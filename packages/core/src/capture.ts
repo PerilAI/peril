@@ -52,10 +52,20 @@ export async function captureElementScreenshot(
   element: Element,
   options: CaptureElementScreenshotOptions = {}
 ): Promise<Blob | string> {
-  const canvas = await renderElement(element as HTMLElement, {
-    backgroundColor: options.backgroundColor,
-    html2canvasOptions: options.html2canvasOptions
-  });
+  const renderOptions: {
+    backgroundColor?: string | null;
+    html2canvasOptions?: Partial<Html2CanvasOptions>;
+  } = {};
+
+  if (options.backgroundColor !== undefined) {
+    renderOptions.backgroundColor = options.backgroundColor;
+  }
+
+  if (options.html2canvasOptions !== undefined) {
+    renderOptions.html2canvasOptions = options.html2canvasOptions;
+  }
+
+  const canvas = await renderElement(element as HTMLElement, renderOptions);
 
   if (options.format === "blob") {
     return canvasToBlob(canvas);
