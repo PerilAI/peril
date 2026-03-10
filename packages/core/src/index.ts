@@ -1,10 +1,17 @@
 export {
+  capturePageScreenshot,
   captureElementScreenshot,
   type CaptureElementScreenshotBlobOptions,
   type CaptureElementScreenshotDataUrlOptions,
   type CaptureElementScreenshotOptions,
+  type CapturePageScreenshotBlobOptions,
+  type CapturePageScreenshotDataUrlOptions,
+  type CapturePageScreenshotOptions,
   type ElementScreenshotFormat,
-  type ElementScreenshotHtml2CanvasOptions
+  type ElementScreenshotHtml2CanvasOptions,
+  type PageScreenshotFormat,
+  type PageScreenshotHtml2CanvasOptions,
+  type ScreenshotFormat
 } from "./capture";
 export {
   getBestLocatorSummary,

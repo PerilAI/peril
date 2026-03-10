@@ -10,6 +10,7 @@ vi.mock("html2canvas", () => ({
 
 import {
   captureElementScreenshot,
+  capturePageScreenshot,
   createReview,
   createReviewId,
   createReviewOverlay,
@@ -158,6 +159,7 @@ class FakeElement extends FakeEventTarget {
 
 class FakeDocument extends FakeEventTarget {
   public readonly body = new FakeElement("body");
+  public defaultView: FakeWindow | null = null;
   public readonly documentElement = new FakeElement("html");
 
   constructor() {
@@ -178,7 +180,12 @@ class FakeDocument extends FakeEventTarget {
   }
 }
 
-class FakeWindow extends FakeEventTarget {}
+class FakeWindow extends FakeEventTarget {
+  public innerHeight = 720;
+  public innerWidth = 1280;
+  public pageXOffset = 0;
+  public pageYOffset = 0;
+}
 
 interface FakeCanvasOptions {
   blob?: Blob | null;
@@ -256,6 +263,7 @@ function createRect(rect: RectInput): DOMRect {
 function createOverlayHarness() {
   const document = new FakeDocument();
   const window = new FakeWindow();
+  document.defaultView = window;
   const firstTarget = new FakeElement("button");
   const secondTarget = new FakeElement("a");
 
@@ -748,6 +756,100 @@ describe("@peril/core", () => {
       scale: 3,
       useCORS: true,
       width: 640
+    });
+  });
+
+  it("captures the visible viewport as a page screenshot by default", async () => {
+    const document = new FakeDocument();
+    const window = new FakeWindow();
+    const { canvas, toDataURL } = createFakeCanvas({
+      dataUrl: "data:image/png;base64,cGFnZQ=="
+    });
+    document.defaultView = window;
+    window.innerWidth = 1440;
+    window.innerHeight = 900;
+    window.pageXOffset = 32;
+    window.pageYOffset = 120;
+    html2canvasMock.mockResolvedValue(canvas);
+
+    const screenshot = await capturePageScreenshot({
+      document: document as unknown as Document,
+      window: window as unknown as Window
+    });
+
+    expect(screenshot).toBe("data:image/png;base64,cGFnZQ==");
+    expect(html2canvasMock).toHaveBeenCalledWith(document.documentElement, {
+      backgroundColor: null,
+      height: 900,
+      logging: false,
+      scrollX: 32,
+      scrollY: 120,
+      useCORS: true,
+      width: 1440,
+      windowHeight: 900,
+      windowWidth: 1440,
+      x: 32,
+      y: 120
+    });
+    expect(toDataURL).toHaveBeenCalledTimes(1);
+  });
+
+  it("captures page screenshots as blobs when requested", async () => {
+    const document = new FakeDocument();
+    const window = new FakeWindow();
+    const expectedBlob = new Blob(["page"], {
+      type: "image/png"
+    });
+    const { canvas, toBlob, toDataURL } = createFakeCanvas({
+      blob: expectedBlob
+    });
+    document.defaultView = window;
+    html2canvasMock.mockResolvedValue(canvas);
+
+    const screenshot = await capturePageScreenshot({
+      document: document as unknown as Document,
+      format: "blob",
+      window: window as unknown as Window
+    });
+
+    expect(screenshot).toBe(expectedBlob);
+    expect(toBlob).toHaveBeenCalledTimes(1);
+    expect(toDataURL).not.toHaveBeenCalled();
+  });
+
+  it("merges page screenshot overrides without allowing viewport crop drift", async () => {
+    const document = new FakeDocument();
+    const window = new FakeWindow();
+    const { canvas } = createFakeCanvas();
+    document.defaultView = window;
+    window.innerWidth = 1024;
+    window.innerHeight = 768;
+    window.pageXOffset = 24;
+    window.pageYOffset = 48;
+    html2canvasMock.mockResolvedValue(canvas);
+
+    await capturePageScreenshot({
+      backgroundColor: "#ffffff",
+      document: document as unknown as Document,
+      html2canvasOptions: {
+        scale: 2
+      },
+      window: window as unknown as Window
+    });
+
+    expect(html2canvasMock).toHaveBeenCalledWith(document.documentElement, {
+      backgroundColor: "#ffffff",
+      height: 768,
+      logging: false,
+      scale: 2,
+      scrollX: 24,
+      scrollY: 48,
+      useCORS: true,
+      width: 1024,
+      windowHeight: 768,
+      windowWidth: 1024,
+      x: 24,
+      y: 48
     });
   });
 
