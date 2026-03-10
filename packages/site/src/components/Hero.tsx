@@ -1,7 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { HeroMicroDemo } from "./HeroMicroDemo";
+import { useExperiment } from "../ab/useExperiment";
+import { experiments } from "../ab";
 
 export function Hero() {
+  const { variant: headlineVariant } = useExperiment(experiments.heroHeadline);
+  const { variant: ctaVariant, convert: ctaConvert } = useExperiment(experiments.ctaLabel);
+
+  const headline =
+    headlineVariant === "short-copy" ? (
+      <>Click. Comment. <span className="text-accent">Ship the fix.</span></>
+    ) : (
+      <>Visual feedback your <span className="text-accent">agents</span> understand</>
+    );
+
+  const ctaText = ctaVariant === "get-started" ? "Get Started" : "Try Peril Free";
+
   return (
     <>
       <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-[120px] pb-24">
@@ -24,7 +38,7 @@ export function Hero() {
           </p>
 
           <h1 className="font-display text-hero leading-[var(--leading-tight)] tracking-[var(--tracking-tight)] text-text-primary">
-            Visual feedback your <span className="text-accent">agents</span> understand
+            {headline}
           </h1>
 
           <p className="mx-auto mt-4 max-w-xl text-body-lg leading-[var(--leading-relaxed)] text-text-secondary">
@@ -36,8 +50,9 @@ export function Hero() {
             <a
               href="#get-started"
               className="inline-flex items-center rounded-[var(--radius-md)] bg-accent px-7 py-3.5 text-base font-medium text-accent-fg shadow-glow-sm transition-all duration-[var(--duration-fast)] hover:bg-accent-hover hover:shadow-glow-md"
+              onClick={ctaConvert}
             >
-              Try Peril Free
+              {ctaText}
             </a>
             <a
               href="#how-it-works"
