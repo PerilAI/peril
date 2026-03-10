@@ -1,12 +1,17 @@
 // @vitest-environment happy-dom
 import { describe, it, expect, afterEach } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { App } from "../App";
 import { Header } from "../components/Header";
 import { Hero } from "../components/Hero";
 import { DesignShowcase } from "../components/DesignShowcase";
+
+function renderWithRouter(ui: React.ReactElement) {
+  return render(<MemoryRouter>{ui}</MemoryRouter>);
+}
 
 afterEach(() => cleanup());
 
@@ -128,30 +133,30 @@ describe("contrast ratios (WCAG 2.1 AA ≥ 4.5:1)", () => {
 
 describe("semantic HTML landmarks", () => {
   it("renders a <main> landmark", () => {
-    render(<App />);
+    renderWithRouter(<App />);
     expect(screen.getByRole("main")).toBeDefined();
   });
 
   it("renders a <banner> (header) landmark", () => {
-    render(<App />);
+    renderWithRouter(<App />);
     expect(screen.getByRole("banner")).toBeDefined();
   });
 
   it("renders a <navigation> landmark with label", () => {
-    render(<App />);
+    renderWithRouter(<App />);
     const nav = screen.getByRole("navigation", { name: "Main navigation" });
     expect(nav).toBeDefined();
     expect(nav.getAttribute("aria-label")).toBe("Main navigation");
   });
 
   it("has exactly one h1", () => {
-    render(<App />);
+    renderWithRouter(<App />);
     const headings = screen.getAllByRole("heading", { level: 1 });
     expect(headings).toHaveLength(1);
   });
 
   it("heading hierarchy does not skip levels", () => {
-    render(<App />);
+    renderWithRouter(<App />);
     const allHeadings = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
     let prevLevel = 0;
     allHeadings.forEach((h) => {
@@ -169,14 +174,14 @@ describe("semantic HTML landmarks", () => {
 
 describe("skip-to-content link", () => {
   it("exists and targets #main", () => {
-    render(<App />);
+    renderWithRouter(<App />);
     const skipLink = screen.getByText("Skip to content");
     expect(skipLink).toBeDefined();
     expect(skipLink.getAttribute("href")).toBe("#main");
   });
 
   it("target element exists", () => {
-    render(<App />);
+    renderWithRouter(<App />);
     expect(document.getElementById("main")).toBeDefined();
   });
 });
@@ -226,7 +231,7 @@ describe("ARIA attributes", () => {
 
 describe("keyboard navigation", () => {
   it("all interactive elements are focusable links or buttons", () => {
-    render(<App />);
+    renderWithRouter(<App />);
     const interactives = document.querySelectorAll("a[href], button");
     interactives.forEach((el) => {
       if (el.closest("[aria-hidden='true']")) {

@@ -1,0 +1,83 @@
+# Available MCP Tools
+
+The Peril MCP server exposes these tools to coding agents:
+
+## `list_reviews`
+
+List open review tasks, optionally filtered.
+
+```json
+{
+  "name": "list_reviews",
+  "arguments": {
+    "status": "open",
+    "category": "visual",
+    "severity": "high"
+  }
+}
+```
+
+### Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `status` | `string` | Filter by status: `open`, `in_progress`, `resolved` |
+| `category` | `string` | Filter by category |
+| `severity` | `string` | Filter by severity |
+| `url` | `string` | Filter by page URL |
+
+## `get_review`
+
+Get full annotation details including locators, DOM snippet, comment, and
+expected outcome.
+
+```json
+{
+  "name": "get_review",
+  "arguments": {
+    "id": "rev_01HXYZ..."
+  }
+}
+```
+
+## `get_review_artifact`
+
+Retrieve a screenshot or snapshot binary.
+
+```json
+{
+  "name": "get_review_artifact",
+  "arguments": {
+    "id": "rev_01HXYZ...",
+    "type": "element"
+  }
+}
+```
+
+## `mark_review_resolved`
+
+Close a review task after fixing the issue.
+
+```json
+{
+  "name": "mark_review_resolved",
+  "arguments": {
+    "id": "rev_01HXYZ...",
+    "resolution": "Fixed button truncation by adding text-overflow"
+  }
+}
+```
+
+## `update_review_status`
+
+Transition a review to a different status.
+
+```json
+{
+  "name": "update_review_status",
+  "arguments": {
+    "id": "rev_01HXYZ...",
+    "status": "in_progress"
+  }
+}
+```

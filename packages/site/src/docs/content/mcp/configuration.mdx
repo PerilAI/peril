@@ -1,0 +1,66 @@
+# MCP Configuration
+
+The Peril MCP server exposes review tasks to coding agents using the
+Model Context Protocol.
+
+## Starting the Server
+
+```bash
+npx @peril/mcp --port 3001
+```
+
+Or programmatically:
+
+```typescript
+import { createMCPServer } from "@peril/mcp";
+
+const server = createMCPServer({
+  port: 3001,
+  perilEndpoint: "http://localhost:3000/api",
+});
+
+await server.start();
+```
+
+## Agent Configuration
+
+### Claude (via claude_desktop_config.json)
+
+```json
+{
+  "mcpServers": {
+    "peril": {
+      "command": "npx",
+      "args": ["@peril/mcp", "--port", "3001"]
+    }
+  }
+}
+```
+
+### Cursor
+
+Add to your `.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "peril": {
+      "command": "npx",
+      "args": ["@peril/mcp"]
+    }
+  }
+}
+```
+
+## Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `port` | `number` | `3001` | MCP server port |
+| `perilEndpoint` | `string` | `http://localhost:3000/api` | Peril REST API URL |
+| `transport` | `"stdio" \| "http"` | `"stdio"` | Transport protocol |
+
+<Callout variant="note">
+  Most MCP clients use stdio transport by default. Use HTTP transport
+  only when running the MCP server as a standalone service.
+</Callout>

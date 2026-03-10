@@ -1,0 +1,44 @@
+# React Setup
+
+`@peril/react` provides React-specific bindings for Peril, including a context
+provider and hooks for managing review mode.
+
+## Installation
+
+```bash
+npm install @peril/react @peril/core
+```
+
+## Provider Setup
+
+Wrap your application (or the section you want to review) with `ReviewProvider`:
+
+```tsx
+import { ReviewProvider } from "@peril/react";
+
+function App() {
+  return (
+    <ReviewProvider
+      endpoint="http://localhost:3000/api"
+      captureScreenshots={true}
+    >
+      <YourApp />
+    </ReviewProvider>
+  );
+}
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `endpoint` | `string` | Required | Peril server API URL |
+| `captureScreenshots` | `boolean` | `true` | Enable screenshot capture |
+| `locatorStrategy` | `string` | `"resilient"` | Locator generation strategy |
+| `children` | `ReactNode` | Required | App content |
+
+<Callout variant="warning">
+  The `ReviewProvider` must be mounted inside your app's root. It adds a
+  transparent overlay when review mode is active — this does not affect
+  your app's layout or event handling in normal mode.
+</Callout>

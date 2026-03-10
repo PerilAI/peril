@@ -1,0 +1,53 @@
+# Capture API
+
+The Capture API is the primary interface for creating reviews from DOM elements.
+
+## `createCapture(options)`
+
+Creates a configured capture instance.
+
+```typescript
+import { createCapture } from "@peril/core";
+
+const capture = createCapture({
+  screenshots: true,
+  domSnippet: true,
+  maxSnippetDepth: 3,
+});
+```
+
+### Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `screenshots` | `boolean` | `true` | Capture element and page screenshots |
+| `domSnippet` | `boolean` | `true` | Include DOM context around the element |
+| `maxSnippetDepth` | `number` | `3` | Depth of DOM tree to capture |
+
+## `capture.fromElement(element, metadata)`
+
+Captures a review from a DOM element.
+
+```typescript
+const review = await capture.fromElement(buttonElement, {
+  comment: "This button needs a loading state",
+  category: "ux",
+  severity: "medium",
+});
+```
+
+### Return Value
+
+Returns a `Review` object containing locators, screenshots, DOM context,
+and all metadata needed for an agent to act on the feedback.
+
+## `capture.fromSelector(selector, metadata)`
+
+Convenience method that finds an element by CSS selector before capturing.
+
+```typescript
+const review = await capture.fromSelector(
+  "[data-testid='submit-btn']",
+  { comment: "Disabled state not visible enough" }
+);
+```

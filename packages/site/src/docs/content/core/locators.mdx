@@ -1,0 +1,46 @@
+# Locators
+
+Locators are the bridge between human feedback and agent action. Peril generates
+multiple locator strategies for each element, giving agents the best chance of
+finding the right element programmatically.
+
+## Locator Bundle
+
+Each review includes a locator bundle ordered by resilience:
+
+```typescript
+interface LocatorBundle {
+  testId?: string;    // data-testid="submit-btn"
+  role?: string;      // button[name="Submit"]
+  css: string;        // .form-actions > button.primary
+  xpath: string;      // /html/body/div/form/button[2]
+  text?: string;      // "Submit Order"
+}
+```
+
+## Strategy Priority
+
+| Priority | Strategy | Resilience | Notes |
+|----------|----------|-----------|-------|
+| 1 | `testId` | Highest | Stable across refactors |
+| 2 | `role` | High | ARIA-based, semantic |
+| 3 | `css` | Medium | May break on class changes |
+| 4 | `xpath` | Low | Fragile to DOM structure |
+| 5 | `text` | Lowest | Content may change |
+
+## Custom Locators
+
+You can extend the locator system with custom strategies:
+
+```typescript
+import { registerLocatorStrategy } from "@peril/core";
+
+registerLocatorStrategy("customAttr", (element) => {
+  return element.getAttribute("data-component") ?? null;
+});
+```
+
+<Callout variant="note">
+  Agents should try locators in priority order, falling back to less resilient
+  strategies only when more resilient ones fail.
+</Callout>

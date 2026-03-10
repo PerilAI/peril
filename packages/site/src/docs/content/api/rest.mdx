@@ -1,0 +1,77 @@
+# REST API
+
+The Peril server exposes a REST API for managing reviews.
+
+## Base URL
+
+```
+http://localhost:3000/api
+```
+
+## Endpoints
+
+### List Reviews
+
+```http
+GET /api/reviews
+```
+
+Query parameters:
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `status` | `string` | Filter by status |
+| `category` | `string` | Filter by category |
+| `severity` | `string` | Filter by severity |
+| `url` | `string` | Filter by page URL |
+
+### Get Review
+
+```http
+GET /api/reviews/:id
+```
+
+Returns the full review object including locators, metadata, and comment.
+
+### Create Review
+
+```http
+POST /api/reviews
+Content-Type: application/json
+```
+
+Created automatically by the SDK when a user submits feedback.
+
+### Update Review
+
+```http
+PATCH /api/reviews/:id
+Content-Type: application/json
+
+{
+  "status": "resolved",
+  "resolution": "Fixed the issue"
+}
+```
+
+### Get Artifact
+
+```http
+GET /api/reviews/:id/artifacts/:type
+```
+
+Returns the binary screenshot or snapshot. Type is `element` or `page`.
+
+### Delete Review
+
+```http
+DELETE /api/reviews/:id
+```
+
+### Health Check
+
+```http
+GET /api/health
+```
+
+Returns `{ "ok": true }` when the server is running.

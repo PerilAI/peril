@@ -1,0 +1,63 @@
+# Troubleshooting
+
+Common issues and their solutions.
+
+## Review Mode Not Activating
+
+**Symptom:** Clicking the toggle doesn't show the overlay.
+
+**Solution:** Ensure `ReviewProvider` is mounted in your component tree:
+
+```tsx
+// Make sure this wraps your app
+<ReviewProvider endpoint="http://localhost:3000/api">
+  <App />
+</ReviewProvider>
+```
+
+## Agent Not Receiving Tasks
+
+**Symptom:** The agent's `list_reviews` returns empty results.
+
+**Possible causes:**
+
+1. MCP server not running — start it with `npx @peril/mcp`
+2. Peril server not running — start it with `npx peril-server`
+3. Wrong endpoint — check that the MCP server points to the correct Peril API URL
+
+## Screenshots Not Captured
+
+**Symptom:** Review artifacts are missing screenshots.
+
+**Solution:** Screenshots require a secure context (HTTPS or localhost).
+Ensure you're running on `localhost` during development.
+
+## Locators Not Matching
+
+**Symptom:** Agent reports it can't find the element.
+
+**Tips:**
+
+- Add `data-testid` attributes to key interactive elements
+- Check if the page structure changed after the review was created
+- Try using a less resilient locator (CSS or XPath) as a fallback
+
+## Server Storage Issues
+
+**Symptom:** Reviews not persisting between server restarts.
+
+**Solution:** Check that the `.peril/` directory exists and is writable.
+The server creates it automatically, but permission issues can prevent this.
+
+```bash
+# Check storage directory
+ls -la .peril/
+
+# Fix permissions if needed
+chmod -R 755 .peril/
+```
+
+<Callout variant="warning">
+  If you're running in a container or CI environment, ensure the `.peril/`
+  directory is mounted as a volume for persistence.
+</Callout>

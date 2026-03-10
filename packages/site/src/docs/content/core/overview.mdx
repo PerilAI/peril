@@ -1,0 +1,51 @@
+# Core SDK Overview
+
+`@peril/core` is the framework-agnostic foundation of Peril. It handles element
+selection, locator generation, screenshot capture, and review serialization.
+
+## Key Concepts
+
+### Locators
+
+Peril generates a bundle of locators for each selected element, ordered by
+resilience:
+
+1. **testId** — `data-testid` attribute (most reliable)
+2. **role** — ARIA role + accessible name
+3. **css** — CSS selector
+4. **xpath** — XPath expression
+5. **text** — Text content match (least reliable)
+
+### Reviews
+
+A review captures everything an agent needs to understand and fix an issue:
+
+- Element locators (multiple strategies)
+- Screenshot of the selected element
+- Full-page screenshot for context
+- DOM snippet around the element
+- Human comment describing the issue
+- Page URL and viewport metadata
+
+## Usage
+
+```typescript
+import { createCapture, generateLocators } from "@peril/core";
+
+const capture = createCapture({
+  screenshots: true,
+  domSnippet: true,
+});
+
+// When the user selects an element:
+const review = await capture.fromElement(element, {
+  comment: "Button text is truncated on mobile",
+  category: "visual",
+  severity: "medium",
+});
+```
+
+<Callout variant="tip">
+  The core package has zero framework dependencies. Use it with React, Vue,
+  Svelte, or vanilla JavaScript.
+</Callout>

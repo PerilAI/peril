@@ -1,0 +1,42 @@
+# Agent Integration
+
+Peril is designed to work seamlessly with MCP-compatible coding agents.
+Here's how agents interact with Peril review tasks.
+
+## Agent Workflow
+
+1. Agent calls `list_reviews` to find open tasks
+2. Agent calls `get_review` on a specific task to get full context
+3. Agent reads the locators, screenshot, and comment
+4. Agent makes the code change to address the feedback
+5. Agent calls `mark_review_resolved` with a resolution note
+
+## What Agents Receive
+
+For each review, the agent gets:
+
+- **Locator bundle** — Multiple strategies to find the element
+- **Element screenshot** — Visual context of the issue
+- **Page screenshot** — Full-page context
+- **DOM snippet** — HTML around the selected element
+- **Comment** — Human description of the issue
+- **Metadata** — Page URL, viewport size, timestamp, category, severity
+
+## Best Practices
+
+### For Agent Developers
+
+- Try locators in priority order (testId first, text last)
+- Use the screenshot to verify you're looking at the right element
+- Include the resolution note when marking tasks resolved
+
+### For Reviewers
+
+- Use `data-testid` attributes for reliable element identification
+- Be specific in comments — describe the expected vs actual behavior
+- Set appropriate category and severity
+
+<Callout variant="tip">
+  Agents work best when elements have `data-testid` attributes. Add them
+  to interactive elements in your app for the most reliable review workflow.
+</Callout>

@@ -19,6 +19,12 @@ export function Header() {
             How it works
           </a>
           <a
+            href="/docs"
+            className="text-sm text-text-secondary transition-colors duration-[var(--duration-fast)] hover:text-text-primary"
+          >
+            Docs
+          </a>
+          <a
             href="https://github.com/anthropics/peril"
             className="text-sm text-text-secondary transition-colors duration-[var(--duration-fast)] hover:text-text-primary"
             target="_blank"

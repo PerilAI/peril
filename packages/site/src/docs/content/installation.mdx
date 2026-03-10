@@ -1,0 +1,58 @@
+# Installation
+
+Peril is distributed as a set of npm packages. Install the ones you need for
+your workflow.
+
+## Package Overview
+
+```bash
+# Core SDK (required)
+npm install @peril/core
+
+# React adapter (for React apps)
+npm install @peril/react
+
+# Local server (for development)
+npm install @peril/server
+
+# MCP server (for agent integration)
+npm install @peril/mcp
+```
+
+## Requirements
+
+- **Node.js** 18.0 or later
+- **TypeScript** 5.0+ (recommended but not required)
+- **React** 18+ (for `@peril/react`)
+
+## Configuration
+
+Peril uses sensible defaults, but you can customize behavior via the
+`ReviewProvider` props or server configuration:
+
+```tsx
+<ReviewProvider
+  endpoint="http://localhost:3000/api"
+  captureScreenshots={true}
+  locatorStrategy="resilient"
+/>
+```
+
+## Storage
+
+By default, the Peril server stores reviews in a `.peril/` directory:
+
+```
+.peril/
+  reviews/
+    rev_<ulid>/
+      review.json     # Full review object
+      element.png     # Element screenshot
+      page.png        # Page screenshot
+  index.json          # Review index for fast queries
+```
+
+<Callout variant="warning">
+  Add `.peril/` to your `.gitignore` to avoid committing review artifacts
+  to version control.
+</Callout>

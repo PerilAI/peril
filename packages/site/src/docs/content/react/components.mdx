@@ -1,0 +1,48 @@
+# React Components
+
+`@peril/react` exports components for integrating Peril into your React app.
+
+## `ReviewProvider`
+
+The root context provider. See [Setup](/docs/react/setup) for full details.
+
+## `ReviewOverlay`
+
+The visual overlay shown when review mode is active. Typically rendered
+automatically by `ReviewProvider`, but can be used standalone:
+
+```tsx
+import { ReviewOverlay } from "@peril/react";
+
+function CustomReviewUI() {
+  return (
+    <ReviewOverlay
+      onElementSelect={(element) => {
+        console.log("Selected:", element);
+      }}
+      highlightColor="rgba(251, 191, 36, 0.3)"
+    />
+  );
+}
+```
+
+## `CommentComposer`
+
+The comment input shown after an element is selected:
+
+```tsx
+import { CommentComposer } from "@peril/react";
+
+<CommentComposer
+  onSubmit={(comment) => {
+    // Handle the comment
+  }}
+  categories={["visual", "ux", "content", "bug"]}
+  severities={["low", "medium", "high", "critical"]}
+/>
+```
+
+<Callout variant="tip">
+  Most apps only need `ReviewProvider` — it handles the overlay and comment
+  composer automatically.
+</Callout>

@@ -1,9 +1,24 @@
+import { Routes, Route } from "react-router-dom";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { TrustSignals } from "./components/TrustSignals";
 import { AnnotationPlayground } from "./components/AnnotationPlayground";
 import { HowItWorks } from "./components/HowItWorks";
 import { UseCases } from "./components/UseCases";
+import { DocsLayout } from "./docs/DocsLayout";
+import { docsRoutes } from "./docs/routes";
+
+function HomePage() {
+  return (
+    <main id="main">
+      <Hero />
+      <TrustSignals />
+      <AnnotationPlayground />
+      <HowItWorks />
+      <UseCases />
+    </main>
+  );
+}
 
 export function App() {
   return (
@@ -11,14 +26,27 @@ export function App() {
       <a href="#main" className="skip-link">
         Skip to content
       </a>
-      <Header />
-      <main id="main">
-        <Hero />
-        <TrustSignals />
-        <AnnotationPlayground />
-        <HowItWorks />
-        <UseCases />
-      </main>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <Header />
+              <HomePage />
+            </>
+          }
+        />
+        <Route path="/docs" element={<DocsLayout />}>
+          {docsRoutes.map((route) => (
+            <Route
+              key={route.path}
+              index={route.path === ""}
+              path={route.path || undefined}
+              element={route.element}
+            />
+          ))}
+        </Route>
+      </Routes>
     </>
   );
 }

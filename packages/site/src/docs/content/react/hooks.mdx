@@ -1,0 +1,52 @@
+# React Hooks
+
+Hooks for controlling review mode and accessing Peril state.
+
+## `useReviewMode()`
+
+Toggle and query the review mode state:
+
+```tsx
+import { useReviewMode } from "@peril/react";
+
+function ReviewToggle() {
+  const { active, toggle, activate, deactivate } = useReviewMode();
+
+  return (
+    <button onClick={toggle}>
+      {active ? "Exit Review" : "Start Review"}
+    </button>
+  );
+}
+```
+
+### Return Value
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `active` | `boolean` | Whether review mode is currently on |
+| `toggle` | `() => void` | Toggle review mode |
+| `activate` | `() => void` | Turn on review mode |
+| `deactivate` | `() => void` | Turn off review mode |
+
+## `useReviews()`
+
+Access the list of reviews created in the current session:
+
+```tsx
+import { useReviews } from "@peril/react";
+
+function ReviewList() {
+  const { reviews, loading } = useReviews();
+
+  if (loading) return <p>Loading...</p>;
+
+  return (
+    <ul>
+      {reviews.map((r) => (
+        <li key={r.id}>{r.comment}</li>
+      ))}
+    </ul>
+  );
+}
+```

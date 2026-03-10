@@ -1,0 +1,50 @@
+# Introduction
+
+Peril turns visual UX feedback into structured, agent-executable tasks via MCP.
+A reviewer selects a UI element in a live app, adds a comment, and a coding agent
+receives locators, screenshots, and structured context to fix the issue without
+human re-description.
+
+## How It Works
+
+1. **Click** — A reviewer clicks any element in your app while review mode is active
+2. **Comment** — They describe the issue, and Peril captures element locators, a screenshot, and DOM context
+3. **Ship** — A coding agent picks up the structured task via MCP and fixes the issue
+
+## Packages
+
+| Package | Description |
+|---------|-------------|
+| `@peril/core` | Framework-agnostic capture SDK — overlay, locators, serialization |
+| `@peril/react` | React adapter — `ReviewProvider`, `useReviewMode` |
+| `@peril/server` | Local dev server with REST API, storage, and dashboard |
+| `@peril/mcp` | MCP server that exposes review tasks to coding agents |
+
+## Quick Example
+
+```tsx
+import { ReviewProvider, useReviewMode } from "@peril/react";
+
+function App() {
+  return (
+    <ReviewProvider endpoint="http://localhost:3000/api">
+      <YourApp />
+      <ReviewToggle />
+    </ReviewProvider>
+  );
+}
+
+function ReviewToggle() {
+  const { active, toggle } = useReviewMode();
+  return (
+    <button onClick={toggle}>
+      {active ? "Exit Review" : "Start Review"}
+    </button>
+  );
+}
+```
+
+<Callout variant="tip">
+  Peril is designed for local development workflows. Point your MCP-compatible
+  agent at the local server and it will receive structured tasks automatically.
+</Callout>

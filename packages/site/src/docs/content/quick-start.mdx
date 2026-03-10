@@ -1,0 +1,64 @@
+# Quick Start
+
+Get up and running with Peril in under 5 minutes.
+
+## Prerequisites
+
+- Node.js 18+
+- A React application (Vite, Next.js, or similar)
+- An MCP-compatible coding agent (Claude, Cursor, etc.)
+
+## Install
+
+```bash
+npm install @peril/core @peril/react @peril/server @peril/mcp
+```
+
+## Add the Provider
+
+Wrap your app with `ReviewProvider`:
+
+```tsx
+import { ReviewProvider } from "@peril/react";
+
+function App() {
+  return (
+    <ReviewProvider endpoint="http://localhost:3000/api">
+      <YourApp />
+    </ReviewProvider>
+  );
+}
+```
+
+## Start the Server
+
+```bash
+npx peril-server --port 3000
+```
+
+## Connect Your Agent
+
+Point your MCP agent at the Peril MCP server:
+
+```json
+{
+  "mcpServers": {
+    "peril": {
+      "command": "npx",
+      "args": ["@peril/mcp", "--port", "3001"]
+    }
+  }
+}
+```
+
+## Start Reviewing
+
+1. Open your app in the browser
+2. Activate review mode
+3. Click any element and leave a comment
+4. Your agent will receive the structured task via MCP
+
+<Callout variant="note">
+  See the full [Installation](/docs/installation) guide for detailed setup
+  instructions and configuration options.
+</Callout>

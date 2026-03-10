@@ -1,0 +1,60 @@
+# Data Models
+
+Reference for the core data types used throughout Peril.
+
+## Review
+
+```typescript
+interface Review {
+  id: string;           // ULID prefixed with rev_
+  url: string;          // Page URL where review was created
+  element: {
+    locators: LocatorBundle;
+    domSnippet: string;  // HTML around the element
+    tagName: string;
+    attributes: Record<string, string>;
+  };
+  comment: string;       // Human feedback
+  category: ReviewCategory;
+  severity: ReviewSeverity;
+  status: ReviewStatus;
+  resolution?: string;   // Set when resolved
+  artifacts: {
+    element?: string;    // Path to element screenshot
+    page?: string;       // Path to page screenshot
+  };
+  viewport: {
+    width: number;
+    height: number;
+  };
+  createdAt: string;     // ISO 8601
+  updatedAt: string;     // ISO 8601
+}
+```
+
+## LocatorBundle
+
+```typescript
+interface LocatorBundle {
+  testId?: string;
+  role?: string;
+  css: string;
+  xpath: string;
+  text?: string;
+}
+```
+
+## Enums
+
+```typescript
+type ReviewCategory = "visual" | "ux" | "content" | "bug" | "a11y";
+
+type ReviewSeverity = "low" | "medium" | "high" | "critical";
+
+type ReviewStatus = "open" | "in_progress" | "resolved" | "dismissed";
+```
+
+<Callout variant="note">
+  All IDs use ULID format with a `rev_` prefix for easy identification.
+  Timestamps follow ISO 8601 format.
+</Callout>
