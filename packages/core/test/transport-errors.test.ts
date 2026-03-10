@@ -101,7 +101,7 @@ describe("@peril/core transport error handling", () => {
         maxRetries: 2,
         retryDelayMs: 0
       })
-    ).rejects.toThrow("Failed to fetch");
+    ).rejects.toThrow("Could not reach the Peril server");
 
     expect(fetchMock).toHaveBeenCalledTimes(3);
   });

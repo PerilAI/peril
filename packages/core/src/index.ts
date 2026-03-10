@@ -1,5 +1,6 @@
 export {
   captureElementScreenshot,
+  CaptureElementScreenshotError,
   capturePageScreenshot,
   type CaptureElementScreenshotBlobOptions,
   type CaptureElementScreenshotDataUrlOptions,
@@ -35,6 +36,7 @@ export {
   type ReviewOverlayOptions
 } from "./overlay";
 export {
+  maxArtifactPayloadBytes,
   createReview,
   createReviewId,
   maxDomSnippetLength,
@@ -54,6 +56,7 @@ export {
   type Viewport
 } from "./review";
 export {
+  ReviewTransportError,
   submitReview,
   type ReviewArtifactUploadInput,
   type ReviewArtifactValue,

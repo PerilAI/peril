@@ -1,4 +1,10 @@
-import { createReview, type Artifacts, type CreateReviewInput, type Review } from "./review";
+import {
+  createReview,
+  maxArtifactPayloadBytes,
+  type Artifacts,
+  type CreateReviewInput,
+  type Review
+} from "./review";
 
 export type ReviewArtifactValue = Blob | string;
 
@@ -21,7 +27,7 @@ export interface SubmitReviewOptions {
   signal?: AbortSignal;
 }
 
-class ReviewTransportError extends Error {
+export class ReviewTransportError extends Error {
   constructor(
     message: string,
     readonly status?: number
@@ -46,6 +52,13 @@ const defaultMaxRetries = 2;
 const defaultRetryDelayMs = 250;
 const multipartFallbackStatuses = new Set([400, 415, 422]);
 const transientStatuses = new Set([408, 425, 429, 500, 502, 503, 504]);
+const networkFailureMessage =
+  "Could not reach the Peril server. Verify the local dev server is running and reachable.";
+const artifactLabels = {
+  elementScreenshot: "Element screenshot",
+  pageScreenshot: "Page screenshot",
+  rrwebSession: "Replay artifact"
+} as const satisfies Record<keyof ReviewArtifactUploadInput, string>;
 
 export async function submitReview(
   input: SubmitReviewInput,
@@ -56,6 +69,8 @@ export async function submitReview(
   if (typeof transport !== "function") {
     throw new Error("submitReview requires a fetch implementation.");
   }
+
+  await validateArtifactPayloads(input.artifacts);
 
   const reviewSkeleton = createReviewSkeleton(input);
   const jsonReview = await createJsonReview(reviewSkeleton, input.artifacts);
@@ -98,8 +113,10 @@ async function sendWithRetries(
     try {
       return await send();
     } catch (error) {
+      const normalizedError = normalizeTransportError(error);
+
       if (attempt === maxRetries || !isTransientError(error)) {
-        throw error;
+        throw normalizedError;
       }
 
       await delay(retryDelayMs * 2 ** attempt, options.signal);
@@ -366,6 +383,29 @@ function hasBinaryArtifacts(artifacts: ReviewArtifactUploadInput): boolean {
   );
 }
 
+async function validateArtifactPayloads(artifacts: ReviewArtifactUploadInput): Promise<void> {
+  for (const [artifactType, value] of Object.entries(artifacts) as Array<
+    [keyof ReviewArtifactUploadInput, ReviewArtifactUploadInput[keyof ReviewArtifactUploadInput]]
+  >) {
+    if (value === undefined) {
+      continue;
+    }
+
+    const payloadSize =
+      typeof value === "string"
+        ? getDataUrlPayloadSize(value)
+        : value.size;
+
+    if (payloadSize === null || payloadSize <= maxArtifactPayloadBytes) {
+      continue;
+    }
+
+    throw new ReviewTransportError(
+      `${artifactLabels[artifactType]} exceeds the ${formatMegabytes(maxArtifactPayloadBytes)} MB size limit.`
+    );
+  }
+}
+
 function isTransientError(error: unknown): boolean {
   if (error instanceof MultipartFallbackError) {
     return false;
@@ -408,4 +448,40 @@ function delay(durationMs: number, signal: AbortSignal | undefined): Promise<voi
       signal.addEventListener("abort", handleAbort, { once: true });
     }
   });
+}
+
+function normalizeTransportError(error: unknown): unknown {
+  if (error instanceof ReviewTransportError) {
+    return error;
+  }
+
+  if (
+    error instanceof Error &&
+    (error.name === "AbortError" || error.name === "TimeoutError")
+  ) {
+    return error;
+  }
+
+  if (error instanceof TypeError) {
+    return new ReviewTransportError(networkFailureMessage);
+  }
+
+  return error;
+}
+
+function getDataUrlPayloadSize(value: string): number | null {
+  const match = /^data:[^;,]+(?:;charset=[^;,]+)?;base64,(.*)$/u.exec(value);
+
+  if (!match) {
+    return null;
+  }
+
+  const encodedPayload = (match[1] ?? "").replace(/\s+/gu, "");
+  const paddingLength = encodedPayload.endsWith("==") ? 2 : encodedPayload.endsWith("=") ? 1 : 0;
+
+  return Math.max(0, Math.floor((encodedPayload.length * 3) / 4) - paddingLength);
+}
+
+function formatMegabytes(value: number): number {
+  return value / (1024 * 1024);
 }

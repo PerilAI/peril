@@ -146,7 +146,7 @@ describe("full-page screenshot capture (PER-67)", () => {
     html2canvasMock.mockRejectedValue(new Error("Canvas rendering failed"));
 
     await expect(captureElementScreenshot(docElement)).rejects.toThrow(
-      "Canvas rendering failed"
+      "Failed to capture element screenshot."
     );
   });
 });

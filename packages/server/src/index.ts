@@ -18,7 +18,8 @@ import {
   renderDashboardListPage,
   renderDashboardNotFoundPage
 } from "./dashboard.js";
-import { ReviewStorage } from "./storage.js";
+import { maxDomSnippetLength, maxLocatorTextLength } from "./limits.js";
+import { ReviewStorage, ReviewStorageError } from "./storage.js";
 
 export interface HealthResponse {
   status: "ok";
@@ -203,7 +204,11 @@ async function readJsonBody(request: IncomingMessage): Promise<unknown> {
     return null;
   }
 
-  return JSON.parse(Buffer.concat(chunks).toString("utf8")) as unknown;
+  try {
+    return JSON.parse(Buffer.concat(chunks).toString("utf8")) as unknown;
+  } catch {
+    throw new Error("Expected request body to be valid JSON.");
+  }
 }
 
 function parseListReviewsFilters(requestUrl: URL): ListReviewsFilters {
@@ -295,6 +300,109 @@ function parseUpdateReviewInput(value: unknown): UpdateReviewInput {
   }
 
   return update;
+}
+
+function normalizeReviewPayload(review: Review): Review {
+  const locators = { ...review.selection.locators };
+
+  if (locators.text !== undefined) {
+    locators.text = truncate(locators.text, maxLocatorTextLength);
+  }
+
+  return {
+    ...review,
+    selection: {
+      ...review.selection,
+      domSnippet: truncate(review.selection.domSnippet, maxDomSnippetLength),
+      locators
+    }
+  };
+}
+
+function truncate(value: string, maxLength: number): string {
+  return value.length > maxLength ? value.slice(0, maxLength) : value;
+}
+
+function createErrorResponse(error: unknown): {
+  body: {
+    error: string;
+    message: string;
+  };
+  statusCode: number;
+} {
+  if (error instanceof ReviewStorageError) {
+    if (error.code === "artifact_payload_too_large") {
+      return {
+        statusCode: 413,
+        body: {
+          error: "payload_too_large",
+          message: error.message
+        }
+      };
+    }
+
+    return {
+      statusCode: 400,
+      body: {
+        error: "bad_request",
+        message: error.message
+      }
+    };
+  }
+
+  const message = error instanceof Error ? error.message : "Unexpected server error.";
+
+  if (hasErrorCode(error, "ENOSPC")) {
+    return {
+      statusCode: 507,
+      body: {
+        error: "storage_full",
+        message: "Local review storage is full. Free disk space and retry."
+      }
+    };
+  }
+
+  if (hasErrorCode(error, "EACCES") || hasErrorCode(error, "EPERM") || hasErrorCode(error, "EROFS")) {
+    return {
+      statusCode: 500,
+      body: {
+        error: "storage_unavailable",
+        message: "Local review storage is not writable. Check directory permissions and retry."
+      }
+    };
+  }
+
+  if (message.startsWith("Expected ")) {
+    return {
+      statusCode: 400,
+      body: {
+        error: message.includes("valid JSON") ? "invalid_json" : "bad_request",
+        message
+      }
+    };
+  }
+
+  if (message.includes("already exists")) {
+    return {
+      statusCode: 409,
+      body: {
+        error: "conflict",
+        message
+      }
+    };
+  }
+
+  return {
+    statusCode: 500,
+    body: {
+      error: "internal_error",
+      message
+    }
+  };
+}
+
+function hasErrorCode(error: unknown, code: string): boolean {
+  return typeof error === "object" && error !== null && "code" in error && error.code === code;
 }
 
 async function handleRequest(
@@ -437,7 +545,7 @@ async function handleRequest(
       return;
     }
 
-    const review = await storage.createReview(payload);
+    const review = await storage.createReview(normalizeReviewPayload(payload));
     writeJsonResponse(response, 201, review);
     return;
   }
@@ -456,18 +564,8 @@ export function createServer(options: PerilServerOptions = {}): Server {
       .ensureReady()
       .then(() => handleRequest(request, response, storage))
       .catch((error: unknown) => {
-        const message = error instanceof Error ? error.message : "Unexpected server error.";
-        const statusCode =
-          message.startsWith("Expected ") || message.startsWith("Artifact source not found")
-            ? 400
-            : message.includes("already exists")
-              ? 409
-              : 500;
-
-        writeJsonResponse(response, statusCode, {
-          error: statusCode === 500 ? "internal_error" : "bad_request",
-          message
-        });
+        const { body, statusCode } = createErrorResponse(error);
+        writeJsonResponse(response, statusCode, body);
       });
   });
 }

@@ -1,8 +1,17 @@
 import type { Options as Html2CanvasOptions } from "html2canvas";
 
+import { maxArtifactPayloadBytes } from "./limits";
+
 export type ScreenshotFormat = "dataUrl" | "blob";
 export type ElementScreenshotFormat = ScreenshotFormat;
 export type PageScreenshotFormat = ScreenshotFormat;
+
+export class CaptureElementScreenshotError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "CaptureElementScreenshotError";
+  }
+}
 
 export interface ElementScreenshotHtml2CanvasOptions
   extends Omit<Partial<Html2CanvasOptions>, "backgroundColor"> {}
@@ -52,26 +61,34 @@ export async function captureElementScreenshot(
   element: Element,
   options: CaptureElementScreenshotOptions = {}
 ): Promise<Blob | string> {
-  const renderOptions: {
-    backgroundColor?: string | null;
-    html2canvasOptions?: Partial<Html2CanvasOptions>;
-  } = {};
+  try {
+    const renderOptions: {
+      backgroundColor?: string | null;
+      html2canvasOptions?: Partial<Html2CanvasOptions>;
+    } = {};
 
-  if (options.backgroundColor !== undefined) {
-    renderOptions.backgroundColor = options.backgroundColor;
+    if (options.backgroundColor !== undefined) {
+      renderOptions.backgroundColor = options.backgroundColor;
+    }
+
+    if (options.html2canvasOptions !== undefined) {
+      renderOptions.html2canvasOptions = options.html2canvasOptions;
+    }
+
+    const canvas = await renderElement(element as HTMLElement, renderOptions);
+
+    if (options.format === "blob") {
+      return canvasToBlob(canvas);
+    }
+
+    return validateDataUrl(canvas.toDataURL("image/png"));
+  } catch (error) {
+    if (error instanceof CaptureElementScreenshotError) {
+      throw error;
+    }
+
+    throw new CaptureElementScreenshotError("Failed to capture element screenshot.");
   }
-
-  if (options.html2canvasOptions !== undefined) {
-    renderOptions.html2canvasOptions = options.html2canvasOptions;
-  }
-
-  const canvas = await renderElement(element as HTMLElement, renderOptions);
-
-  if (options.format === "blob") {
-    return canvasToBlob(canvas);
-  }
-
-  return canvas.toDataURL("image/png");
 }
 
 export function capturePageScreenshot(
@@ -153,10 +170,10 @@ async function canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob> {
   const blob = await tryCanvasToBlob(canvas);
 
   if (blob) {
-    return blob;
+    return validateBlob(blob);
   }
 
-  return dataUrlToBlob(canvas.toDataURL("image/png"));
+  return dataUrlToBlob(validateDataUrl(canvas.toDataURL("image/png")));
 }
 
 function tryCanvasToBlob(canvas: HTMLCanvasElement): Promise<Blob | null> {
@@ -172,21 +189,22 @@ function tryCanvasToBlob(canvas: HTMLCanvasElement): Promise<Blob | null> {
 }
 
 function dataUrlToBlob(dataUrl: string): Blob {
-  const match = /^data:([^;,]+)?;base64,(.+)$/u.exec(dataUrl);
+  const parsedDataUrl = parseDataUrl(dataUrl);
 
-  if (!match) {
-    throw new Error("Screenshot canvas produced an invalid PNG data URL.");
+  if (!parsedDataUrl) {
+    throw new CaptureElementScreenshotError(
+      "Element screenshot canvas produced an invalid PNG data URL."
+    );
   }
 
-  const mimeType = match[1] ?? "image/png";
-  const encodedData = match[2];
-
-  if (!encodedData) {
-    throw new Error("Screenshot canvas produced an empty PNG payload.");
+  if (!parsedDataUrl.encodedData) {
+    throw new CaptureElementScreenshotError(
+      "Element screenshot canvas produced an empty PNG payload."
+    );
   }
 
-  return new Blob([decodeBase64(encodedData)], {
-    type: mimeType
+  return new Blob([decodeBase64(parsedDataUrl.encodedData)], {
+    type: parsedDataUrl.mimeType
   });
 }
 
@@ -215,5 +233,74 @@ function decodeBase64(value: string): ArrayBuffer {
     return bytes.buffer;
   }
 
-  throw new Error("No base64 decoder is available for screenshot conversion.");
+  throw new CaptureElementScreenshotError(
+    "No base64 decoder is available for element screenshot conversion."
+  );
+}
+
+function validateBlob(blob: Blob): Blob {
+  if (blob.size > maxArtifactPayloadBytes) {
+    throw new CaptureElementScreenshotError(
+      `Element screenshot exceeds the ${formatMegabytes(maxArtifactPayloadBytes)} MB size limit.`
+    );
+  }
+
+  return blob;
+}
+
+function validateDataUrl(dataUrl: string): string {
+  const parsedDataUrl = parseDataUrl(dataUrl);
+
+  if (!parsedDataUrl) {
+    throw new CaptureElementScreenshotError(
+      "Element screenshot canvas produced an invalid PNG data URL."
+    );
+  }
+
+  if (!parsedDataUrl.encodedData) {
+    throw new CaptureElementScreenshotError(
+      "Element screenshot canvas produced an empty PNG payload."
+    );
+  }
+
+  if (parsedDataUrl.payloadByteLength > maxArtifactPayloadBytes) {
+    throw new CaptureElementScreenshotError(
+      `Element screenshot exceeds the ${formatMegabytes(maxArtifactPayloadBytes)} MB size limit.`
+    );
+  }
+
+  return dataUrl;
+}
+
+function parseDataUrl(
+  value: string
+): { encodedData: string; mimeType: string; payloadByteLength: number } | null {
+  const match = /^data:([^;,]+)?;base64,(.*)$/u.exec(value);
+
+  if (!match) {
+    return null;
+  }
+
+  const encodedData = match[2] ?? "";
+
+  return {
+    encodedData,
+    mimeType: match[1] ?? "image/png",
+    payloadByteLength: getBase64ByteLength(encodedData)
+  };
+}
+
+function getBase64ByteLength(value: string): number {
+  const normalizedValue = value.replace(/\s+/gu, "");
+  const paddingLength = normalizedValue.endsWith("==")
+    ? 2
+    : normalizedValue.endsWith("=")
+      ? 1
+      : 0;
+
+  return Math.max(0, Math.floor((normalizedValue.length * 3) / 4) - paddingLength);
+}
+
+function formatMegabytes(value: number): number {
+  return value / (1024 * 1024);
 }

@@ -10,6 +10,7 @@ vi.mock("html2canvas", () => ({
 
 import {
   captureElementScreenshot,
+  CaptureElementScreenshotError,
   capturePageScreenshot,
   createReview,
   createReviewId,
@@ -18,6 +19,7 @@ import {
   getBestLocatorSummary,
   getRankedLocators,
   locatorPriority,
+  maxArtifactPayloadBytes,
   maxDomSnippetLength,
   maxLocatorTextLength,
   serializeReview,
@@ -1328,5 +1330,29 @@ describe("@peril/core", () => {
 
     expect(harness.document.body.children).toHaveLength(2);
     expect(harness.getOverlayRoot()).toBeUndefined();
+  });
+
+  it("rejects oversized screenshot payloads with CaptureElementScreenshotError", async () => {
+    const target = new FakeElement("div");
+    const oversizedBase64 = "A".repeat(Math.ceil((maxArtifactPayloadBytes + 1) * 4 / 3));
+    const oversizedDataUrl = `data:image/png;base64,${oversizedBase64}`;
+    const { canvas } = createFakeCanvas({ dataUrl: oversizedDataUrl });
+    html2canvasMock.mockResolvedValue(canvas);
+
+    await expect(captureElementScreenshot(target as unknown as Element)).rejects.toThrow(
+      CaptureElementScreenshotError
+    );
+  });
+
+  it("wraps renderer failures as CaptureElementScreenshotError", async () => {
+    const target = new FakeElement("div");
+    html2canvasMock.mockRejectedValue(new TypeError("Canvas rendering failed"));
+
+    await expect(captureElementScreenshot(target as unknown as Element)).rejects.toThrow(
+      CaptureElementScreenshotError
+    );
+    await expect(captureElementScreenshot(target as unknown as Element)).rejects.toThrow(
+      "Failed to capture element screenshot."
+    );
   });
 });

@@ -375,4 +375,70 @@ describe("@peril/server", () => {
     expect(getResponse.status).toBe(404);
     expect(indexEntries).toEqual([]);
   });
+
+  it("truncates oversized DOM snippets and locator text on review creation", async () => {
+    const review = createReview({
+      id: "rev_01ARZ3NDEKTSV4RRFFQ69G5FAH",
+      selection: {
+        boundingBox: { x: 0, y: 0, width: 100, height: 50 },
+        domSnippet: "x".repeat(4096),
+        locators: {
+          css: ".test",
+          xpath: "//test",
+          text: "A".repeat(400)
+        }
+      }
+    });
+    const response = await postReview(review);
+    const body = (await response.json()) as Review;
+
+    expect(response.status).toBe(201);
+    expect(body.selection.domSnippet).toHaveLength(2048);
+    expect(body.selection.locators.text).toHaveLength(200);
+  });
+
+  it("returns 400 for invalid JSON request bodies", async () => {
+    const response = await fetch(`${activeServer?.url}/api/reviews`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: "{ invalid json }"
+    });
+    const body = (await response.json()) as { error: string; message: string };
+
+    expect(response.status).toBe(400);
+    expect(body.error).toBe("invalid_json");
+    expect(body.message).toContain("valid JSON");
+  });
+
+  it("returns 413 for oversized screenshot payloads", async () => {
+    const oversizedBase64 = "A".repeat(Math.ceil((5 * 1024 * 1024 + 1) * 4 / 3));
+    const review = createReview({
+      id: "rev_01ARZ3NDEKTSV4RRFFQ69G5FAJ",
+      artifacts: {
+        elementScreenshot: `data:image/png;base64,${oversizedBase64}`,
+        pageScreenshot: pngDataUrl
+      }
+    });
+    const response = await postReview(review);
+    const body = (await response.json()) as { error: string; message: string };
+
+    expect(response.status).toBe(413);
+    expect(body.error).toBe("payload_too_large");
+  });
+
+  it("returns structured error responses for storage permission errors", async () => {
+    const review = createReview({
+      id: "rev_01ARZ3NDEKTSV4RRFFQ69G5FAK",
+      artifacts: {
+        elementScreenshot: "/nonexistent/path/element.png",
+        pageScreenshot: pngDataUrl
+      }
+    });
+    const response = await postReview(review);
+    const body = (await response.json()) as { error: string; message: string };
+
+    expect(response.status).toBe(400);
+    expect(body.error).toBe("bad_request");
+    expect(body.message).toContain("Artifact source not found");
+  });
 });

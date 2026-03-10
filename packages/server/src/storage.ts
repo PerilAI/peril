@@ -6,10 +6,12 @@ import {
   readdir,
   rm,
   rename,
+  stat,
   writeFile
 } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
+import { maxArtifactPayloadBytes } from "./limits.js";
 import type {
   Artifacts,
   ListReviewsFilters,
@@ -28,6 +30,16 @@ export interface ReviewStorageOptions {
 interface ArtifactConfig {
   contentType: string;
   fileName: string;
+}
+
+export class ReviewStorageError extends Error {
+  constructor(
+    message: string,
+    readonly code: "artifact_payload_too_large" | "artifact_source_not_found"
+  ) {
+    super(message);
+    this.name = "ReviewStorageError";
+  }
 }
 
 const severityOrder: Severity[] = ["low", "medium", "high", "critical"];
@@ -302,11 +314,13 @@ export class ReviewStorage {
     const dataUrl = parseDataUrl(value);
 
     if (dataUrl) {
+      assertArtifactSizeWithinLimit(dataUrl.payload.byteLength, artifactType);
       await writeAtomic(destinationPath, dataUrl.payload);
       return `artifact://${reviewId}/${config.fileName}`;
     }
 
     if (artifactType === "rrwebSession" && (value.trim().startsWith("{") || value.trim().startsWith("["))) {
+      assertArtifactSizeWithinLimit(Buffer.byteLength(value, "utf8"), artifactType);
       await writeAtomic(destinationPath, value);
       return `artifact://${reviewId}/${config.fileName}`;
     }
@@ -314,9 +328,14 @@ export class ReviewStorage {
     const sourcePath = resolve(value);
 
     if (!(await fileExists(sourcePath))) {
-      throw new Error(`Artifact source not found for ${artifactType}.`);
+      throw new ReviewStorageError(
+        `Artifact source not found for ${artifactType}.`,
+        "artifact_source_not_found"
+      );
     }
 
+    const sourceStats = await stat(sourcePath);
+    assertArtifactSizeWithinLimit(sourceStats.size, artifactType);
     await copyFile(sourcePath, destinationPath);
     return `artifact://${reviewId}/${config.fileName}`;
   }
@@ -353,4 +372,18 @@ export class ReviewStorage {
   private getReviewFilePath(reviewId: string): string {
     return resolve(this.getReviewDirectory(reviewId), "review.json");
   }
+}
+
+function assertArtifactSizeWithinLimit(
+  sizeInBytes: number,
+  artifactType: keyof Artifacts
+): void {
+  if (sizeInBytes <= maxArtifactPayloadBytes) {
+    return;
+  }
+
+  throw new ReviewStorageError(
+    `Artifact payload too large for ${artifactType}.`,
+    "artifact_payload_too_large"
+  );
 }

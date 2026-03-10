@@ -1,6 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { submitReview, type Review, type SubmitReviewInput } from "../src/index";
+import {
+  maxArtifactPayloadBytes,
+  ReviewTransportError,
+  submitReview,
+  type Review,
+  type SubmitReviewInput
+} from "../src/index";
 
 function createSubmitReviewInput(): SubmitReviewInput {
   return {
@@ -204,5 +210,49 @@ describe("@peril/core transport", () => {
     ).rejects.toThrow("Expected request body to match the Review interface.");
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("normalizes network TypeErrors into ReviewTransportError", async () => {
+    const input = createSubmitReviewInput();
+    const fetchMock = vi.fn<typeof fetch>(async () => {
+      throw new TypeError("Failed to fetch");
+    });
+
+    await expect(
+      submitReview(input, {
+        fetch: fetchMock,
+        maxRetries: 0,
+        retryDelayMs: 0
+      })
+    ).rejects.toThrow(ReviewTransportError);
+    await expect(
+      submitReview(input, {
+        fetch: fetchMock,
+        maxRetries: 0,
+        retryDelayMs: 0
+      })
+    ).rejects.toThrow("Could not reach the Peril server");
+  });
+
+  it("rejects oversized artifact payloads before sending", async () => {
+    const input = createSubmitReviewInput();
+    const oversizedBase64 = "A".repeat(Math.ceil((maxArtifactPayloadBytes + 1) * 4 / 3));
+    input.artifacts.elementScreenshot = `data:image/png;base64,${oversizedBase64}`;
+    const fetchMock = vi.fn<typeof fetch>();
+
+    await expect(
+      submitReview(input, {
+        fetch: fetchMock,
+        retryDelayMs: 0
+      })
+    ).rejects.toThrow(ReviewTransportError);
+    await expect(
+      submitReview(input, {
+        fetch: fetchMock,
+        retryDelayMs: 0
+      })
+    ).rejects.toThrow("size limit");
+
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 });

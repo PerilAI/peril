@@ -1,4 +1,4 @@
-import { maxDomSnippetLength, maxLocatorTextLength } from "./limits";
+import { maxArtifactPayloadBytes, maxDomSnippetLength, maxLocatorTextLength } from "./limits";
 import type { LocatorBundle } from "./locators";
 import type { BoundingBox } from "./overlay";
 
@@ -148,7 +148,7 @@ export function serializeReview(input: CreateReviewInput): string {
   return JSON.stringify(createReview(input), null, 2);
 }
 
-export { maxDomSnippetLength, maxLocatorTextLength };
+export { maxArtifactPayloadBytes, maxDomSnippetLength, maxLocatorTextLength };
 
 function encodeRandom(providedRandomValues: Uint8Array | undefined): string {
   const randomValues = getRandomValues(providedRandomValues);
