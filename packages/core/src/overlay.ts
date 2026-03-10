@@ -1,3 +1,5 @@
+import type { ReviewCategory, ReviewComment, Severity } from "./review";
+
 export interface BoundingBox {
   x: number;
   y: number;
@@ -10,7 +12,26 @@ export interface OverlaySelection {
   boundingBox: BoundingBox;
 }
 
+export interface ReviewCommentSubmission {
+  comment: ReviewComment;
+  selection: OverlaySelection;
+}
+
+export interface ReviewCommentComposerDefaults {
+  category?: ReviewCategory;
+  expected?: string;
+  severity?: Severity;
+  text?: string;
+}
+
+export interface ReviewCommentComposerOptions {
+  defaults?: ReviewCommentComposerDefaults;
+  onCancel?: (selection: OverlaySelection) => void;
+  onSubmit?: (submission: ReviewCommentSubmission) => void;
+}
+
 export interface ReviewOverlayOptions {
+  commentComposer?: ReviewCommentComposerOptions | false;
   document?: Document;
   window?: Window;
   zIndex?: number;
@@ -46,18 +67,30 @@ interface OverlayEventLike {
 }
 
 interface OverlayElementLike {
+  addEventListener(
+    type: string,
+    listener: (event: OverlayEventLike) => void,
+    options?: boolean | AddEventListenerOptions
+  ): void;
   appendChild(child: OverlayElementLike): unknown;
   contains(node: unknown): boolean;
   getBoundingClientRect(): DOMRect;
   remove(): void;
   setAttribute(name: string, value: string): void;
   style: Record<string, string>;
+  textContent?: string | null;
+  value?: string;
 }
 
 interface OverlayDocumentLike extends EventListenerTargetLike {
   body: OverlayElementLike | null;
   createElement(tagName: string): OverlayElementLike;
   documentElement: OverlayElementLike;
+}
+
+interface OverlayWindowLike extends EventListenerTargetLike {
+  innerHeight?: number;
+  innerWidth?: number;
 }
 
 interface OverlayNodeLike {
@@ -67,12 +100,16 @@ interface OverlayNodeLike {
 
 const overlayRootAttribute = "data-peril-overlay-root";
 const overlayHighlightAttribute = "data-peril-overlay-highlight";
+const overlayComposerAttribute = "data-peril-overlay-composer";
+const defaultComposerWidth = 320;
+const defaultComposerHeight = 260;
+const defaultComposerOffset = 12;
 
 export function createReviewOverlay(
   options: ReviewOverlayOptions = {}
 ): ReviewOverlayController {
   const targetDocument = (options.document ?? globalThis.document) as unknown as OverlayDocumentLike;
-  const targetWindow = (options.window ?? globalThis.window) as unknown as EventListenerTargetLike;
+  const targetWindow = (options.window ?? globalThis.window) as unknown as OverlayWindowLike;
 
   if (!targetDocument) {
     throw new Error("createReviewOverlay requires a document.");
@@ -84,10 +121,12 @@ export function createReviewOverlay(
 
   const rootElement = targetDocument.createElement("div");
   const highlightElement = targetDocument.createElement("div");
+  const composerElement = createComposerElement(targetDocument, options.commentComposer);
   const mountTarget = targetDocument.body ?? targetDocument.documentElement;
   const zIndex = options.zIndex ?? 2147483647;
   let currentTarget: Element | null = null;
   let enabled = false;
+  let currentSelection: OverlaySelection | null = null;
   let selectionLocked = false;
 
   rootElement.setAttribute(overlayRootAttribute, "true");
@@ -111,6 +150,7 @@ export function createReviewOverlay(
   });
 
   rootElement.appendChild(highlightElement);
+  rootElement.appendChild(composerElement.root);
   mountTarget.appendChild(rootElement);
 
   const handlePointerMove = (event: OverlayEventLike): void => {
@@ -138,11 +178,14 @@ export function createReviewOverlay(
 
     selectionLocked = true;
     updateCurrentTarget(selectedTarget);
-    options.onSelect?.(buildSelection(selectedTarget));
+    currentSelection = buildSelection(selectedTarget);
+    options.onSelect?.(currentSelection);
+    composerElement.open(currentSelection);
   };
 
   const handleViewportChange = (): void => {
     renderHighlight();
+    composerElement.reposition(currentSelection);
   };
 
   targetDocument.addEventListener("pointermove", handlePointerMove, true);
@@ -153,6 +196,8 @@ export function createReviewOverlay(
   return {
     clearSelection(): void {
       selectionLocked = false;
+      currentSelection = null;
+      composerElement.close();
       updateCurrentTarget(null);
     },
     destroy(): void {
@@ -161,7 +206,9 @@ export function createReviewOverlay(
       targetWindow.removeEventListener("scroll", handleViewportChange, true);
       targetWindow.removeEventListener("resize", handleViewportChange);
       currentTarget = null;
+      currentSelection = null;
       selectionLocked = false;
+      composerElement.destroy();
       rootElement.remove();
     },
     isEnabled(): boolean {
@@ -176,6 +223,8 @@ export function createReviewOverlay(
 
       if (!enabled) {
         selectionLocked = false;
+        currentSelection = null;
+        composerElement.close();
         updateCurrentTarget(null);
         return;
       }
@@ -248,12 +297,182 @@ export function createReviewOverlay(
     }
 
     currentTarget = nextTarget;
+    currentSelection = currentTarget ? buildSelection(currentTarget) : null;
 
     if (!selectionLocked) {
-      options.onHover?.(currentTarget ? buildSelection(currentTarget) : null);
+      options.onHover?.(currentSelection);
     }
 
     renderHighlight();
+  }
+
+  function createComposerElement(
+    document: OverlayDocumentLike,
+    composerOptions: ReviewCommentComposerOptions | false | undefined
+  ) {
+    const composerSettings = composerOptions === false ? undefined : composerOptions;
+    const root = document.createElement("form");
+    const title = document.createElement("strong");
+    const textField = document.createElement("textarea");
+    const categoryField = document.createElement("select");
+    const severityField = document.createElement("select");
+    const expectedField = document.createElement("input");
+    const actions = document.createElement("div");
+    const cancelButton = document.createElement("button");
+    const submitButton = document.createElement("button");
+    let selection: OverlaySelection | null = null;
+
+    root.setAttribute(overlayComposerAttribute, "true");
+    Object.assign(root.style, {
+      background: "#ffffff",
+      border: "1px solid rgba(2, 132, 199, 0.35)",
+      borderRadius: "10px",
+      boxShadow: "0 18px 40px rgba(15, 23, 42, 0.22)",
+      color: "#0f172a",
+      display: "none",
+      gap: "10px",
+      left: `${defaultComposerOffset}px`,
+      maxWidth: `${defaultComposerWidth}px`,
+      padding: "14px",
+      pointerEvents: "auto",
+      position: "fixed",
+      top: `${defaultComposerOffset}px`,
+      width: `${defaultComposerWidth}px`
+    });
+
+    title.textContent = "Add review";
+    Object.assign(title.style, {
+      display: "block",
+      fontSize: "14px"
+    });
+
+    configureField(textField, {
+      name: "text",
+      placeholder: "What is wrong with this UI?",
+      rows: "4",
+      tag: "textarea",
+      value: composerSettings?.defaults?.text
+    });
+    configureSelect(categoryField, "category", ["bug", "polish", "accessibility", "copy", "ux"]);
+    categoryField.value = composerSettings?.defaults?.category ?? "bug";
+
+    configureSelect(severityField, "severity", ["low", "medium", "high", "critical"]);
+    severityField.value = composerSettings?.defaults?.severity ?? "medium";
+
+    configureField(expectedField, {
+      name: "expected",
+      placeholder: "What should happen instead?",
+      tag: "input",
+      value: composerSettings?.defaults?.expected
+    });
+
+    Object.assign(actions.style, {
+      display: "flex",
+      gap: "8px",
+      justifyContent: "flex-end"
+    });
+
+    configureButton(cancelButton, "button", "Cancel");
+    configureButton(submitButton, "submit", "Save review");
+    Object.assign(submitButton.style, {
+      background: "#0284c7",
+      color: "#ffffff"
+    });
+
+    actions.appendChild(cancelButton);
+    actions.appendChild(submitButton);
+    root.appendChild(title);
+    root.appendChild(textField);
+    root.appendChild(categoryField);
+    root.appendChild(severityField);
+    root.appendChild(expectedField);
+    root.appendChild(actions);
+
+    cancelButton.addEventListener("click", (event) => {
+      event.preventDefault?.();
+
+      if (!selection) {
+        return;
+      }
+
+      composerSettings?.onCancel?.(selection);
+      selectionLocked = false;
+      currentSelection = null;
+      close();
+      updateCurrentTarget(null);
+    });
+
+    root.addEventListener("submit", (event) => {
+      event.preventDefault?.();
+
+      if (!selection) {
+        return;
+      }
+
+      composerSettings?.onSubmit?.({
+        comment: {
+          category: (categoryField.value ?? "bug") as ReviewCategory,
+          expected: expectedField.value ?? "",
+          severity: (severityField.value ?? "medium") as Severity,
+          text: textField.value ?? ""
+        },
+        selection
+      });
+
+      selectionLocked = false;
+      currentSelection = null;
+      close();
+      updateCurrentTarget(null);
+    });
+
+    return {
+      close,
+      destroy(): void {
+        close();
+      },
+      root,
+      open(nextSelection: OverlaySelection): void {
+        if (!composerSettings) {
+          return;
+        }
+
+        selection = nextSelection;
+        root.style.display = "grid";
+        reposition(nextSelection);
+      },
+      reposition
+    };
+
+    function close(): void {
+      selection = null;
+      root.style.display = "none";
+    }
+
+    function reposition(nextSelection: OverlaySelection | null): void {
+      if (!nextSelection || root.style.display === "none") {
+        return;
+      }
+
+      const viewportWidth = targetWindow.innerWidth ?? 1280;
+      const viewportHeight = targetWindow.innerHeight ?? 720;
+      const left = clamp(
+        nextSelection.boundingBox.x,
+        defaultComposerOffset,
+        viewportWidth - defaultComposerWidth - defaultComposerOffset
+      );
+      const belowTop = nextSelection.boundingBox.y + nextSelection.boundingBox.height + defaultComposerOffset;
+      const top =
+        belowTop + defaultComposerHeight <= viewportHeight - defaultComposerOffset
+          ? belowTop
+          : clamp(
+              nextSelection.boundingBox.y - defaultComposerHeight - defaultComposerOffset,
+              defaultComposerOffset,
+              viewportHeight - defaultComposerHeight - defaultComposerOffset
+            );
+
+      root.style.left = `${left}px`;
+      root.style.top = `${top}px`;
+    }
   }
 }
 
@@ -264,4 +483,83 @@ function isElementLike(candidate: unknown): candidate is Element {
     typeof (candidate as Element).contains === "function" &&
     typeof (candidate as Element).getBoundingClientRect === "function"
   );
+}
+
+function configureField(
+  field: OverlayElementLike,
+  options: {
+    name: string;
+    placeholder: string;
+    rows?: string;
+    tag: "input" | "textarea";
+    value?: string | undefined;
+  }
+): void {
+  field.setAttribute("name", options.name);
+  field.setAttribute("placeholder", options.placeholder);
+
+  if (options.rows) {
+    field.setAttribute("rows", options.rows);
+  }
+
+  field.value = options.value ?? "";
+  Object.assign(field.style, {
+    border: "1px solid rgba(148, 163, 184, 0.8)",
+    borderRadius: "8px",
+    boxSizing: "border-box",
+    font: "inherit",
+    minHeight: options.tag === "textarea" ? "96px" : "40px",
+    padding: "10px",
+    width: "100%"
+  });
+}
+
+function configureSelect(
+  field: OverlayElementLike,
+  name: string,
+  values: string[]
+): void {
+  field.setAttribute("name", name);
+  Object.assign(field.style, {
+    border: "1px solid rgba(148, 163, 184, 0.8)",
+    borderRadius: "8px",
+    boxSizing: "border-box",
+    font: "inherit",
+    minHeight: "40px",
+    padding: "10px",
+    width: "100%"
+  });
+
+  for (const value of values) {
+    const option = (field as { ownerDocument?: OverlayDocumentLike }).ownerDocument?.createElement("option");
+
+    if (!option) {
+      continue;
+    }
+
+    option.setAttribute("value", value);
+    option.textContent = value;
+    field.appendChild(option);
+  }
+}
+
+function configureButton(field: OverlayElementLike, type: string, label: string): void {
+  field.setAttribute("type", type);
+  field.textContent = label;
+  Object.assign(field.style, {
+    border: "none",
+    borderRadius: "999px",
+    cursor: "pointer",
+    font: "inherit",
+    minHeight: "36px",
+    padding: "0 14px"
+  });
+}
+
+function clamp(value: number, min: number, max: number): number {
+  if (max < min) {
+    return min;
+  }
+
+  return Math.min(Math.max(value, min), max);
 }

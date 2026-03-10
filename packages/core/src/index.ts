@@ -20,6 +20,9 @@ export {
   createReviewOverlay,
   type BoundingBox,
   type OverlaySelection,
+  type ReviewCommentComposerDefaults,
+  type ReviewCommentComposerOptions,
+  type ReviewCommentSubmission,
   type ReviewOverlayController,
   type ReviewOverlayOptions
 } from "./overlay";

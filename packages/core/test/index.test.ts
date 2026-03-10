@@ -33,6 +33,12 @@ interface FakeMouseEvent {
   target: unknown;
 }
 
+interface FakeSubmitEvent {
+  defaultPrevented: boolean;
+  preventDefault(): void;
+  target: unknown;
+}
+
 interface RectInput {
   height: number;
   left: number;
@@ -76,12 +82,13 @@ class FakeEventTarget {
   }
 }
 
-class FakeElement {
+class FakeElement extends FakeEventTarget {
   public children: FakeElement[] = [];
   public readonly nodeType = 1;
   public ownerDocument: FakeDocument | null = null;
   public parentElement: FakeElement | null = null;
   public readonly style: Record<string, string> = {};
+  public value = "";
   private attributes = new Map<string, string>();
   private explicitTextContent: string | null = null;
   private rect = createRect({
@@ -93,7 +100,9 @@ class FakeElement {
 
   constructor(
     public readonly tagName: string
-  ) {}
+  ) {
+    super();
+  }
 
   appendChild(child: FakeElement): void {
     child.parentElement = this;
@@ -218,6 +227,16 @@ function createMouseEvent(target: unknown): FakeMouseEvent {
   };
 }
 
+function createSubmitEvent(target: unknown): FakeSubmitEvent {
+  return {
+    defaultPrevented: false,
+    preventDefault() {
+      this.defaultPrevented = true;
+    },
+    target
+  };
+}
+
 function createRect(rect: RectInput): DOMRect {
   return {
     bottom: rect.top + rect.height,
@@ -268,6 +287,9 @@ function createOverlayHarness() {
         child.getAttribute("data-peril-overlay-root") === "true"
       );
     },
+    getComposer(): FakeElement | undefined {
+      return findElementByAttribute(document.body, "data-peril-overlay-composer", "true");
+    },
     secondTarget,
     window
   };
@@ -287,6 +309,34 @@ function findElementById(root: FakeElement, id: string): FakeElement | null {
   }
 
   return null;
+}
+
+function findElementByAttribute(
+  root: FakeElement,
+  name: string,
+  value: string
+): FakeElement | undefined {
+  if (root.getAttribute(name) === value) {
+    return root;
+  }
+
+  for (const child of root.children) {
+    const match = findElementByAttribute(child, name, value);
+
+    if (match) {
+      return match;
+    }
+  }
+
+  return undefined;
+}
+
+function findFieldByName(root: FakeElement, name: string): FakeElement | undefined {
+  return findElementByAttribute(root, "name", name);
+}
+
+function findButtonByType(root: FakeElement, type: string): FakeElement | undefined {
+  return findElementByAttribute(root, "type", type);
 }
 
 describe("@peril/core", () => {
@@ -754,6 +804,121 @@ describe("@peril/core", () => {
     expect(harness.getHighlight()?.style.left).toBe("12px");
 
     overlay.clearSelection();
+    harness.document.dispatch("pointermove", createMouseEvent(harness.secondTarget));
+
+    expect(harness.getHighlight()?.style.left).toBe("200px");
+    expect(harness.getHighlight()?.style.top).toBe("90px");
+  });
+
+  it("opens a comment composer on selection and submits structured comment data", () => {
+    const harness = createOverlayHarness();
+    const submissions: Array<{
+      comment: {
+        category: string;
+        expected: string;
+        severity: string;
+        text: string;
+      };
+      selection: OverlaySelection;
+    }> = [];
+    const overlay = createReviewOverlay({
+      commentComposer: {
+        defaults: {
+          category: "polish",
+          severity: "high"
+        },
+        onSubmit(submission) {
+          submissions.push(submission);
+        }
+      },
+      document: harness.document as unknown as Document,
+      window: harness.window as unknown as Window
+    });
+
+    overlay.setEnabled(true);
+    harness.document.dispatch("click", createMouseEvent(harness.firstTarget));
+
+    const composer = harness.getComposer();
+    const textField = composer ? findFieldByName(composer, "text") : undefined;
+    const categoryField = composer ? findFieldByName(composer, "category") : undefined;
+    const severityField = composer ? findFieldByName(composer, "severity") : undefined;
+    const expectedField = composer ? findFieldByName(composer, "expected") : undefined;
+
+    expect(composer?.style.display).toBe("grid");
+    expect(categoryField?.value).toBe("polish");
+    expect(severityField?.value).toBe("high");
+
+    if (!composer || !textField || !categoryField || !severityField || !expectedField) {
+      throw new Error("Expected composer fields to exist.");
+    }
+
+    textField.value = "The CTA needs more spacing.";
+    categoryField.value = "ux";
+    severityField.value = "medium";
+    expectedField.value = "Keep 16px between the headline and CTA.";
+    composer.dispatch("submit", createSubmitEvent(composer));
+
+    expect(submissions).toEqual([
+      {
+        comment: {
+          category: "ux",
+          expected: "Keep 16px between the headline and CTA.",
+          severity: "medium",
+          text: "The CTA needs more spacing."
+        },
+        selection: {
+          boundingBox: {
+            height: 48,
+            width: 120,
+            x: 12,
+            y: 18
+          },
+          element: harness.firstTarget
+        }
+      }
+    ]);
+    expect(composer.style.display).toBe("none");
+    expect(harness.getHighlight()?.style.display).toBe("none");
+  });
+
+  it("clears the locked selection when the composer is cancelled", () => {
+    const harness = createOverlayHarness();
+    const cancelledSelections: OverlaySelection[] = [];
+    const overlay = createReviewOverlay({
+      commentComposer: {
+        onCancel(selection) {
+          cancelledSelections.push(selection);
+        }
+      },
+      document: harness.document as unknown as Document,
+      window: harness.window as unknown as Window
+    });
+
+    overlay.setEnabled(true);
+    harness.document.dispatch("click", createMouseEvent(harness.firstTarget));
+
+    const composer = harness.getComposer();
+    const cancelButton = composer ? findButtonByType(composer, "button") : undefined;
+
+    if (!composer || !cancelButton) {
+      throw new Error("Expected composer cancel button to exist.");
+    }
+
+    cancelButton.dispatch("click", createMouseEvent(cancelButton));
+
+    expect(cancelledSelections).toEqual([
+      {
+        boundingBox: {
+          height: 48,
+          width: 120,
+          x: 12,
+          y: 18
+        },
+        element: harness.firstTarget
+      }
+    ]);
+    expect(composer.style.display).toBe("none");
+
     harness.document.dispatch("pointermove", createMouseEvent(harness.secondTarget));
 
     expect(harness.getHighlight()?.style.left).toBe("200px");
