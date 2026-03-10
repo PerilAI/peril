@@ -1,6 +1,6 @@
 export {
-  capturePageScreenshot,
   captureElementScreenshot,
+  capturePageScreenshot,
   type CaptureElementScreenshotBlobOptions,
   type CaptureElementScreenshotDataUrlOptions,
   type CaptureElementScreenshotOptions,
