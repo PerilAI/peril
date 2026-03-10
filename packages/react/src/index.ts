@@ -19,6 +19,7 @@ import {
   locatorPriority,
   type OverlaySelection,
   type ReviewCommentComposerOptions,
+  type ReviewKeyboardShortcut,
   type ReviewOverlayController
 } from "@peril/core";
 
@@ -35,6 +36,7 @@ export interface ReviewProviderProps {
   commentComposer?: ReviewCommentComposerOptions | false;
   document?: Document;
   initialEnabled?: boolean;
+  keyboardShortcut?: ReviewKeyboardShortcut | false;
   onHover?: (selection: OverlaySelection | null) => void;
   onSelect?: (selection: OverlaySelection) => void;
   serverUrl?: string;
@@ -49,6 +51,7 @@ export function ReviewProvider({
   commentComposer,
   document,
   initialEnabled = false,
+  keyboardShortcut,
   onHover,
   onSelect,
   serverUrl,
@@ -60,6 +63,11 @@ export function ReviewProvider({
   const targetDocument = document ?? globalThis.document;
   const targetWindow = window ?? globalThis.window;
   const portalTarget = portalReady ? targetDocument?.body ?? targetDocument?.documentElement : null;
+  const contextValue: ReviewModeContextValue = {
+    enabled,
+    setEnabled,
+    ...(serverUrl === undefined ? {} : { serverUrl })
+  };
 
   useEffect(() => {
     if (targetDocument?.body ?? targetDocument?.documentElement) {
@@ -67,27 +75,27 @@ export function ReviewProvider({
     }
   }, [targetDocument]);
 
+  const bridgeProps: ReviewOverlayBridgeProps = {
+    document: targetDocument,
+    enabled,
+    onToggleRequest: setEnabled,
+    window: targetWindow,
+    ...(commentComposer === undefined ? {} : { commentComposer }),
+    ...(keyboardShortcut === undefined ? {} : { keyboardShortcut }),
+    ...(onHover === undefined ? {} : { onHover }),
+    ...(onSelect === undefined ? {} : { onSelect }),
+    ...(zIndex === undefined ? {} : { zIndex })
+  };
+
   return createElement(
     ReviewModeContext.Provider,
     {
-      value: {
-        enabled,
-        serverUrl,
-        setEnabled
-      }
+      value: contextValue
     },
     children,
-    portalTarget
+      portalTarget
       ? createPortal(
-          createElement(ReviewOverlayBridge, {
-            commentComposer,
-            document: targetDocument,
-            enabled,
-            onHover,
-            onSelect,
-            window: targetWindow,
-            zIndex
-          }),
+          createElement(ReviewOverlayBridge, bridgeProps),
           portalTarget
         )
       : null
@@ -108,8 +116,10 @@ interface ReviewOverlayBridgeProps {
   commentComposer?: ReviewCommentComposerOptions | false;
   document?: Document;
   enabled: boolean;
+  keyboardShortcut?: ReviewKeyboardShortcut | false;
   onHover?: (selection: OverlaySelection | null) => void;
   onSelect?: (selection: OverlaySelection) => void;
+  onToggleRequest?: (enabled: boolean) => void;
   window?: Window;
   zIndex?: number;
 }
@@ -118,8 +128,10 @@ function ReviewOverlayBridge({
   commentComposer,
   document,
   enabled,
+  keyboardShortcut,
   onHover,
   onSelect,
+  onToggleRequest,
   window,
   zIndex
 }: ReviewOverlayBridgeProps): null {
@@ -135,17 +147,22 @@ function ReviewOverlayBridge({
       return undefined;
     }
 
+    const handleHover = (selection: OverlaySelection | null): void => {
+      latestOnHover.current?.(selection);
+    };
+    const handleSelect = (selection: OverlaySelection): void => {
+      latestOnSelect.current?.(selection);
+    };
+
     const controller = createReviewOverlay({
-      commentComposer,
       document,
-      onHover(selection) {
-        latestOnHover.current?.(selection);
-      },
-      onSelect(selection) {
-        latestOnSelect.current?.(selection);
-      },
       window,
-      zIndex
+      ...(commentComposer === undefined ? {} : { commentComposer }),
+      ...(keyboardShortcut === undefined ? {} : { keyboardShortcut }),
+      ...(onToggleRequest === undefined ? {} : { onToggleRequest }),
+      ...(zIndex === undefined ? {} : { zIndex }),
+      onHover: handleHover,
+      onSelect: handleSelect
     });
 
     controllerRef.current = controller;
@@ -155,7 +172,7 @@ function ReviewOverlayBridge({
       controllerRef.current = null;
       controller.destroy();
     };
-  }, [commentComposer, document, window, zIndex]);
+  }, [commentComposer, document, keyboardShortcut, onToggleRequest, window, zIndex]);
 
   useEffect(() => {
     const controller = controllerRef.current;

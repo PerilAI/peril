@@ -33,6 +33,17 @@ interface FakeMouseEvent {
   target: unknown;
 }
 
+interface FakeKeyboardEvent {
+  altKey: boolean;
+  ctrlKey: boolean;
+  defaultPrevented: boolean;
+  key: string;
+  metaKey: boolean;
+  repeat: boolean;
+  shiftKey: boolean;
+  preventDefault(): void;
+}
+
 interface FakeSubmitEvent {
   defaultPrevented: boolean;
   preventDefault(): void;
@@ -234,6 +245,24 @@ function createSubmitEvent(target: unknown): FakeSubmitEvent {
       this.defaultPrevented = true;
     },
     target
+  };
+}
+
+function createKeyboardEvent(
+  key: string,
+  options: Partial<Omit<FakeKeyboardEvent, "defaultPrevented" | "key" | "preventDefault">> = {}
+): FakeKeyboardEvent {
+  return {
+    altKey: options.altKey ?? false,
+    ctrlKey: options.ctrlKey ?? false,
+    defaultPrevented: false,
+    key,
+    metaKey: options.metaKey ?? false,
+    repeat: options.repeat ?? false,
+    shiftKey: options.shiftKey ?? false,
+    preventDefault() {
+      this.defaultPrevented = true;
+    }
   };
 }
 
@@ -985,6 +1014,112 @@ describe("@peril/core", () => {
     harness.document.dispatch("pointermove", createMouseEvent(zeroSizeElement));
 
     expect(harness.getHighlight()?.style.display).toBe("none");
+    overlay.destroy();
+  });
+
+  it("toggles review mode with the default Ctrl+Shift+R shortcut", () => {
+    const harness = createOverlayHarness();
+    const overlay = createReviewOverlay({
+      document: harness.document as unknown as Document,
+      window: harness.window as unknown as Window
+    });
+    const keyboardEvent = createKeyboardEvent("R", {
+      ctrlKey: true,
+      shiftKey: true
+    });
+
+    expect(overlay.isEnabled()).toBe(false);
+
+    harness.document.dispatch("keydown", keyboardEvent);
+
+    expect(keyboardEvent.defaultPrevented).toBe(true);
+    expect(overlay.isEnabled()).toBe(true);
+
+    harness.document.dispatch(
+      "keydown",
+      createKeyboardEvent("r", {
+        ctrlKey: true,
+        shiftKey: true
+      })
+    );
+
+    expect(overlay.isEnabled()).toBe(false);
+    overlay.destroy();
+  });
+
+  it("supports configurable keyboard shortcuts", () => {
+    const harness = createOverlayHarness();
+    const overlay = createReviewOverlay({
+      document: harness.document as unknown as Document,
+      keyboardShortcut: {
+        altKey: true,
+        ctrlKey: false,
+        key: "k",
+        shiftKey: false
+      },
+      window: harness.window as unknown as Window
+    });
+
+    harness.document.dispatch(
+      "keydown",
+      createKeyboardEvent("r", {
+        ctrlKey: true,
+        shiftKey: true
+      })
+    );
+    expect(overlay.isEnabled()).toBe(false);
+
+    harness.document.dispatch(
+      "keydown",
+      createKeyboardEvent("k", {
+        altKey: true
+      })
+    );
+    expect(overlay.isEnabled()).toBe(true);
+    overlay.destroy();
+  });
+
+  it("can disable keyboard shortcut handling", () => {
+    const harness = createOverlayHarness();
+    const overlay = createReviewOverlay({
+      document: harness.document as unknown as Document,
+      keyboardShortcut: false,
+      window: harness.window as unknown as Window
+    });
+
+    harness.document.dispatch(
+      "keydown",
+      createKeyboardEvent("r", {
+        ctrlKey: true,
+        shiftKey: true
+      })
+    );
+
+    expect(overlay.isEnabled()).toBe(false);
+    overlay.destroy();
+  });
+
+  it("delegates shortcut toggles through onToggleRequest when provided", () => {
+    const harness = createOverlayHarness();
+    const toggleRequests: boolean[] = [];
+    const overlay = createReviewOverlay({
+      document: harness.document as unknown as Document,
+      onToggleRequest(enabled) {
+        toggleRequests.push(enabled);
+      },
+      window: harness.window as unknown as Window
+    });
+
+    harness.document.dispatch(
+      "keydown",
+      createKeyboardEvent("r", {
+        ctrlKey: true,
+        shiftKey: true
+      })
+    );
+
+    expect(toggleRequests).toEqual([true]);
+    expect(overlay.isEnabled()).toBe(false);
     overlay.destroy();
   });
 

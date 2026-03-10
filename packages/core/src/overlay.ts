@@ -30,9 +30,19 @@ export interface ReviewCommentComposerOptions {
   onSubmit?: (submission: ReviewCommentSubmission) => void;
 }
 
+export interface ReviewKeyboardShortcut {
+  altKey?: boolean;
+  ctrlKey?: boolean;
+  key?: string;
+  metaKey?: boolean;
+  shiftKey?: boolean;
+}
+
 export interface ReviewOverlayOptions {
   commentComposer?: ReviewCommentComposerOptions | false;
   document?: Document;
+  keyboardShortcut?: ReviewKeyboardShortcut | false;
+  onToggleRequest?: (enabled: boolean) => void;
   window?: Window;
   zIndex?: number;
   onHover?: (selection: OverlaySelection | null) => void;
@@ -62,6 +72,12 @@ interface EventListenerTargetLike {
 interface OverlayEventLike {
   target?: unknown;
   preventDefault?: () => void;
+  key?: string;
+  altKey?: boolean;
+  ctrlKey?: boolean;
+  metaKey?: boolean;
+  repeat?: boolean;
+  shiftKey?: boolean;
   stopImmediatePropagation?: () => void;
   stopPropagation?: () => void;
 }
@@ -104,6 +120,13 @@ const overlayComposerAttribute = "data-peril-overlay-composer";
 const defaultComposerWidth = 320;
 const defaultComposerHeight = 260;
 const defaultComposerOffset = 12;
+const defaultKeyboardShortcut: Required<ReviewKeyboardShortcut> = {
+  altKey: false,
+  ctrlKey: true,
+  key: "r",
+  metaKey: false,
+  shiftKey: true
+};
 
 export function createReviewOverlay(
   options: ReviewOverlayOptions = {}
@@ -123,6 +146,7 @@ export function createReviewOverlay(
   const highlightElement = targetDocument.createElement("div");
   const composerElement = createComposerElement(targetDocument, options.commentComposer);
   const mountTarget = targetDocument.body ?? targetDocument.documentElement;
+  const keyboardShortcut = getKeyboardShortcut(options.keyboardShortcut);
   const zIndex = options.zIndex ?? 2147483647;
   let currentTarget: Element | null = null;
   let enabled = false;
@@ -188,8 +212,25 @@ export function createReviewOverlay(
     composerElement.reposition(currentSelection);
   };
 
+  const handleKeyDown = (event: OverlayEventLike): void => {
+    if (!keyboardShortcut || event.repeat || !matchesKeyboardShortcut(event, keyboardShortcut)) {
+      return;
+    }
+
+    event.preventDefault?.();
+    const nextEnabled = !enabled;
+
+    if (options.onToggleRequest) {
+      options.onToggleRequest(nextEnabled);
+      return;
+    }
+
+    setEnabledState(nextEnabled);
+  };
+
   targetDocument.addEventListener("pointermove", handlePointerMove, true);
   targetDocument.addEventListener("click", handleClick, true);
+  targetDocument.addEventListener("keydown", handleKeyDown, true);
   targetWindow.addEventListener("scroll", handleViewportChange, true);
   targetWindow.addEventListener("resize", handleViewportChange);
 
@@ -203,6 +244,7 @@ export function createReviewOverlay(
     destroy(): void {
       targetDocument.removeEventListener("pointermove", handlePointerMove, true);
       targetDocument.removeEventListener("click", handleClick, true);
+      targetDocument.removeEventListener("keydown", handleKeyDown, true);
       targetWindow.removeEventListener("scroll", handleViewportChange, true);
       targetWindow.removeEventListener("resize", handleViewportChange);
       currentTarget = null;
@@ -215,23 +257,27 @@ export function createReviewOverlay(
       return enabled;
     },
     setEnabled(nextEnabled: boolean): void {
-      if (enabled === nextEnabled) {
-        return;
-      }
-
-      enabled = nextEnabled;
-
-      if (!enabled) {
-        selectionLocked = false;
-        currentSelection = null;
-        composerElement.close();
-        updateCurrentTarget(null);
-        return;
-      }
-
-      renderHighlight();
+      setEnabledState(nextEnabled);
     }
   };
+
+  function setEnabledState(nextEnabled: boolean): void {
+    if (enabled === nextEnabled) {
+      return;
+    }
+
+    enabled = nextEnabled;
+
+    if (!enabled) {
+      selectionLocked = false;
+      currentSelection = null;
+      composerElement.close();
+      updateCurrentTarget(null);
+      return;
+    }
+
+    renderHighlight();
+  }
 
   function buildSelection(element: Element): OverlaySelection {
     const rect = element.getBoundingClientRect();
@@ -562,4 +608,37 @@ function clamp(value: number, min: number, max: number): number {
   }
 
   return Math.min(Math.max(value, min), max);
+}
+
+function getKeyboardShortcut(
+  shortcut: ReviewKeyboardShortcut | false | undefined
+): Required<ReviewKeyboardShortcut> | null {
+  if (shortcut === false) {
+    return null;
+  }
+
+  return {
+    altKey: shortcut?.altKey ?? defaultKeyboardShortcut.altKey,
+    ctrlKey: shortcut?.ctrlKey ?? defaultKeyboardShortcut.ctrlKey,
+    key: normalizeShortcutKey(shortcut?.key ?? defaultKeyboardShortcut.key),
+    metaKey: shortcut?.metaKey ?? defaultKeyboardShortcut.metaKey,
+    shiftKey: shortcut?.shiftKey ?? defaultKeyboardShortcut.shiftKey
+  };
+}
+
+function matchesKeyboardShortcut(
+  event: OverlayEventLike,
+  shortcut: Required<ReviewKeyboardShortcut>
+): boolean {
+  return (
+    normalizeShortcutKey(event.key) === shortcut.key &&
+    Boolean(event.altKey) === shortcut.altKey &&
+    Boolean(event.ctrlKey) === shortcut.ctrlKey &&
+    Boolean(event.metaKey) === shortcut.metaKey &&
+    Boolean(event.shiftKey) === shortcut.shiftKey
+  );
+}
+
+function normalizeShortcutKey(key: string | undefined): string {
+  return (key ?? "").toLowerCase();
 }
