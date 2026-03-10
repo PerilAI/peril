@@ -10,6 +10,7 @@ import {
   type PlaygroundAnnotationOutput
 } from "./annotationPlaygroundData";
 import { generatePlaygroundLocatorBundle } from "./annotationPlaygroundLocators";
+import { trackDemoInteraction } from "../analytics";
 
 interface ComposerPosition {
   left: number;
@@ -61,11 +62,13 @@ export function AnnotationPlayground() {
     setDraft(createDefaultDraft(issueId));
     setIsComposerOpen(true);
     updateComposerPosition(issueId);
+    trackDemoInteraction("started");
   }
 
   function handleSubmit() {
     syncAnnotation(activeIssueId, true, draft);
     setIsComposerOpen(false);
+    trackDemoInteraction("completed");
   }
 
   function syncAnnotation(
@@ -399,7 +402,7 @@ export function AnnotationPlayground() {
                 <div className="mt-4 flex items-center justify-between gap-3">
                   <button
                     type="button"
-                    onClick={() => setIsComposerOpen(false)}
+                    onClick={() => { setIsComposerOpen(false); trackDemoInteraction("abandoned"); }}
                     className="text-sm text-text-secondary transition-colors duration-[var(--duration-fast)] hover:text-text-primary"
                   >
                     Cancel

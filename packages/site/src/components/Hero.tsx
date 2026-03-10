@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { HeroMicroDemo } from "./HeroMicroDemo";
 import { useExperiment } from "../ab/useExperiment";
 import { experiments } from "../ab";
+import { trackCTAClick } from "../analytics";
 
 export function Hero() {
   const { variant: headlineVariant } = useExperiment(experiments.heroHeadline);
@@ -50,13 +51,14 @@ export function Hero() {
             <a
               href="#get-started"
               className="inline-flex items-center rounded-[var(--radius-md)] bg-accent px-7 py-3.5 text-base font-medium text-accent-fg shadow-glow-sm transition-all duration-[var(--duration-fast)] hover:bg-accent-hover hover:shadow-glow-md"
-              onClick={ctaConvert}
+              onClick={() => { ctaConvert(); trackCTAClick(ctaText, "primary"); }}
             >
               {ctaText}
             </a>
             <a
               href="#how-it-works"
               className="inline-flex items-center rounded-[var(--radius-md)] border border-border px-7 py-3.5 text-base font-medium text-text-secondary transition-all duration-[var(--duration-fast)] hover:border-text-secondary hover:bg-surface hover:text-text-primary"
+              onClick={() => trackCTAClick("See How It Works", "secondary")}
             >
               See How It Works
             </a>
