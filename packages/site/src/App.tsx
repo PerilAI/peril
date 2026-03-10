@@ -1,5 +1,6 @@
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
+import { TrustSignals } from "./components/TrustSignals";
 import { AnnotationPlayground } from "./components/AnnotationPlayground";
 import { HowItWorks } from "./components/HowItWorks";
 import { UseCases } from "./components/UseCases";
@@ -13,6 +14,7 @@ export function App() {
       <Header />
       <main id="main">
         <Hero />
+        <TrustSignals />
         <AnnotationPlayground />
         <HowItWorks />
         <UseCases />
