@@ -65,9 +65,16 @@ describe("@peril/react portal bridge", () => {
     const fakeWindow = {} as Window;
     const onHover = vi.fn();
     const onSelect = vi.fn();
+    const keyboardShortcut = {
+      altKey: true,
+      ctrlKey: false,
+      key: "k",
+      shiftKey: false
+    };
 
     const element = ReviewProvider({
       children: "child",
+      keyboardShortcut,
       document: fakeDocument,
       initialEnabled: true,
       onHover,
@@ -88,6 +95,7 @@ describe("@peril/react portal bridge", () => {
     expect(bridgeElement.props).toMatchObject({
       document: fakeDocument,
       enabled: true,
+      keyboardShortcut,
       onHover,
       onSelect,
       window: fakeWindow,
@@ -132,9 +140,10 @@ describe("@peril/react portal bridge", () => {
         cleanups.push(cleanup);
       }
     });
+    const setReviewModeEnabled = vi.fn();
     const useStateMock = vi
       .fn()
-      .mockImplementationOnce(() => [true, vi.fn()])
+      .mockImplementationOnce(() => [true, setReviewModeEnabled])
       .mockImplementationOnce(() => [true, vi.fn()]);
     const createPortalMock = vi.fn((node) => node);
 
@@ -164,11 +173,17 @@ describe("@peril/react portal bridge", () => {
     const fakeWindow = {} as Window;
     const onHover = vi.fn();
     const onSelect = vi.fn();
+    const keyboardShortcut = {
+      ctrlKey: true,
+      key: "r",
+      shiftKey: true
+    };
 
     ReviewProvider({
       children: "child",
       document: fakeDocument,
       initialEnabled: true,
+      keyboardShortcut,
       onHover,
       onSelect,
       window: fakeWindow,
@@ -183,12 +198,21 @@ describe("@peril/react portal bridge", () => {
     expect(bridgeElement.type(bridgeElement.props)).toBeNull();
     expect(createReviewOverlayMock).toHaveBeenCalledWith(expect.objectContaining({
       document: fakeDocument,
+      keyboardShortcut,
       onHover: expect.any(Function),
       onSelect: expect.any(Function),
+      onToggleRequest: expect.any(Function),
       window: fakeWindow,
       zIndex: 120
     }));
     expect(controller.setEnabled).toHaveBeenCalledWith(true);
+
+    const onToggleRequest = createReviewOverlayMock.mock.calls[0]?.[0]?.onToggleRequest as
+      | ((enabled: boolean) => void)
+      | undefined;
+    onToggleRequest?.(false);
+
+    expect(setReviewModeEnabled).toHaveBeenCalledWith(false);
 
     for (const cleanup of cleanups) {
       cleanup();

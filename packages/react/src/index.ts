@@ -24,6 +24,7 @@ import {
   type Review,
   type ReviewCommentComposerOptions,
   type ReviewCommentSubmission,
+  type ReviewKeyboardShortcut,
   type ReviewMetadata,
   type ReviewOverlayController,
   type ReviewOverlayOptions,
@@ -44,10 +45,12 @@ export interface ReviewProviderProps {
   commentComposer?: ReviewCommentComposerOptions | false;
   document?: Document;
   initialEnabled?: boolean;
+  keyboardShortcut?: ReviewKeyboardShortcut | false;
   onHover?: (selection: OverlaySelection | null) => void;
   onSelect?: (selection: OverlaySelection) => void;
   onReviewCreated?: (review: Review) => void;
   onReviewError?: (error: unknown, submission: ReviewCommentSubmission) => void;
+  onToggleRequest?: (enabled: boolean) => void;
   reviewerName?: string;
   serverUrl?: string;
   submitOptions?: Omit<SubmitReviewOptions, "endpoint">;
@@ -62,10 +65,12 @@ export function ReviewProvider({
   commentComposer,
   document,
   initialEnabled = false,
+  keyboardShortcut,
   onHover,
   onSelect,
   onReviewCreated,
   onReviewError,
+  onToggleRequest,
   reviewerName,
   serverUrl,
   submitOptions,
@@ -77,6 +82,11 @@ export function ReviewProvider({
   const targetDocument = document ?? globalThis.document;
   const targetWindow = window ?? globalThis.window;
   const portalTarget = portalReady ? targetDocument?.body ?? targetDocument?.documentElement : null;
+  const contextValue: ReviewModeContextValue = {
+    enabled,
+    setEnabled,
+    ...(serverUrl === undefined ? {} : { serverUrl })
+  };
 
   useEffect(() => {
     if (targetDocument?.body ?? targetDocument?.documentElement) {
@@ -87,23 +97,21 @@ export function ReviewProvider({
   return createElement(
     ReviewModeContext.Provider,
     {
-      value: {
-        enabled,
-        serverUrl,
-        setEnabled
-      }
+      value: contextValue
     },
     children,
-    portalTarget
+      portalTarget
       ? createPortal(
           createElement(ReviewOverlayBridge, {
             commentComposer,
             document: targetDocument,
             enabled,
+            keyboardShortcut,
             onHover,
             onSelect,
             onReviewCreated,
             onReviewError,
+            onToggleRequest: onToggleRequest ?? setEnabled,
             reviewerName,
             serverUrl,
             submitOptions,
@@ -130,10 +138,12 @@ interface ReviewOverlayBridgeProps {
   commentComposer: ReviewCommentComposerOptions | false | undefined;
   document: Document | undefined;
   enabled: boolean;
+  keyboardShortcut?: ReviewKeyboardShortcut | false;
   onHover: ((selection: OverlaySelection | null) => void) | undefined;
   onReviewCreated: ((review: Review) => void) | undefined;
   onReviewError: ((error: unknown, submission: ReviewCommentSubmission) => void) | undefined;
   onSelect: ((selection: OverlaySelection) => void) | undefined;
+  onToggleRequest?: (enabled: boolean) => void;
   reviewerName: string | undefined;
   serverUrl: string | undefined;
   submitOptions: Omit<SubmitReviewOptions, "endpoint"> | undefined;
@@ -145,10 +155,12 @@ function ReviewOverlayBridge({
   commentComposer,
   document,
   enabled,
+  keyboardShortcut,
   onHover,
   onSelect,
   onReviewCreated,
   onReviewError,
+  onToggleRequest,
   reviewerName,
   serverUrl,
   submitOptions,
@@ -202,6 +214,14 @@ function ReviewOverlayBridge({
       window
     };
 
+    if (keyboardShortcut !== undefined) {
+      overlayOptions.keyboardShortcut = keyboardShortcut;
+    }
+
+    if (onToggleRequest !== undefined) {
+      overlayOptions.onToggleRequest = onToggleRequest;
+    }
+
     if (zIndex !== undefined) {
       overlayOptions.zIndex = zIndex;
     }
@@ -215,7 +235,7 @@ function ReviewOverlayBridge({
       controllerRef.current = null;
       controller.destroy();
     };
-  }, [commentComposer, document, window, zIndex]);
+  }, [commentComposer, document, keyboardShortcut, onToggleRequest, window, zIndex]);
 
   useEffect(() => {
     const controller = controllerRef.current;

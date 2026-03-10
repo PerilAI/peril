@@ -29,6 +29,7 @@ export {
   type OverlaySelection,
   type ReviewCommentComposerDefaults,
   type ReviewCommentComposerOptions,
+  type ReviewKeyboardShortcut,
   type ReviewCommentSubmission,
   type ReviewOverlayController,
   type ReviewOverlayOptions
