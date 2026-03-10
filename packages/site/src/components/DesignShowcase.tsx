@@ -4,7 +4,7 @@
  */
 export function DesignShowcase() {
   return (
-    <section className="border-t border-border px-6 py-24">
+    <section className="border-t border-border px-6 py-24" aria-label="Design system showcase">
       <div className="mx-auto max-w-[var(--container-max)]">
         {/* Section: Typography */}
         <div className="mb-20">
@@ -54,6 +54,7 @@ export function DesignShowcase() {
                   <div
                     className="h-12 w-12 rounded-[var(--radius-md)]"
                     style={{ backgroundColor: `var(--color-amber-${shade})` }}
+                    aria-hidden="true"
                   />
                   <span className="text-caption text-text-muted">{shade}</span>
                 </div>
@@ -69,6 +70,7 @@ export function DesignShowcase() {
                   <div
                     className="h-12 w-12 rounded-[var(--radius-md)] border border-border-subtle"
                     style={{ backgroundColor: `var(--color-neutral-${shade})` }}
+                    aria-hidden="true"
                   />
                   <span className="text-caption text-text-muted">{shade}</span>
                 </div>
@@ -102,19 +104,19 @@ export function DesignShowcase() {
 
           <div className="mt-10 flex flex-wrap gap-8">
             <div className="flex flex-col items-center gap-3">
-              <div className="h-20 w-20 rounded-[var(--radius-lg)] border border-accent bg-surface shadow-glow-sm" />
+              <div className="h-20 w-20 rounded-[var(--radius-lg)] border border-accent bg-surface shadow-glow-sm" aria-hidden="true" />
               <span className="text-sm text-text-secondary">Glow SM</span>
             </div>
             <div className="flex flex-col items-center gap-3">
-              <div className="h-20 w-20 rounded-[var(--radius-lg)] border border-accent bg-surface shadow-glow-md" />
+              <div className="h-20 w-20 rounded-[var(--radius-lg)] border border-accent bg-surface shadow-glow-md" aria-hidden="true" />
               <span className="text-sm text-text-secondary">Glow MD</span>
             </div>
             <div className="flex flex-col items-center gap-3">
-              <div className="h-20 w-20 rounded-[var(--radius-lg)] border border-accent bg-surface shadow-glow-lg" />
+              <div className="h-20 w-20 rounded-[var(--radius-lg)] border border-accent bg-surface shadow-glow-lg" aria-hidden="true" />
               <span className="text-sm text-text-secondary">Glow LG</span>
             </div>
             <div className="flex flex-col items-center gap-3">
-              <div className="h-20 w-20 rounded-[var(--radius-lg)] border border-accent bg-surface animate-[glow-pulse_2s_ease-in-out_infinite]" />
+              <div className="h-20 w-20 rounded-[var(--radius-lg)] border border-accent bg-surface animate-[glow-pulse_2s_ease-in-out_infinite]" aria-hidden="true" />
               <span className="text-sm text-text-secondary">Glow Pulse</span>
             </div>
           </div>
@@ -185,6 +187,7 @@ function SemanticSwatch({
     <div className="flex flex-col gap-1.5">
       <div
         className={`h-16 rounded-[var(--radius-md)] border border-border-subtle ${className}`}
+        aria-hidden="true"
       />
       <span className="text-caption text-text-muted">{label}</span>
     </div>
