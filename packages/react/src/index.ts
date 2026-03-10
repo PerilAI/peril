@@ -53,16 +53,14 @@ export function ReviewProvider({
   zIndex
 }: ReviewProviderProps): ReactElement {
   const [enabled, setEnabled] = useState(initialEnabled);
-  const [portalReady, setPortalReady] = useState(false);
-  const targetDocument = document ?? globalThis.document;
-  const targetWindow = window ?? globalThis.window;
-  const portalTarget = portalReady ? targetDocument?.body ?? targetDocument?.documentElement : null;
+  const [isMounted, setIsMounted] = useState(false);
+  const targetDocument = isMounted ? resolveTargetDocument(document) : undefined;
+  const targetWindow = isMounted ? resolveTargetWindow(window) : undefined;
+  const portalTarget = targetDocument?.body ?? targetDocument?.documentElement ?? null;
 
   useEffect(() => {
-    if (targetDocument?.body ?? targetDocument?.documentElement) {
-      setPortalReady(true);
-    }
-  }, [targetDocument]);
+    setIsMounted(true);
+  }, []);
 
   return createElement(
     ReviewModeContext.Provider,
@@ -228,6 +226,22 @@ function createBridgeProps(props: ReviewOverlayBridgeInput): ReviewOverlayBridge
   }
 
   return bridgeProps;
+}
+
+function resolveTargetDocument(targetDocument: Document | undefined): Document | undefined {
+  if (targetDocument !== undefined) {
+    return targetDocument;
+  }
+
+  return typeof document === "undefined" ? undefined : document;
+}
+
+function resolveTargetWindow(targetWindow: Window | undefined): Window | undefined {
+  if (targetWindow !== undefined) {
+    return targetWindow;
+  }
+
+  return typeof window === "undefined" ? undefined : window;
 }
 
 function createOverlayOptions(

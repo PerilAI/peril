@@ -10,15 +10,50 @@ function mockCoreModule(createReviewOverlayMock: ReturnType<typeof vi.fn>) {
 }
 
 describe("@peril/react portal bridge", () => {
+  it("does not create the overlay portal during server rendering", async () => {
+    vi.resetModules();
+
+    const createPortalMock = vi.fn();
+    const createReviewOverlayMock = vi.fn();
+
+    vi.doMock("react-dom", async () => {
+      const actual = await vi.importActual<typeof import("react-dom")>("react-dom");
+
+      return {
+        ...actual,
+        createPortal: createPortalMock
+      };
+    });
+    mockCoreModule(createReviewOverlayMock);
+
+    const { createElement } = await import("react");
+    const { renderToString } = await import("react-dom/server");
+    const { ReviewProvider } = await import("../src/index");
+
+    const rendered = renderToString(
+      createElement(
+        ReviewProvider,
+        {
+          initialEnabled: true,
+          serverUrl: "http://localhost:4173"
+        },
+        createElement("div", { id: "child" }, "Hello Peril")
+      )
+    );
+
+    expect(rendered).toContain("Hello Peril");
+    expect(createPortalMock).not.toHaveBeenCalled();
+    expect(createReviewOverlayMock).not.toHaveBeenCalled();
+  });
+
   it("creates a portal-mounted bridge when a DOM target is available", async () => {
     vi.resetModules();
 
     const setEnabled = vi.fn();
-    const setPortalReady = vi.fn();
     const useStateMock = vi
       .fn()
       .mockImplementationOnce(() => [true, setEnabled])
-      .mockImplementationOnce(() => [true, setPortalReady]);
+      .mockImplementationOnce(() => [true, vi.fn()]);
     const useEffectMock = vi.fn();
     const createPortalMock = vi.fn((node, target) => ({
       node,
@@ -173,5 +208,48 @@ describe("@peril/react portal bridge", () => {
     }
 
     expect(controller.destroy).toHaveBeenCalledTimes(1);
+  });
+
+  it("waits until the client mount effect before creating the overlay portal", async () => {
+    vi.resetModules();
+
+    const useStateMock = vi
+      .fn()
+      .mockImplementationOnce(() => [false, vi.fn()])
+      .mockImplementationOnce(() => [false, vi.fn()]);
+    const useEffectMock = vi.fn();
+    const createPortalMock = vi.fn();
+
+    vi.doMock("react", async () => {
+      const actual = await vi.importActual<typeof import("react")>("react");
+
+      return {
+        ...actual,
+        useEffect: useEffectMock,
+        useState: useStateMock
+      };
+    });
+    vi.doMock("react-dom", () => ({
+      createPortal: createPortalMock
+    }));
+    mockCoreModule(vi.fn());
+
+    const { ReviewProvider } = await import("../src/index");
+    const fakeDocument = {
+      body: {
+        nodeName: "BODY"
+      }
+    } as unknown as Document;
+    const fakeWindow = {} as Window;
+
+    ReviewProvider({
+      children: "child",
+      document: fakeDocument,
+      initialEnabled: true,
+      window: fakeWindow
+    });
+
+    expect(useEffectMock).toHaveBeenCalledTimes(1);
+    expect(createPortalMock).not.toHaveBeenCalled();
   });
 });
