@@ -18,7 +18,9 @@ export default defineConfig({
     }
   },
   test: {
+    alias: {
+      "@peril/core": resolve(__dirname, "../core/src/index.ts")
+    },
     include: ["test/**/*.test.ts"]
   }
 });
-
