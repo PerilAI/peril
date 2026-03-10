@@ -5,9 +5,11 @@
   "scripts": {
     "build": "pnpm --filter './packages/*' -r build",
     "dev": "pnpm --filter './packages/*' -r --parallel --stream dev",
-    "test": "pnpm test:packages && pnpm test:harness",
+    "test": "pnpm test:packages && pnpm test:repo-audit && pnpm test:harness",
     "test:packages": "pnpm --filter './packages/*' -r test",
+    "test:repo-audit": "vitest run test/repo-audit.test.ts",
     "test:harness": "vitest run test/harness.test.ts",
+    "repo:audit": "tsx scripts/repo-audit.ts",
     "test:core": "pnpm --filter @peril/core test",
     "test:server": "pnpm --filter @peril/server test",
     "test:mcp": "pnpm --filter @peril/mcp test",

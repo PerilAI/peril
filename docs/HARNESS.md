@@ -33,6 +33,7 @@ These files define the current product boundary, package split, and agent-facing
 - documented package structure matches the workspace packages
 - locator priority in docs matches `@peril/core`
 - MCP tool names in docs match `@peril/mcp`
+- merge-close guidance keeps the custom worktree policy and `pnpm repo:audit` documented
 
 These checks are intentionally narrow. They focus on the contracts agents need to trust while the product is still taking shape.
 
@@ -43,7 +44,8 @@ For any substantial change:
 1. Update the relevant source-of-truth doc first or in the same patch.
 2. Implement the code change inside the documented package boundary.
 3. Add or update automated checks.
-4. Run `pnpm test`.
+4. Run `pnpm repo:audit -- --base main` when the change affects branch/worktree hygiene.
+5. Run `pnpm test`.
 
 ## Next Harness Expansions
 

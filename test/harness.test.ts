@@ -102,6 +102,9 @@ describe("repository harness", () => {
   it("keeps custom worktree guidance present in repo and agent instructions", () => {
     expect(agentsDocument).toContain("dedicated custom git worktree");
     expect(agentsDocument).toContain("$AGENT_HOME/worktrees/peril/<ticket-or-branch>");
+    expect(agentsDocument).toContain("## Merge-Close Checklist");
+    expect(agentsDocument).toContain("pnpm repo:audit -- --base main");
+    expect(harnessDocument).toContain("pnpm repo:audit -- --base main");
 
     for (const relativePath of agentInstructionPaths) {
       const document = readFileSync(resolve(repoRoot, relativePath), "utf8");

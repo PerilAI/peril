@@ -52,6 +52,14 @@ Always run tests after making changes. Write tests for new functionality.
 - Do not reuse another agent's worktree. Each agent should have its own custom worktree path for isolated changes and review.
 - Do not merge your own branch unless the user explicitly asks for it. Hand off with a short summary, review notes, and test results.
 
+## Merge-Close Checklist
+
+- Run `pnpm repo:audit -- --base main` before asking to merge or marking a Paperclip issue `done`.
+- Confirm every task worktree is either clean and merged, or explicitly preserved on a named recovery branch.
+- Fix or remove nested worktrees inside the repository root. Agent worktrees belong under `$AGENT_HOME/worktrees/peril/<ticket-or-branch>` or `../peril-worktrees/<ticket-or-branch>`, not inside tracked directories.
+- Review `git branch --no-merged main` and explain any intentional exceptions in your handoff comment.
+- Run `pnpm test` after the audit passes or after documenting why a known exception remains open.
+
 ## Code Conventions
 
 - Use named exports, not default exports

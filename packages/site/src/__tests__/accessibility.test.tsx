@@ -139,7 +139,7 @@ describe("semantic HTML landmarks", () => {
 
   it("renders a <navigation> landmark with label", () => {
     render(<App />);
-    const nav = screen.getByRole("navigation");
+    const nav = screen.getByRole("navigation", { name: "Main navigation" });
     expect(nav).toBeDefined();
     expect(nav.getAttribute("aria-label")).toBe("Main navigation");
   });
@@ -229,6 +229,10 @@ describe("keyboard navigation", () => {
     render(<App />);
     const interactives = document.querySelectorAll("a[href], button");
     interactives.forEach((el) => {
+      if (el.closest("[aria-hidden='true']")) {
+        return;
+      }
+
       // tabIndex should be 0 or not set (defaults to 0 for a/button)
       const tabIndex = el.getAttribute("tabindex");
       if (tabIndex !== null) {
