@@ -158,6 +158,7 @@ class FakeElement extends FakeEventTarget {
 
 class FakeDocument extends FakeEventTarget {
   public readonly body = new FakeElement("body");
+  public defaultView: FakeWindow | null = null;
   public readonly documentElement = new FakeElement("html");
 
   constructor() {
@@ -178,7 +179,25 @@ class FakeDocument extends FakeEventTarget {
   }
 }
 
-class FakeWindow extends FakeEventTarget {}
+class FakeWindow extends FakeEventTarget {
+  public frameElement: FakeIframeElement | null = null;
+  public innerHeight = 720;
+  public innerWidth = 1280;
+}
+
+class FakeIframeElement extends FakeElement {
+  constructor(
+    public readonly contentDocument: FakeDocument | null,
+    public readonly contentWindow: FakeWindow | null
+  ) {
+    super("iframe");
+
+    if (this.contentDocument && this.contentWindow) {
+      this.contentDocument.defaultView = this.contentWindow;
+      this.contentWindow.frameElement = this;
+    }
+  }
+}
 
 interface FakeCanvasOptions {
   blob?: Blob | null;
@@ -256,6 +275,7 @@ function createRect(rect: RectInput): DOMRect {
 function createOverlayHarness() {
   const document = new FakeDocument();
   const window = new FakeWindow();
+  document.defaultView = window;
   const firstTarget = new FakeElement("button");
   const secondTarget = new FakeElement("a");
 
@@ -278,19 +298,56 @@ function createOverlayHarness() {
     document,
     firstTarget,
     getHighlight(): FakeElement | undefined {
-      return document.body.children.find((child) =>
-        child.getAttribute("data-peril-overlay-root") === "true"
-      )?.children[0];
+      return findElementByAttribute(document.documentElement, "data-peril-overlay-root", "true")?.children[0];
     },
     getOverlayRoot(): FakeElement | undefined {
-      return document.body.children.find((child) =>
-        child.getAttribute("data-peril-overlay-root") === "true"
-      );
+      return findElementByAttribute(document.documentElement, "data-peril-overlay-root", "true");
     },
     getComposer(): FakeElement | undefined {
-      return findElementByAttribute(document.body, "data-peril-overlay-composer", "true");
+      return findElementByAttribute(document.documentElement, "data-peril-overlay-composer", "true");
     },
     secondTarget,
+    window
+  };
+}
+
+function createIframeOverlayHarness() {
+  const document = new FakeDocument();
+  const window = new FakeWindow();
+  const iframeDocument = new FakeDocument();
+  const iframeWindow = new FakeWindow();
+  const iframe = new FakeIframeElement(iframeDocument, iframeWindow);
+  const iframeTarget = new FakeElement("button");
+  document.defaultView = window;
+
+  iframe.setRect({
+    height: 220,
+    left: 40,
+    top: 50,
+    width: 320
+  });
+  iframeTarget.setRect({
+    height: 30,
+    left: 15,
+    top: 20,
+    width: 140
+  });
+
+  iframeDocument.body.appendChild(iframeTarget);
+  document.body.appendChild(iframe);
+
+  return {
+    document,
+    getChildHighlight(): FakeElement | undefined {
+      return findElementByAttribute(iframeDocument.documentElement, "data-peril-overlay-root", "true")?.children[0];
+    },
+    getComposer(): FakeElement | undefined {
+      return findElementByAttribute(document.documentElement, "data-peril-overlay-composer", "true");
+    },
+    iframe,
+    iframeDocument,
+    iframeTarget,
+    iframeWindow,
     window
   };
 }
@@ -923,6 +980,85 @@ describe("@peril/core", () => {
 
     expect(harness.getHighlight()?.style.left).toBe("200px");
     expect(harness.getHighlight()?.style.top).toBe("90px");
+  });
+
+  it("mounts the overlay on the document root with isolated stacking styles", () => {
+    const harness = createOverlayHarness();
+    const overlay = createReviewOverlay({
+      document: harness.document as unknown as Document,
+      window: harness.window as unknown as Window,
+      zIndex: 4000
+    });
+
+    const overlayRoot = harness.getOverlayRoot();
+    const highlight = harness.getHighlight();
+
+    expect(overlayRoot?.parentElement).toBe(harness.document.documentElement);
+    expect(overlayRoot?.style.zIndex).toBe("4000");
+    expect(overlayRoot?.style.isolation).toBe("isolate");
+    expect(highlight?.style.transition).toContain("left 120ms");
+
+    overlay.destroy();
+  });
+
+  it("tracks same-origin iframe hover targets using top-level coordinates", () => {
+    const harness = createIframeOverlayHarness();
+    const hoveredSelections: Array<OverlaySelection | null> = [];
+    const overlay = createReviewOverlay({
+      document: harness.document as unknown as Document,
+      onHover(selection) {
+        hoveredSelections.push(selection);
+      },
+      window: harness.window as unknown as Window
+    });
+
+    overlay.setEnabled(true);
+    harness.iframeDocument.dispatch("pointermove", createMouseEvent(harness.iframeTarget));
+
+    expect(hoveredSelections).toHaveLength(1);
+    expect(hoveredSelections[0]?.boundingBox).toEqual({
+      height: 30,
+      width: 140,
+      x: 55,
+      y: 70
+    });
+    expect(harness.getChildHighlight()?.style.left).toBe("15px");
+    expect(harness.getChildHighlight()?.style.top).toBe("20px");
+
+    overlay.destroy();
+  });
+
+  it("positions the composer from top-level coordinates for iframe selections", () => {
+    const harness = createIframeOverlayHarness();
+    const selectedSelections: OverlaySelection[] = [];
+    const overlay = createReviewOverlay({
+      commentComposer: {},
+      document: harness.document as unknown as Document,
+      onSelect(selection) {
+        selectedSelections.push(selection);
+      },
+      window: harness.window as unknown as Window
+    });
+
+    overlay.setEnabled(true);
+    harness.iframeDocument.dispatch("click", createMouseEvent(harness.iframeTarget));
+
+    expect(selectedSelections).toEqual([
+      {
+        boundingBox: {
+          height: 30,
+          width: 140,
+          x: 55,
+          y: 70
+        },
+        element: harness.iframeTarget
+      }
+    ]);
+    expect(harness.getComposer()?.style.display).toBe("grid");
+    expect(harness.getComposer()?.style.left).toBe("55px");
+    expect(harness.getComposer()?.style.top).toBe("112px");
+
+    overlay.destroy();
   });
 
   it("ranks locators correctly with only required fields", () => {

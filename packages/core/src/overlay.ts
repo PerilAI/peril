@@ -73,11 +73,15 @@ interface OverlayElementLike {
     options?: boolean | AddEventListenerOptions
   ): void;
   appendChild(child: OverlayElementLike): unknown;
+  children?: ArrayLike<unknown>;
   contains(node: unknown): boolean;
   getBoundingClientRect(): DOMRect;
+  getAttribute?(name: string): string | null | undefined;
+  ownerDocument?: OverlayDocumentLike | null;
   remove(): void;
   setAttribute(name: string, value: string): void;
   style: Record<string, string>;
+  tagName?: string;
   textContent?: string | null;
   value?: string;
 }
@@ -85,10 +89,12 @@ interface OverlayElementLike {
 interface OverlayDocumentLike extends EventListenerTargetLike {
   body: OverlayElementLike | null;
   createElement(tagName: string): OverlayElementLike;
+  defaultView?: OverlayWindowLike | null;
   documentElement: OverlayElementLike;
 }
 
 interface OverlayWindowLike extends EventListenerTargetLike {
+  frameElement?: OverlayIframeElementLike | null;
   innerHeight?: number;
   innerWidth?: number;
 }
@@ -96,6 +102,22 @@ interface OverlayWindowLike extends EventListenerTargetLike {
 interface OverlayNodeLike {
   nodeType?: number;
   parentElement?: Element | null;
+}
+
+interface OverlayIframeElementLike extends OverlayElementLike {
+  contentDocument?: OverlayDocumentLike | null;
+  contentWindow?: OverlayWindowLike | null;
+}
+
+interface OverlayDocumentContext {
+  document: OverlayDocumentLike;
+  frameElement: OverlayIframeElementLike | null;
+  handleClick: (event: OverlayEventLike) => void;
+  handlePointerMove: (event: OverlayEventLike) => void;
+  handleViewportChange: () => void;
+  highlightElement: OverlayElementLike;
+  rootElement: OverlayElementLike;
+  window: OverlayWindowLike;
 }
 
 const overlayRootAttribute = "data-peril-overlay-root";
@@ -119,97 +141,31 @@ export function createReviewOverlay(
     throw new Error("createReviewOverlay requires a window.");
   }
 
-  const rootElement = targetDocument.createElement("div");
-  const highlightElement = targetDocument.createElement("div");
   const composerElement = createComposerElement(targetDocument, options.commentComposer);
-  const mountTarget = targetDocument.body ?? targetDocument.documentElement;
   const zIndex = options.zIndex ?? 2147483647;
+  const contexts = new Map<OverlayDocumentLike, OverlayDocumentContext>();
   let currentTarget: Element | null = null;
+  let currentContext: OverlayDocumentContext | null = null;
   let enabled = false;
   let currentSelection: OverlaySelection | null = null;
   let selectionLocked = false;
 
-  rootElement.setAttribute(overlayRootAttribute, "true");
-  Object.assign(rootElement.style, {
-    inset: "0",
-    pointerEvents: "none",
-    position: "fixed",
-    zIndex: String(zIndex)
-  });
-
-  highlightElement.setAttribute(overlayHighlightAttribute, "true");
-  Object.assign(highlightElement.style, {
-    background: "rgba(14, 165, 233, 0.14)",
-    border: "2px solid #0284c7",
-    borderRadius: "4px",
-    boxSizing: "border-box",
-    display: "none",
-    left: "0px",
-    position: "fixed",
-    top: "0px"
-  });
-
-  rootElement.appendChild(highlightElement);
-  rootElement.appendChild(composerElement.root);
-  mountTarget.appendChild(rootElement);
-
-  const handlePointerMove = (event: OverlayEventLike): void => {
-    if (!enabled || selectionLocked) {
-      return;
-    }
-
-    updateCurrentTarget(getSelectableTarget(event.target));
-  };
-
-  const handleClick = (event: OverlayEventLike): void => {
-    if (!enabled) {
-      return;
-    }
-
-    const selectedTarget = getSelectableTarget(event.target);
-
-    if (!selectedTarget) {
-      return;
-    }
-
-    event.preventDefault?.();
-    event.stopPropagation?.();
-    event.stopImmediatePropagation?.();
-
-    selectionLocked = true;
-    updateCurrentTarget(selectedTarget);
-    currentSelection = buildSelection(selectedTarget);
-    options.onSelect?.(currentSelection);
-    composerElement.open(currentSelection);
-  };
-
-  const handleViewportChange = (): void => {
-    renderHighlight();
-    composerElement.reposition(currentSelection);
-  };
-
-  targetDocument.addEventListener("pointermove", handlePointerMove, true);
-  targetDocument.addEventListener("click", handleClick, true);
-  targetWindow.addEventListener("scroll", handleViewportChange, true);
-  targetWindow.addEventListener("resize", handleViewportChange);
+  syncDocumentContexts();
 
   return {
     clearSelection(): void {
       selectionLocked = false;
       currentSelection = null;
       composerElement.close();
-      updateCurrentTarget(null);
+      updateCurrentTarget(null, null);
     },
     destroy(): void {
-      targetDocument.removeEventListener("pointermove", handlePointerMove, true);
-      targetDocument.removeEventListener("click", handleClick, true);
-      targetWindow.removeEventListener("scroll", handleViewportChange, true);
-      targetWindow.removeEventListener("resize", handleViewportChange);
+      destroyDocumentContexts();
       currentTarget = null;
+      currentContext = null;
       currentSelection = null;
       selectionLocked = false;
       composerElement.destroy();
-      rootElement.remove();
     },
     isEnabled(): boolean {
       return enabled;
@@ -225,24 +181,29 @@ export function createReviewOverlay(
         selectionLocked = false;
         currentSelection = null;
         composerElement.close();
-        updateCurrentTarget(null);
+        updateCurrentTarget(null, null);
         return;
       }
 
+      syncDocumentContexts();
       renderHighlight();
     }
   };
 
-  function buildSelection(element: Element): OverlaySelection {
+  function buildSelection(
+    context: OverlayDocumentContext,
+    element: Element
+  ): OverlaySelection {
     const rect = element.getBoundingClientRect();
+    const offset = getFrameOffset(context);
 
     return {
       element,
       boundingBox: {
         height: rect.height,
         width: rect.width,
-        x: rect.left,
-        y: rect.top
+        x: rect.left + offset.x,
+        y: rect.top + offset.y
       }
     };
   }
@@ -257,53 +218,302 @@ export function createReviewOverlay(
       ? nodeCandidate.parentElement
       : candidate;
 
-    if (!isElementLike(elementCandidate) || rootElement.contains(elementCandidate)) {
+    if (!isElementLike(elementCandidate) || hasOverlayAncestor(elementCandidate)) {
       return null;
     }
 
     return elementCandidate;
   }
 
-  function hideHighlight(): void {
-    highlightElement.style.display = "none";
+  function hideHighlight(highlight: OverlayElementLike): void {
+    highlight.style.display = "none";
+    highlight.style.opacity = "0";
   }
 
   function renderHighlight(): void {
-    if (!enabled || !currentTarget) {
-      hideHighlight();
+    for (const context of contexts.values()) {
+      hideHighlight(context.highlightElement);
+    }
+
+    if (!enabled || !currentTarget || !currentContext) {
       return;
     }
 
     const rect = currentTarget.getBoundingClientRect();
 
     if (rect.width <= 0 || rect.height <= 0) {
-      hideHighlight();
+      hideHighlight(currentContext.highlightElement);
       return;
     }
 
-    Object.assign(highlightElement.style, {
+    Object.assign(currentContext.highlightElement.style, {
       display: "block",
       height: `${rect.height}px`,
       left: `${rect.left}px`,
+      opacity: "1",
       top: `${rect.top}px`,
       width: `${rect.width}px`
     });
   }
 
-  function updateCurrentTarget(nextTarget: Element | null): void {
-    if (currentTarget === nextTarget) {
+  function updateCurrentTarget(
+    nextContext: OverlayDocumentContext | null,
+    nextTarget: Element | null
+  ): void {
+    if (currentContext === nextContext && currentTarget === nextTarget) {
+      currentSelection =
+        currentContext && currentTarget ? buildSelection(currentContext, currentTarget) : null;
       renderHighlight();
       return;
     }
 
+    currentContext = nextContext;
     currentTarget = nextTarget;
-    currentSelection = currentTarget ? buildSelection(currentTarget) : null;
+    currentSelection =
+      currentContext && currentTarget ? buildSelection(currentContext, currentTarget) : null;
 
     if (!selectionLocked) {
       options.onHover?.(currentSelection);
     }
 
     renderHighlight();
+  }
+
+  function syncDocumentContexts(): void {
+    const nextDocuments = collectChildDocuments(targetDocument);
+    const activeDocuments = new Set<OverlayDocumentLike>([targetDocument]);
+
+    for (const frameContext of nextDocuments) {
+      activeDocuments.add(frameContext.document);
+
+      if (contexts.has(frameContext.document)) {
+        continue;
+      }
+
+      contexts.set(
+        frameContext.document,
+        createDocumentContext(
+          frameContext.document,
+          frameContext.window,
+          frameContext.frameElement,
+          false
+        )
+      );
+    }
+
+    if (!contexts.has(targetDocument)) {
+      contexts.set(targetDocument, createDocumentContext(targetDocument, targetWindow, null, true));
+    }
+
+    for (const [document, context] of Array.from(contexts.entries())) {
+      if (activeDocuments.has(document)) {
+        continue;
+      }
+
+      if (currentContext === context) {
+        selectionLocked = false;
+        currentSelection = null;
+        currentTarget = null;
+        currentContext = null;
+        composerElement.close();
+      }
+
+      context.rootElement.remove();
+      contexts.delete(document);
+    }
+  }
+
+  function destroyDocumentContexts(): void {
+    for (const context of contexts.values()) {
+      context.document.removeEventListener("pointermove", context.handlePointerMove, true);
+      context.document.removeEventListener("click", context.handleClick, true);
+      context.window.removeEventListener("scroll", context.handleViewportChange, true);
+      context.window.removeEventListener("resize", context.handleViewportChange);
+      context.rootElement.remove();
+    }
+
+    contexts.clear();
+  }
+
+  function createDocumentContext(
+    document: OverlayDocumentLike,
+    window: OverlayWindowLike,
+    frameElement: OverlayIframeElementLike | null,
+    includeComposer: boolean
+  ): OverlayDocumentContext {
+    const rootElement = document.createElement("div");
+    const highlightElement = document.createElement("div");
+    const mountTarget = document.documentElement ?? document.body;
+
+    rootElement.setAttribute(overlayRootAttribute, "true");
+    Object.assign(rootElement.style, {
+      contain: "layout style",
+      inset: "0",
+      isolation: "isolate",
+      overflow: "visible",
+      pointerEvents: "none",
+      position: "fixed",
+      zIndex: String(zIndex)
+    });
+
+    highlightElement.setAttribute(overlayHighlightAttribute, "true");
+    Object.assign(highlightElement.style, {
+      background: "rgba(14, 165, 233, 0.14)",
+      border: "2px solid #0284c7",
+      borderRadius: "4px",
+      boxSizing: "border-box",
+      display: "none",
+      left: "0px",
+      opacity: "0",
+      position: "fixed",
+      top: "0px",
+      transition: "left 120ms ease-out, top 120ms ease-out, width 120ms ease-out, height 120ms ease-out, opacity 120ms ease-out",
+      willChange: "left, top, width, height, opacity"
+    });
+
+    rootElement.appendChild(highlightElement);
+
+    if (includeComposer) {
+      rootElement.appendChild(composerElement.root);
+    }
+
+    mountTarget.appendChild(rootElement);
+
+    const context = {
+      document,
+      frameElement,
+      handleClick(event: OverlayEventLike): void {
+        if (!enabled) {
+          return;
+        }
+
+        if (!frameElement) {
+          syncDocumentContexts();
+        }
+
+        if (isWithinOverlayTarget(event.target)) {
+          return;
+        }
+
+        const selectedTarget = getSelectableTarget(event.target);
+
+        if (!selectedTarget) {
+          return;
+        }
+
+        event.preventDefault?.();
+        event.stopPropagation?.();
+        event.stopImmediatePropagation?.();
+
+        selectionLocked = true;
+        updateCurrentTarget(context, selectedTarget);
+
+        if (!currentSelection) {
+          return;
+        }
+
+        options.onSelect?.(currentSelection);
+        composerElement.open(currentSelection);
+      },
+      handlePointerMove(event: OverlayEventLike): void {
+        if (!enabled || selectionLocked) {
+          return;
+        }
+
+        if (!frameElement) {
+          syncDocumentContexts();
+        }
+
+        if (isWithinOverlayTarget(event.target)) {
+          return;
+        }
+
+        const nextTarget = getSelectableTarget(event.target);
+        updateCurrentTarget(nextTarget ? context : null, nextTarget);
+      },
+      handleViewportChange(): void {
+        syncDocumentContexts();
+        currentSelection =
+          currentContext && currentTarget ? buildSelection(currentContext, currentTarget) : null;
+        renderHighlight();
+        composerElement.reposition(currentSelection);
+      },
+      highlightElement,
+      rootElement,
+      window
+    };
+
+    document.addEventListener("pointermove", context.handlePointerMove, true);
+    document.addEventListener("click", context.handleClick, true);
+    window.addEventListener("scroll", context.handleViewportChange, true);
+    window.addEventListener("resize", context.handleViewportChange);
+
+    return context;
+  }
+
+  function getFrameOffset(context: OverlayDocumentContext): Pick<BoundingBox, "x" | "y"> {
+    let currentFrame = context.frameElement;
+    let x = 0;
+    let y = 0;
+
+    while (currentFrame) {
+      const rect = currentFrame.getBoundingClientRect();
+      x += rect.left;
+      y += rect.top;
+
+      const parentContext = contexts.get(currentFrame.ownerDocument ?? targetDocument);
+      currentFrame = parentContext?.frameElement ?? null;
+    }
+
+    return {
+      x,
+      y
+    };
+  }
+
+  function collectChildDocuments(document: OverlayDocumentLike): Array<{
+    document: OverlayDocumentLike;
+    frameElement: OverlayIframeElementLike;
+    window: OverlayWindowLike;
+  }> {
+    const iframeElements = collectIframeElements(document.documentElement);
+    const childDocuments: Array<{
+      document: OverlayDocumentLike;
+      frameElement: OverlayIframeElementLike;
+      window: OverlayWindowLike;
+    }> = [];
+
+    for (const iframeElement of iframeElements) {
+      const childDocument = iframeElement.contentDocument;
+      const childWindow = iframeElement.contentWindow ?? childDocument?.defaultView ?? null;
+
+      if (!childDocument || !childWindow) {
+        continue;
+      }
+
+      childDocuments.push({
+        document: childDocument,
+        frameElement: iframeElement,
+        window: childWindow
+      });
+      childDocuments.push(...collectChildDocuments(childDocument));
+    }
+
+    return childDocuments;
+  }
+
+  function collectIframeElements(root: OverlayElementLike): OverlayIframeElementLike[] {
+    const iframeElements: OverlayIframeElementLike[] = [];
+
+    for (const child of getChildElements(root)) {
+      if (isIframeElementLike(child)) {
+        iframeElements.push(child);
+      }
+
+      iframeElements.push(...collectIframeElements(child));
+    }
+
+    return iframeElements;
   }
 
   function createComposerElement(
@@ -399,7 +609,7 @@ export function createReviewOverlay(
       selectionLocked = false;
       currentSelection = null;
       close();
-      updateCurrentTarget(null);
+      updateCurrentTarget(null, null);
     });
 
     root.addEventListener("submit", (event) => {
@@ -422,7 +632,7 @@ export function createReviewOverlay(
       selectionLocked = false;
       currentSelection = null;
       close();
-      updateCurrentTarget(null);
+      updateCurrentTarget(null, null);
     });
 
     return {
@@ -482,6 +692,62 @@ function isElementLike(candidate: unknown): candidate is Element {
     candidate !== null &&
     typeof (candidate as Element).contains === "function" &&
     typeof (candidate as Element).getBoundingClientRect === "function"
+  );
+}
+
+function isIframeElementLike(candidate: unknown): candidate is OverlayIframeElementLike {
+  return (
+    typeof candidate === "object" &&
+    candidate !== null &&
+    typeof (candidate as OverlayElementLike).appendChild === "function" &&
+    typeof (candidate as OverlayElementLike).tagName === "string" &&
+    (candidate as OverlayElementLike).tagName?.toLowerCase() === "iframe"
+  );
+}
+
+function getChildElements(root: OverlayElementLike): OverlayElementLike[] {
+  const children = root.children ?? [];
+  const childElements: OverlayElementLike[] = [];
+
+  for (let index = 0; index < children.length; index += 1) {
+    const child = children[index];
+
+    if (isOverlayElementLike(child)) {
+      childElements.push(child);
+    }
+  }
+
+  return childElements;
+}
+
+function hasOverlayAncestor(element: Element): boolean {
+  let current: OverlayNodeLike | null = element as OverlayNodeLike;
+
+  while (current) {
+    if (
+      isOverlayElementLike(current) &&
+      current.getAttribute?.(overlayRootAttribute) === "true"
+    ) {
+      return true;
+    }
+
+    current = current.parentElement ?? null;
+  }
+
+  return false;
+}
+
+function isWithinOverlayTarget(candidate: unknown): boolean {
+  return isElementLike(candidate) && hasOverlayAncestor(candidate);
+}
+
+function isOverlayElementLike(candidate: unknown): candidate is OverlayElementLike {
+  return (
+    typeof candidate === "object" &&
+    candidate !== null &&
+    typeof (candidate as OverlayElementLike).appendChild === "function" &&
+    typeof (candidate as OverlayElementLike).contains === "function" &&
+    typeof (candidate as OverlayElementLike).getBoundingClientRect === "function"
   );
 }
 
