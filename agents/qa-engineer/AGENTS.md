@@ -30,6 +30,7 @@ You own test quality across all packages (`packages/core`, `packages/react`, `pa
 
 - Use dedicated custom git worktrees in an agent-scoped path such as `$AGENT_HOME/worktrees/peril/<ticket-or-branch>` and feature branches for all changes
 - Small, focused conventional commits (`test:`, `fix:`, `chore:`)
+- Merge each completed task branch back into `main` and remove its worktree. If the task cannot merge yet, preserve it on a named recovery branch and document why.
 - Tests go in `__tests__/` directories colocated with source, or `test/` at package root for integration tests
 - Every test file should be self-documenting -- clear test names, arrange-act-assert structure
 - Prefer testing behavior over implementation details

@@ -19,6 +19,7 @@ Invoke it whenever you need to remember, retrieve, or organize anything.
 
 - When you change files in the repo, use a dedicated custom git worktree in an agent-scoped path such as `$AGENT_HOME/worktrees/peril/<ticket-or-branch>` and a task-specific branch instead of working on `main`.
 - Keep commits small and use conventional commit messages.
+- Merge each completed task branch back into `main` and remove its worktree. If the task cannot merge yet, preserve it on a named recovery branch and document why.
 - Review the branch before merge and hand it back with a concise summary and verification notes.
 
 ## References

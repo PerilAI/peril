@@ -48,14 +48,15 @@ Always run tests after making changes. Write tests for new functionality.
 - Do not make changes directly on `main` or `master`. Start from `main` in your custom worktree, then create or switch to a task-specific branch before editing files.
 - Name branches with the ticket and intent when possible, for example `feature/per-39-agent-worktrees`, `fix/per-128-overlay-scroll`, or `chore/per-52-docs`.
 - Keep commits small and focused. Use conventional commit messages such as `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, or `chore:`.
-- Review your branch before asking to merge: inspect the diff, verify only task-related files changed, and run the relevant test commands.
+- Review your branch before merging: inspect the diff, verify only task-related files changed, and run the relevant test commands.
 - Do not reuse another agent's worktree. Each agent should have its own custom worktree path for isolated changes and review.
-- Do not merge your own branch unless the user explicitly asks for it. Hand off with a short summary, review notes, and test results.
+- When a task is complete, merge the task branch back into `main` and remove its worktree. If the work cannot be merged yet, preserve it on a named recovery branch and say why. Never leave orphaned or abandoned worktrees.
+- Hand off with a short summary, review notes, and test results after the merge or documented recovery handoff.
 
 ## Merge-Close Checklist
 
-- Run `pnpm repo:audit -- --base main` before asking to merge or marking a Paperclip issue `done`.
-- Confirm every task worktree is either clean and merged, or explicitly preserved on a named recovery branch.
+- Run `pnpm repo:audit -- --base main` before merging into `main` or marking a Paperclip issue `done`.
+- Confirm every task worktree is either removed after merge, or explicitly preserved on a named recovery branch with a documented reason.
 - Fix or remove nested worktrees inside the repository root. Agent worktrees belong under `$AGENT_HOME/worktrees/peril/<ticket-or-branch>` or `../peril-worktrees/<ticket-or-branch>`, not inside tracked directories.
 - Review `git branch --no-merged main` and explain any intentional exceptions in your handoff comment.
 - Run `pnpm test` after the audit passes or after documenting why a known exception remains open.

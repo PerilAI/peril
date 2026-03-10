@@ -14,6 +14,7 @@ const harnessDocument = readFileSync(resolve(repoRoot, "docs/HARNESS.md"), "utf8
 const agentInstructionPaths = [
   "agents/ceo/AGENTS.md",
   "agents/cpo/AGENTS.md",
+  "agents/frontend-engineer/AGENTS.md",
   "agents/qa-engineer/AGENTS.md"
 ];
 
@@ -103,7 +104,10 @@ describe("repository harness", () => {
     expect(agentsDocument).toContain("dedicated custom git worktree");
     expect(agentsDocument).toContain("$AGENT_HOME/worktrees/peril/<ticket-or-branch>");
     expect(agentsDocument).toContain("## Merge-Close Checklist");
+    expect(agentsDocument).toContain("merge the task branch back into `main`");
+    expect(agentsDocument).toContain("Never leave orphaned or abandoned worktrees.");
     expect(agentsDocument).toContain("pnpm repo:audit -- --base main");
+    expect(harnessDocument).toContain("merge-back-to-`main` requirement");
     expect(harnessDocument).toContain("pnpm repo:audit -- --base main");
 
     for (const relativePath of agentInstructionPaths) {
@@ -117,6 +121,14 @@ describe("repository harness", () => {
         document,
         `${relativePath} should show the agent-scoped worktree convention`
       ).toContain("$AGENT_HOME/worktrees/peril/<ticket-or-branch>");
+      expect(
+        document,
+        `${relativePath} should require completed worktrees to merge back into main`
+      ).toContain("Merge each completed task branch back into `main`");
+      expect(
+        document,
+        `${relativePath} should document recovery branches when work cannot merge`
+      ).toContain("named recovery branch");
     }
   });
 });

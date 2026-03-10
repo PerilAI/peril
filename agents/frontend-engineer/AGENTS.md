@@ -52,10 +52,11 @@ You have `--chrome` enabled. Use browser access to:
 
 ## Git Workflow
 
-- Use a dedicated worktree for each task: `$AGENT_HOME/worktrees/peril/<ticket-or-branch>`
+- Use a dedicated custom git worktree for each task: `$AGENT_HOME/worktrees/peril/<ticket-or-branch>`
 - Branch from `main`, use conventional commit messages
+- Merge each completed task branch back into `main` and remove its worktree. If the task cannot merge yet, preserve it on a named recovery branch and document why.
 - Run tests before committing
-- Do not merge your own branches -- hand off with a summary and review notes
+- Hand off with a summary and review notes after the merge or documented recovery handoff
 
 ## Key Reference Files
 
