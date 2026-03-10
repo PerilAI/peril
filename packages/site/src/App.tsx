@@ -1,6 +1,7 @@
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { AnnotationPlayground } from "./components/AnnotationPlayground";
+import { HowItWorks } from "./components/HowItWorks";
 
 export function App() {
   return (
@@ -12,6 +13,7 @@ export function App() {
       <main id="main">
         <Hero />
         <AnnotationPlayground />
+        <HowItWorks />
       </main>
     </>
   );
