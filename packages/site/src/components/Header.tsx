@@ -25,6 +25,7 @@ export function Header() {
             rel="noopener noreferrer"
           >
             GitHub
+            <span className="sr-only"> (opens in new tab)</span>
           </a>
           <a
             href="#get-started"

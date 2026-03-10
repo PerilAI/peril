@@ -4,7 +4,7 @@ export function Hero() {
       <div className="mx-auto max-w-[var(--container-narrow)] text-center">
         {/* Eyebrow */}
         <p className="mb-6 inline-flex items-center gap-2 rounded-[var(--radius-full)] border border-border bg-surface px-4 py-1.5 text-caption text-text-secondary">
-          <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-[glow-pulse_2s_ease-in-out_infinite]" />
+          <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent animate-[glow-pulse_2s_ease-in-out_infinite]" aria-hidden="true" />
           Now in public beta
         </p>
 
