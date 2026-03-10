@@ -28,14 +28,14 @@ afterEach(() => cleanup());
 
 /** Compute relative luminance per WCAG 2.1 definition. */
 function relativeLuminance(hex: string): number {
-  const rgb = hex
+  const [red = 0, green = 0, blue = 0] = hex
     .replace("#", "")
     .match(/.{2}/g)!
     .map((c) => {
       const v = parseInt(c, 16) / 255;
       return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
     });
-  return 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
+  return 0.2126 * red + 0.7152 * green + 0.0722 * blue;
 }
 
 /** Compute WCAG contrast ratio between two hex colors. */
@@ -160,7 +160,7 @@ describe("semantic HTML landmarks", () => {
     const allHeadings = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
     let prevLevel = 0;
     allHeadings.forEach((h) => {
-      const level = parseInt(h.tagName[1], 10);
+      const level = parseInt(h.tagName.slice(1), 10);
       // A heading should not jump more than 1 level deeper
       expect(level).toBeLessThanOrEqual(prevLevel + 1 || level);
       prevLevel = level;

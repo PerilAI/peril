@@ -3,17 +3,26 @@ import { HeroMicroDemo } from "./HeroMicroDemo";
 import { useExperiment } from "../ab/useExperiment";
 import { experiments } from "../ab";
 import { trackCTAClick } from "../analytics";
+import { defaultHeroMessage, getHeroMessageFromReferrer, type HeroMessage } from "./heroMessages";
 
 export function Hero() {
+  const [heroMessage, setHeroMessage] = useState<HeroMessage>(defaultHeroMessage);
   const { variant: headlineVariant } = useExperiment(experiments.heroHeadline);
   const { variant: ctaVariant, convert: ctaConvert } = useExperiment(experiments.ctaLabel);
 
-  const headline =
-    headlineVariant === "short-copy" ? (
-      <>Click. Comment. <span className="text-accent">Ship the fix.</span></>
-    ) : (
-      <>Visual feedback your <span className="text-accent">agents</span> understand</>
-    );
+  useEffect(() => {
+    setHeroMessage(getHeroMessageFromReferrer(document.referrer));
+  }, []);
+
+  const isReferralPersonalized = heroMessage !== defaultHeroMessage;
+
+  const headline = isReferralPersonalized ? (
+    <AccentHeadline headline={heroMessage.headline} accent={heroMessage.accent} />
+  ) : headlineVariant === "short-copy" ? (
+    <>Click. Comment. <span className="text-accent">Ship the fix.</span></>
+  ) : (
+    <AccentHeadline headline={heroMessage.headline} accent={heroMessage.accent} />
+  );
 
   const ctaText = ctaVariant === "get-started" ? "Get Started" : "Try Peril Free";
 
@@ -43,8 +52,7 @@ export function Hero() {
           </h1>
 
           <p className="mx-auto mt-4 max-w-xl text-body-lg leading-[var(--leading-relaxed)] text-text-secondary">
-            Click any element, leave a comment, and your coding agent gets structured locators,
-            screenshots, and context via MCP.
+            {heroMessage.description}
           </p>
 
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
@@ -71,6 +79,31 @@ export function Hero() {
       </section>
 
       <MobileStickyCta />
+    </>
+  );
+}
+
+interface AccentHeadlineProps {
+  accent: string;
+  headline: string;
+}
+
+function AccentHeadline({ accent, headline }: AccentHeadlineProps) {
+  const accentStart = headline.indexOf(accent);
+
+  if (accentStart === -1) {
+    return headline;
+  }
+
+  const accentEnd = accentStart + accent.length;
+  const beforeAccent = headline.slice(0, accentStart);
+  const afterAccent = headline.slice(accentEnd);
+
+  return (
+    <>
+      {beforeAccent}
+      <span className="text-accent">{accent}</span>
+      {afterAccent}
     </>
   );
 }
