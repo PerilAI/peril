@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ProductFrame } from "./ProductFrame";
+import { HeroMicroDemo } from "./HeroMicroDemo";
 
 export function Hero() {
   return (
@@ -51,9 +51,9 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Product frame — 64px gap from CTAs */}
+        {/* Micro-demo — 64px gap from CTAs */}
         <div className="relative mt-16 w-full max-w-[var(--container-max)] mx-auto px-6">
-          <ProductFrame />
+          <HeroMicroDemo />
         </div>
       </section>
 
