@@ -11,6 +11,9 @@
     "test:core": "pnpm --filter @peril/core test",
     "test:server": "pnpm --filter @peril/server test",
     "test:mcp": "pnpm --filter @peril/mcp test",
+    "test:site": "pnpm --filter @peril/site test",
+    "dev:site": "pnpm --filter @peril/site dev",
+    "build:site": "pnpm --filter @peril/site build",
     "test:e2e": "playwright test",
     "test:e2e:api": "playwright test --project=api"
   },

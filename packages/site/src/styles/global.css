@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+/*
+ * Peril Design Tokens
+ *
+ * Dark mode is the default. Light mode activates via .light class or
+ * prefers-color-scheme media query. Colors use amber/gold accent to
+ * differentiate from the sea of blue dev-tools sites.
+ */
+
+@theme {
+  /* Amber/gold accent palette */
+  --color-accent-50: #fffbeb;
+  --color-accent-100: #fef3c7;
+  --color-accent-200: #fde68a;
+  --color-accent-300: #fcd34d;
+  --color-accent-400: #fbbf24;
+  --color-accent-500: #f59e0b;
+  --color-accent-600: #d97706;
+  --color-accent-700: #b45309;
+  --color-accent-800: #92400e;
+  --color-accent-900: #78350f;
+
+  /* Neutral surface palette (warm-tinted grays) */
+  --color-surface-50: #fafaf9;
+  --color-surface-100: #f5f5f4;
+  --color-surface-200: #e7e5e4;
+  --color-surface-300: #d6d3d1;
+  --color-surface-400: #a8a29e;
+  --color-surface-500: #78716c;
+  --color-surface-600: #57534e;
+  --color-surface-700: #44403c;
+  --color-surface-800: #292524;
+  --color-surface-900: #1c1917;
+  --color-surface-950: #0c0a09;
+
+  /* Semantic colors */
+  --color-glow: #f59e0b;
+  --color-glow-muted: rgba(245, 158, 11, 0.15);
+
+  /* Typography scale */
+  --font-display: "Instrument Serif", "Georgia", serif;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+}
+
+/* ---- Dark mode (default) ---- */
+:root {
+  color-scheme: dark;
+  --bg: var(--color-surface-950);
+  --bg-secondary: var(--color-surface-900);
+  --bg-tertiary: var(--color-surface-800);
+  --fg: var(--color-surface-50);
+  --fg-secondary: var(--color-surface-400);
+  --fg-muted: var(--color-surface-500);
+  --border: var(--color-surface-800);
+  --border-subtle: var(--color-surface-900);
+}
+
+/* ---- Light mode ---- */
+.light {
+  color-scheme: light;
+  --bg: var(--color-surface-50);
+  --bg-secondary: var(--color-surface-100);
+  --bg-tertiary: var(--color-surface-200);
+  --fg: var(--color-surface-900);
+  --fg-secondary: var(--color-surface-600);
+  --fg-muted: var(--color-surface-500);
+  --border: var(--color-surface-200);
+  --border-subtle: var(--color-surface-100);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not(.dark) {
+    color-scheme: light;
+    --bg: var(--color-surface-50);
+    --bg-secondary: var(--color-surface-100);
+    --bg-tertiary: var(--color-surface-200);
+    --fg: var(--color-surface-900);
+    --fg-secondary: var(--color-surface-600);
+    --fg-muted: var(--color-surface-500);
+    --border: var(--color-surface-200);
+    --border-subtle: var(--color-surface-100);
+  }
+}
+
+/* ---- Base styles ---- */
+html {
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* ---- Skip to content (a11y) ---- */
+.skip-to-content {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background: var(--color-accent-500);
+  color: var(--color-surface-950);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.skip-to-content:focus {
+  left: 0;
+}
+
+/* ---- Focus ring ---- */
+:focus-visible {
+  outline: 2px solid var(--color-accent-500);
+  outline-offset: 2px;
+}
+
+/* ---- Glow utility ---- */
+.glow {
+  box-shadow: 0 0 20px var(--color-glow-muted),
+    0 0 60px rgba(245, 158, 11, 0.08);
+}
+
+/* ---- Reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
