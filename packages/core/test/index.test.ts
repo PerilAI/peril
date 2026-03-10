@@ -1,6 +1,15 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+const { html2canvasMock } = vi.hoisted(() => ({
+  html2canvasMock: vi.fn()
+}));
+
+vi.mock("html2canvas", () => ({
+  default: html2canvasMock
+}));
 
 import {
+  captureElementScreenshot,
   createReview,
   createReviewId,
   createReviewOverlay,
@@ -162,6 +171,35 @@ class FakeDocument extends FakeEventTarget {
 
 class FakeWindow extends FakeEventTarget {}
 
+interface FakeCanvasOptions {
+  blob?: Blob | null;
+  dataUrl?: string;
+  omitToBlob?: boolean;
+}
+
+function createFakeCanvas(options: FakeCanvasOptions = {}) {
+  const dataUrl = options.dataUrl ?? "data:image/png;base64,ZWxlbWVudA==";
+  const toDataURL = vi.fn((type?: string) => {
+    expect(type).toBe("image/png");
+    return dataUrl;
+  });
+  const toBlob = options.omitToBlob
+    ? undefined
+    : vi.fn((callback: (blob: Blob | null) => void, type?: string) => {
+        expect(type).toBe("image/png");
+        callback(options.blob ?? null);
+      });
+
+  return {
+    canvas: {
+      toBlob,
+      toDataURL
+    } as unknown as HTMLCanvasElement,
+    toBlob,
+    toDataURL
+  };
+}
+
 function createMouseEvent(target: unknown): FakeMouseEvent {
   return {
     defaultPrevented: false,
@@ -252,6 +290,10 @@ function findElementById(root: FakeElement, id: string): FakeElement | null {
 }
 
 describe("@peril/core", () => {
+  afterEach(() => {
+    html2canvasMock.mockReset();
+  });
+
   it("keeps locator priority aligned with the data model docs", () => {
     expect(locatorPriority).toEqual(["testId", "role", "css", "xpath", "text"]);
   });
@@ -579,6 +621,83 @@ describe("@peril/core", () => {
     expect(bundle.role).toEqual({
       name: longText,
       type: "button"
+    });
+  });
+
+  it("captures element screenshots as PNG data URLs by default", async () => {
+    const target = new FakeElement("button");
+    const { canvas, toDataURL } = createFakeCanvas();
+    html2canvasMock.mockResolvedValue(canvas);
+
+    const screenshot = await captureElementScreenshot(target as unknown as Element);
+
+    expect(screenshot).toBe("data:image/png;base64,ZWxlbWVudA==");
+    expect(html2canvasMock).toHaveBeenCalledWith(target, {
+      backgroundColor: null,
+      logging: false,
+      useCORS: true
+    });
+    expect(toDataURL).toHaveBeenCalledTimes(1);
+  });
+
+  it("captures element screenshots as blobs when requested", async () => {
+    const target = new FakeElement("section");
+    const expectedBlob = new Blob(["element"], {
+      type: "image/png"
+    });
+    const { canvas, toBlob, toDataURL } = createFakeCanvas({
+      blob: expectedBlob
+    });
+    html2canvasMock.mockResolvedValue(canvas);
+
+    const screenshot = await captureElementScreenshot(target as unknown as Element, {
+      format: "blob"
+    });
+
+    expect(screenshot).toBe(expectedBlob);
+    expect(toBlob).toHaveBeenCalledTimes(1);
+    expect(toDataURL).not.toHaveBeenCalled();
+  });
+
+  it("falls back to PNG data URL conversion when canvas blob output is unavailable", async () => {
+    const target = new FakeElement("article");
+    const { canvas, toBlob, toDataURL } = createFakeCanvas({
+      blob: null,
+      dataUrl: "data:image/png;base64,ZmFsbGJhY2s="
+    });
+    html2canvasMock.mockResolvedValue(canvas);
+
+    const screenshot = await captureElementScreenshot(target as unknown as Element, {
+      format: "blob"
+    });
+
+    expect(toBlob).toHaveBeenCalledTimes(1);
+    expect(toDataURL).toHaveBeenCalledTimes(1);
+    expect(screenshot).toBeInstanceOf(Blob);
+    await expect((screenshot as Blob).text()).resolves.toBe("fallback");
+  });
+
+  it("forwards capture overrides to html2canvas", async () => {
+    const target = new FakeElement("div");
+    const { canvas } = createFakeCanvas();
+    html2canvasMock.mockResolvedValue(canvas);
+
+    await captureElementScreenshot(target as unknown as Element, {
+      backgroundColor: "#ffffff",
+      html2canvasOptions: {
+        height: 240,
+        scale: 3,
+        width: 640
+      }
+    });
+
+    expect(html2canvasMock).toHaveBeenCalledWith(target, {
+      backgroundColor: "#ffffff",
+      height: 240,
+      logging: false,
+      scale: 3,
+      useCORS: true,
+      width: 640
     });
   });
 

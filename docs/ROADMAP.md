@@ -25,7 +25,7 @@ Tooling: TypeScript, pnpm workspaces, Vite for SDK bundling, Vitest for tests.
 | 1.1 | Monorepo setup (pnpm, tsconfig, Vite, Vitest) | root | -- |
 | 1.2 | Core overlay engine: review mode toggle, hover highlight, click-to-select | core | 1.1 |
 | 1.3 | Locator generator: testId, ARIA role, CSS, XPath, text | core | 1.1 |
-| 1.4 | Element screenshot capture (SnapDOM, html2canvas fallback) | core | 1.1 |
+| 1.4 | Element screenshot capture (html2canvas) | core | 1.1 |
 | 1.5 | Annotation serializer (JSON schema from DATA_MODEL.md) | core | 1.3, 1.4 |
 | 1.6 | Local dev server: REST API, file-based storage | server | 1.1 |
 | 1.7 | SDK transport: POST annotations to server | core | 1.5, 1.6 |

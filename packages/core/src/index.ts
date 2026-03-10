@@ -1,4 +1,12 @@
 export {
+  captureElementScreenshot,
+  type CaptureElementScreenshotBlobOptions,
+  type CaptureElementScreenshotDataUrlOptions,
+  type CaptureElementScreenshotOptions,
+  type ElementScreenshotFormat,
+  type ElementScreenshotHtml2CanvasOptions
+} from "./capture";
+export {
   getBestLocatorSummary,
   generateLocatorBundle,
   getRankedLocators,
@@ -34,3 +42,10 @@ export {
   type Severity,
   type Viewport
 } from "./review";
+export {
+  submitReview,
+  type ReviewArtifactUploadInput,
+  type ReviewArtifactValue,
+  type SubmitReviewInput,
+  type SubmitReviewOptions
+} from "./transport";

@@ -19,6 +19,8 @@
     "build": "tsc -p tsconfig.build.json && vite build",
     "dev": "vite build --watch",
     "test": "vitest run"
+  },
+  "dependencies": {
+    "html2canvas": "^1.4.1"
   }
 }
-

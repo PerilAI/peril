@@ -12,7 +12,11 @@ import {
 
 function ReviewModeProbe() {
   const reviewMode = useReviewMode();
-  return createElement("span", null, reviewMode.enabled ? "enabled" : "disabled");
+  return createElement(
+    "span",
+    null,
+    `${reviewMode.enabled ? "enabled" : "disabled"}:${reviewMode.serverUrl ?? "no-server"}`
+  );
 }
 
 function UseReviewModeWithoutProvider() {
@@ -40,43 +44,46 @@ describe("@peril/react", () => {
 
   it("re-exports getBestLocatorSummary from core", () => {
     expect(typeof getBestLocatorSummary).toBe("function");
-    expect(getBestLocatorSummary({
-      testId: "my-id",
-      css: ".test",
-      xpath: "//div"
-    })).toBe("my-id");
+    expect(
+      getBestLocatorSummary({
+        testId: "my-id",
+        css: ".test",
+        xpath: "//div"
+      })
+    ).toBe("my-id");
   });
 
-  it("provides review mode state through the provider", () => {
+  it("provides review mode state and serverUrl through the provider", () => {
     const rendered = renderToString(
       createElement(
         ReviewProvider,
         {
-          initialEnabled: true
+          initialEnabled: true,
+          serverUrl: "http://localhost:4173"
         },
         createElement(ReviewModeProbe)
       )
     );
 
-    expect(rendered).toContain("enabled");
+    expect(rendered).toContain("enabled:http://localhost:4173");
   });
 
   it("defaults to disabled when initialEnabled is not set", () => {
     const rendered = renderToString(
       createElement(
         ReviewProvider,
-        null,
+        {
+          serverUrl: "http://localhost:4173"
+        },
         createElement(ReviewModeProbe)
       )
     );
 
-    expect(rendered).toContain("disabled");
+    expect(rendered).toContain("disabled:http://localhost:4173");
   });
 
   it("throws when useReviewMode is used outside ReviewProvider", () => {
-    const rendered = renderToString(
-      createElement(UseReviewModeWithoutProvider)
-    );
+    const rendered = renderToString(createElement(UseReviewModeWithoutProvider));
 
     expect(rendered).toContain("threw-error");
   });
@@ -94,4 +101,3 @@ describe("@peril/react", () => {
     expect(rendered).toContain("child");
   });
 });
-
