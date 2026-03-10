@@ -11,11 +11,24 @@ export interface CaptureElementScreenshotOptions {
   html2canvasOptions?: ElementScreenshotHtml2CanvasOptions;
 }
 
+export interface CapturePageScreenshotOptions extends CaptureElementScreenshotOptions {
+  document?: Document;
+  window?: Window;
+}
+
 export interface CaptureElementScreenshotBlobOptions extends CaptureElementScreenshotOptions {
   format: "blob";
 }
 
 export interface CaptureElementScreenshotDataUrlOptions extends CaptureElementScreenshotOptions {
+  format?: "dataUrl";
+}
+
+export interface CapturePageScreenshotBlobOptions extends CapturePageScreenshotOptions {
+  format: "blob";
+}
+
+export interface CapturePageScreenshotDataUrlOptions extends CapturePageScreenshotOptions {
   format?: "dataUrl";
 }
 
@@ -40,18 +53,79 @@ export async function captureElementScreenshot(
   return canvas.toDataURL("image/png");
 }
 
+export function capturePageScreenshot(
+  options?: CapturePageScreenshotDataUrlOptions
+): Promise<string>;
+export function capturePageScreenshot(
+  options: CapturePageScreenshotBlobOptions
+): Promise<Blob>;
+export async function capturePageScreenshot(
+  options: CapturePageScreenshotOptions = {}
+): Promise<Blob | string> {
+  const canvas = await renderPage(options);
+
+  if (options.format === "blob") {
+    return canvasToBlob(canvas);
+  }
+
+  return canvas.toDataURL("image/png");
+}
+
 async function renderElement(
   element: Element,
   options: CaptureElementScreenshotOptions
 ): Promise<HTMLCanvasElement> {
-  const html2canvas = (await import("html2canvas")).default;
-
-  return html2canvas(element as HTMLElement, {
+  return renderCanvas(element as HTMLElement, {
     backgroundColor: options.backgroundColor ?? null,
     logging: false,
     useCORS: true,
     ...options.html2canvasOptions
   });
+}
+
+async function renderPage(
+  options: CapturePageScreenshotOptions
+): Promise<HTMLCanvasElement> {
+  const targetDocument = options.document ?? globalThis.document;
+  const targetWindow = options.window ?? globalThis.window;
+  const rootElement = targetDocument?.documentElement ?? targetDocument?.body;
+
+  if (!targetDocument || !rootElement) {
+    throw new Error("capturePageScreenshot requires a document with a root element.");
+  }
+
+  if (!targetWindow) {
+    throw new Error("capturePageScreenshot requires a window.");
+  }
+
+  const viewportWidth = targetWindow.innerWidth || rootElement.clientWidth || 0;
+  const viewportHeight = targetWindow.innerHeight || rootElement.clientHeight || 0;
+  const scrollX = targetWindow.scrollX || 0;
+  const scrollY = targetWindow.scrollY || 0;
+
+  return renderCanvas(rootElement as HTMLElement, {
+    backgroundColor: options.backgroundColor ?? null,
+    height: viewportHeight,
+    logging: false,
+    scrollX,
+    scrollY,
+    useCORS: true,
+    width: viewportWidth,
+    windowHeight: viewportHeight,
+    windowWidth: viewportWidth,
+    x: scrollX,
+    y: scrollY,
+    ...options.html2canvasOptions
+  });
+}
+
+async function renderCanvas(
+  element: HTMLElement,
+  options: Partial<Html2CanvasOptions>
+): Promise<HTMLCanvasElement> {
+  const html2canvas = (await import("html2canvas")).default;
+
+  return html2canvas(element, options);
 }
 
 async function canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob> {

@@ -1,8 +1,12 @@
 export {
   captureElementScreenshot,
+  capturePageScreenshot,
   type CaptureElementScreenshotBlobOptions,
   type CaptureElementScreenshotDataUrlOptions,
   type CaptureElementScreenshotOptions,
+  type CapturePageScreenshotBlobOptions,
+  type CapturePageScreenshotDataUrlOptions,
+  type CapturePageScreenshotOptions,
   type ElementScreenshotFormat,
   type ElementScreenshotHtml2CanvasOptions
 } from "./capture";

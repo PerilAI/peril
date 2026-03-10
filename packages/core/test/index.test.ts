@@ -10,6 +10,7 @@ vi.mock("html2canvas", () => ({
 
 import {
   captureElementScreenshot,
+  capturePageScreenshot,
   createReview,
   createReviewId,
   createReviewOverlay,
@@ -83,6 +84,8 @@ class FakeEventTarget {
 }
 
 class FakeElement extends FakeEventTarget {
+  public clientHeight = 0;
+  public clientWidth = 0;
   public children: FakeElement[] = [];
   public readonly nodeType = 1;
   public ownerDocument: FakeDocument | null = null;
@@ -141,6 +144,8 @@ class FakeElement extends FakeEventTarget {
 
   setRect(rect: RectInput): void {
     this.rect = createRect(rect);
+    this.clientHeight = rect.height;
+    this.clientWidth = rect.width;
   }
 
   get textContent(): string | null {
@@ -725,6 +730,43 @@ describe("@peril/core", () => {
     expect(toDataURL).toHaveBeenCalledTimes(1);
     expect(screenshot).toBeInstanceOf(Blob);
     await expect((screenshot as Blob).text()).resolves.toBe("fallback");
+  });
+
+  it("captures visible page screenshots using the current viewport bounds", async () => {
+    const document = new FakeDocument();
+    document.documentElement.clientWidth = 1280;
+    document.documentElement.clientHeight = 720;
+    const window = {
+      innerHeight: 900,
+      innerWidth: 1440,
+      scrollX: 24,
+      scrollY: 64
+    } as Window;
+    const { canvas, toDataURL } = createFakeCanvas({
+      dataUrl: "data:image/png;base64,cGFnZQ=="
+    });
+    html2canvasMock.mockResolvedValue(canvas);
+
+    const screenshot = await capturePageScreenshot({
+      document: document as unknown as Document,
+      window
+    });
+
+    expect(screenshot).toBe("data:image/png;base64,cGFnZQ==");
+    expect(html2canvasMock).toHaveBeenCalledWith(document.documentElement, {
+      backgroundColor: null,
+      height: 900,
+      logging: false,
+      scrollX: 24,
+      scrollY: 64,
+      useCORS: true,
+      width: 1440,
+      windowHeight: 900,
+      windowWidth: 1440,
+      x: 24,
+      y: 64
+    });
+    expect(toDataURL).toHaveBeenCalledTimes(1);
   });
 
   it("forwards capture overrides to html2canvas", async () => {
