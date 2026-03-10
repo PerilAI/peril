@@ -85,7 +85,24 @@ export function ReviewProvider({
   const contextValue: ReviewModeContextValue = {
     enabled,
     setEnabled,
-    ...(serverUrl === undefined ? {} : { serverUrl })
+    serverUrl
+  };
+
+  const bridgeProps: ReviewOverlayBridgeProps = {
+    commentComposer,
+    document: targetDocument,
+    enabled,
+    onHover,
+    onReviewCreated,
+    onReviewError,
+    onSelect,
+    onToggleRequest: onToggleRequest ?? setEnabled,
+    reviewerName,
+    serverUrl,
+    submitOptions,
+    window: targetWindow,
+    ...(keyboardShortcut === undefined ? {} : { keyboardShortcut }),
+    ...(zIndex === undefined ? {} : { zIndex })
   };
 
   useEffect(() => {
@@ -102,22 +119,7 @@ export function ReviewProvider({
     children,
       portalTarget
       ? createPortal(
-          createElement(ReviewOverlayBridge, {
-            commentComposer,
-            document: targetDocument,
-            enabled,
-            keyboardShortcut,
-            onHover,
-            onSelect,
-            onReviewCreated,
-            onReviewError,
-            onToggleRequest: onToggleRequest ?? setEnabled,
-            reviewerName,
-            serverUrl,
-            submitOptions,
-            window: targetWindow,
-            zIndex
-          }),
+          createElement(ReviewOverlayBridge, bridgeProps),
           portalTarget
         )
       : null
@@ -148,7 +150,7 @@ interface ReviewOverlayBridgeProps {
   serverUrl: string | undefined;
   submitOptions: Omit<SubmitReviewOptions, "endpoint"> | undefined;
   window: Window | undefined;
-  zIndex: number | undefined;
+  zIndex?: number;
 }
 
 function ReviewOverlayBridge({

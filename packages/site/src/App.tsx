@@ -1,6 +1,6 @@
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
-import { DesignShowcase } from "./components/DesignShowcase";
+import { AnnotationPlayground } from "./components/AnnotationPlayground";
 
 export function App() {
   return (
@@ -11,7 +11,7 @@ export function App() {
       <Header />
       <main id="main">
         <Hero />
-        <DesignShowcase />
+        <AnnotationPlayground />
       </main>
     </>
   );
