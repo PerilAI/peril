@@ -16,9 +16,10 @@ Peril turns visual UX feedback into structured, agent-executable tasks via MCP. 
 ```
 packages/
   core/       # @peril/core -- overlay, capture, locators, serialization (framework-agnostic)
+  mcp/        # @peril/mcp -- MCP server wrapping the REST API
   react/      # @peril/react -- ReviewProvider, useReviewMode (thin wrapper over core)
   server/     # @peril/server -- local dev server, REST API, storage, dashboard UI
-  mcp/        # @peril/mcp -- MCP server wrapping the REST API
+  site/       # @peril/site -- marketing site (Vite + React + Tailwind)
 ```
 
 ## Setup

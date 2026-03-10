@@ -1,0 +1,178 @@
+/*
+ * Peril Design System — Tokens
+ *
+ * Color palette: Dark mode base with amber/gold accent
+ * Typography: DM Serif Display (headlines) + Inter (body)
+ * Spacing: 8px grid system
+ *
+ * Reference: docs/marketing-site-research.md §2.4, §5
+ */
+
+/* ============================================================
+   COLOR TOKENS
+   ============================================================
+   Dark mode base: warm-tinted near-black (not pure #000)
+   Accent: amber/gold — warm, distinctive, NOT blue
+   ============================================================ */
+
+:root {
+  /* --- Base palette (HSL for easy manipulation) --- */
+
+  /* Amber/gold accent ramp */
+  --color-amber-50: #fffbeb;
+  --color-amber-100: #fef3c7;
+  --color-amber-200: #fde68a;
+  --color-amber-300: #fcd34d;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
+  --color-amber-700: #b45309;
+  --color-amber-800: #92400e;
+  --color-amber-900: #78350f;
+
+  /* Neutral ramp (warm-tinted) */
+  --color-neutral-50: #fafaf9;
+  --color-neutral-100: #f5f5f4;
+  --color-neutral-200: #e7e5e4;
+  --color-neutral-300: #d6d3d1;
+  --color-neutral-400: #a8a29e;
+  --color-neutral-500: #78716c;
+  --color-neutral-600: #57534e;
+  --color-neutral-700: #44403c;
+  --color-neutral-800: #292524;
+  --color-neutral-900: #1c1917;
+  --color-neutral-950: #0c0a09;
+
+  /* --- Semantic tokens (dark mode default) --- */
+  --color-background: var(--color-neutral-950);
+  --color-surface: var(--color-neutral-900);
+  --color-surface-elevated: var(--color-neutral-800);
+  --color-border: var(--color-neutral-800);
+  --color-border-subtle: rgba(255, 255, 255, 0.06);
+
+  --color-text: var(--color-neutral-50);
+  --color-text-secondary: var(--color-neutral-400);
+  --color-text-muted: var(--color-neutral-500);
+
+  --color-accent: var(--color-amber-400);
+  --color-accent-hover: var(--color-amber-300);
+  --color-accent-foreground: var(--color-neutral-950);
+  --color-accent-muted: rgba(251, 191, 36, 0.15);
+  --color-accent-glow: rgba(251, 191, 36, 0.25);
+
+  /* --- Glow effect tokens (ties to annotation cursor pattern) --- */
+  --glow-color: var(--color-amber-400);
+  --glow-sm: 0 0 8px var(--color-accent-glow);
+  --glow-md: 0 0 16px var(--color-accent-glow), 0 0 4px var(--color-accent-muted);
+  --glow-lg: 0 0 32px var(--color-accent-glow), 0 0 8px var(--color-accent-muted);
+
+  /* ============================================================
+     TYPOGRAPHY TOKENS
+     ============================================================
+     Headline: DM Serif Display — distinctive serif, breaks sans monoculture
+     Body: Inter — clean, variable, excellent readability
+     ============================================================ */
+
+  --font-display: "DM Serif Display", Georgia, "Times New Roman", serif;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+
+  /* Type scale (modular, ~1.25 ratio) */
+  --text-hero: clamp(3rem, 5vw + 1rem, 5rem);
+  --text-h1: clamp(2.25rem, 3vw + 0.5rem, 3.5rem);
+  --text-h2: clamp(1.75rem, 2.5vw + 0.25rem, 2.5rem);
+  --text-h3: clamp(1.375rem, 2vw + 0.125rem, 1.875rem);
+  --text-h4: clamp(1.125rem, 1.5vw, 1.375rem);
+  --text-body: 1rem;
+  --text-body-lg: 1.125rem;
+  --text-small: 0.875rem;
+  --text-caption: 0.75rem;
+
+  /* Line heights */
+  --leading-tight: 1.1;
+  --leading-snug: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+
+  /* Font weights */
+  --weight-light: 300;
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* Letter spacing */
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.025em;
+  --tracking-wider: 0.05em;
+
+  /* ============================================================
+     SPACING TOKENS (8px grid)
+     ============================================================ */
+  --space-0: 0;
+  --space-1: 0.25rem; /* 4px */
+  --space-2: 0.5rem; /* 8px */
+  --space-3: 0.75rem; /* 12px */
+  --space-4: 1rem; /* 16px */
+  --space-5: 1.25rem; /* 20px */
+  --space-6: 1.5rem; /* 24px */
+  --space-8: 2rem; /* 32px */
+  --space-10: 2.5rem; /* 40px */
+  --space-12: 3rem; /* 48px */
+  --space-16: 4rem; /* 64px */
+  --space-20: 5rem; /* 80px */
+  --space-24: 6rem; /* 96px */
+  --space-32: 8rem; /* 128px */
+
+  /* Section rhythm */
+  --section-padding-y: var(--space-24);
+  --section-padding-y-sm: var(--space-16);
+
+  /* Container */
+  --container-max: 72rem; /* 1152px */
+  --container-narrow: 48rem; /* 768px */
+  --container-wide: 80rem; /* 1280px */
+  --container-padding: var(--space-6);
+
+  /* ============================================================
+     BORDER & RADIUS TOKENS
+     ============================================================ */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+
+  /* ============================================================
+     TRANSITION TOKENS
+     ============================================================ */
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================
+   LIGHT MODE OVERRIDES
+   ============================================================ */
+
+:root.light,
+[data-theme="light"] {
+  --color-background: var(--color-neutral-50);
+  --color-surface: white;
+  --color-surface-elevated: var(--color-neutral-100);
+  --color-border: var(--color-neutral-200);
+  --color-border-subtle: rgba(0, 0, 0, 0.06);
+
+  --color-text: var(--color-neutral-900);
+  --color-text-secondary: var(--color-neutral-600);
+  --color-text-muted: var(--color-neutral-500);
+
+  --color-accent: var(--color-amber-600);
+  --color-accent-hover: var(--color-amber-500);
+  --color-accent-foreground: white;
+  --color-accent-muted: rgba(217, 119, 6, 0.1);
+  --color-accent-glow: rgba(217, 119, 6, 0.2);
+}
