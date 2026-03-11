@@ -1,3 +1,5 @@
+import { ThemeToggle } from "./ThemeToggle";
+
 export function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-border-subtle bg-bg/80 backdrop-blur-md">
@@ -33,6 +35,7 @@ export function Header() {
             GitHub
             <span className="sr-only"> (opens in new tab)</span>
           </a>
+          <ThemeToggle />
           <a
             href="#get-started"
             className="inline-flex items-center rounded-[var(--radius-md)] bg-accent px-4 py-2 text-sm font-medium text-accent-fg transition-all duration-[var(--duration-fast)] hover:bg-accent-hover hover:shadow-glow-sm"

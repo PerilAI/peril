@@ -30,4 +30,7 @@ export default defineConfig({
     port: 4000,
     open: true,
   },
+  test: {
+    setupFiles: ["./src/test/setup.ts"],
+  },
 });

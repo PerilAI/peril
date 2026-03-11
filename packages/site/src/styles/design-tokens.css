@@ -170,8 +170,8 @@
   --color-text-secondary: var(--color-neutral-600);
   --color-text-muted: var(--color-neutral-500);
 
-  --color-accent: var(--color-amber-600);
-  --color-accent-hover: var(--color-amber-500);
+  --color-accent: var(--color-amber-700); /* amber-700 for text use: 4.81:1 on neutral-50, passes AA */
+  --color-accent-hover: var(--color-amber-600);
   --color-accent-foreground: var(--color-neutral-950); /* dark text on amber — 6.1:1 AA */
   --color-accent-muted: rgba(217, 119, 6, 0.1);
   --color-accent-glow: rgba(217, 119, 6, 0.2);
