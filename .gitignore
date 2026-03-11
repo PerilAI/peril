@@ -4,5 +4,8 @@ coverage
 *.tsbuildinfo
 .peril
 test-results
+.claude/skills/
 .claude/worktrees/
+agents/*/life/
+agents/*/memory/
 

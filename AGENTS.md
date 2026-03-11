@@ -130,5 +130,6 @@ The MCP server exposes these tools to coding agents:
 **Never:**
 - Import React (or any framework) in `packages/core/`
 - Break the MCP tool contract -- agents depend on stable tool signatures
+- Commit Paperclip-managed local state such as `agents/*/memory/`, `agents/*/life/`, `.claude/skills/`, or `.claude/worktrees/`
 - Commit screenshots, binary artifacts, or `.peril/` data directories
 - Add network calls to external services -- V1 is local-only
