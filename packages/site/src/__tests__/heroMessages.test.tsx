@@ -1,9 +1,15 @@
 // @vitest-environment happy-dom
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import { Hero } from "../components/Hero";
 import { defaultHeroMessage, getHeroMessageFromReferrer } from "../components/heroMessages";
+import { resetAssignments } from "../ab/engine";
+
+beforeEach(() => {
+  resetAssignments();
+  localStorage.clear();
+});
 
 afterEach(() => {
   cleanup();
@@ -38,10 +44,15 @@ describe("getHeroMessageFromReferrer", () => {
 
 describe("Hero personalization", () => {
   it("renders the generic headline during server rendering", () => {
+    // Pin Math.random so the A/B engine always assigns the "control" variant
+    vi.spyOn(Math, "random").mockReturnValue(0);
+
     const markup = renderToStaticMarkup(<Hero />);
     const textContent = markup.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
 
     expect(textContent).toContain(defaultHeroMessage.headline);
+
+    vi.restoreAllMocks();
   });
 
   it("updates the hero copy after mount when the visitor came from Cursor", async () => {
