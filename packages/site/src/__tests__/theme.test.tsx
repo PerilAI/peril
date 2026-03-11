@@ -16,6 +16,7 @@ afterEach(() => {
   cleanup();
   document.documentElement.className = "";
   document.documentElement.removeAttribute("data-theme");
+  window.localStorage.removeItem(THEME_STORAGE_KEY);
   vi.restoreAllMocks();
 });
 
