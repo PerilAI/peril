@@ -451,6 +451,7 @@ export function HowItWorks() {
 
   return (
     <section
+      id="how-it-works"
       ref={sectionRef as React.RefObject<HTMLElement>}
       className="py-[var(--section-padding-y)] px-[var(--container-padding)]"
       aria-labelledby="how-it-works-heading"

@@ -139,7 +139,7 @@ export function AnnotationPlayground() {
 
   return (
     <section
-      id="how-it-works"
+      id="get-started"
       className="relative overflow-hidden border-t border-border-subtle px-6 py-24"
       aria-labelledby="annotation-playground-heading"
     >
