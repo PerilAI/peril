@@ -197,6 +197,16 @@ export function AnnotationPlayground() {
           </p>
         </div>
 
+        <noscript>
+          <div className="mt-12 rounded-2xl border border-border bg-surface p-8 text-center">
+            <p className="text-body-lg text-text-secondary">
+              The interactive annotation playground requires JavaScript.
+              Enable JavaScript to try clicking elements and see the
+              structured payload Peril sends to your coding agent.
+            </p>
+          </div>
+        </noscript>
+
         <div
           className="mt-16 grid gap-8 lg:grid-cols-[minmax(0,1.45fr)_minmax(20rem,0.95fr)]"
           style={{
