@@ -71,19 +71,19 @@ function StructureIcon() {
         width="28"
         height="36"
         rx="3"
-        stroke="var(--color-neutral-400)"
+        stroke="var(--color-text-muted)"
         strokeWidth="1.5"
         fill="none"
       />
       {/* Data lines */}
-      <rect x="15" y="13" width="10" height="2" rx="1" fill="var(--color-neutral-400)" opacity="0.5" />
-      <rect x="15" y="19" width="18" height="2" rx="1" fill="var(--color-neutral-500)" />
-      <rect x="15" y="24" width="14" height="2" rx="1" fill="var(--color-neutral-500)" />
-      <rect x="15" y="29" width="16" height="2" rx="1" fill="var(--color-neutral-500)" />
-      <rect x="15" y="34" width="8" height="2" rx="1" fill="var(--color-neutral-500)" opacity="0.5" />
+      <rect x="15" y="13" width="10" height="2" rx="1" fill="var(--color-text-muted)" opacity="0.5" />
+      <rect x="15" y="19" width="18" height="2" rx="1" fill="var(--color-text-secondary)" />
+      <rect x="15" y="24" width="14" height="2" rx="1" fill="var(--color-text-secondary)" />
+      <rect x="15" y="29" width="16" height="2" rx="1" fill="var(--color-text-secondary)" />
+      <rect x="15" y="34" width="8" height="2" rx="1" fill="var(--color-text-secondary)" opacity="0.5" />
       {/* Bracket accents */}
-      <path d="M32 17L35 17L35 27L32 27" stroke="var(--color-neutral-500)" strokeWidth="1.5" fill="none" />
-      <circle cx="35" cy="22" r="2" fill="var(--color-neutral-500)" opacity="0.4" />
+      <path d="M32 17L35 17L35 27L32 27" stroke="var(--color-text-secondary)" strokeWidth="1.5" fill="none" />
+      <circle cx="35" cy="22" r="2" fill="var(--color-text-secondary)" opacity="0.4" />
     </svg>
   );
 }
@@ -156,7 +156,7 @@ function AnnotateVisual() {
 function StructureVisual() {
   return (
     <div className="rounded-lg border border-border-subtle bg-surface p-3 text-caption font-mono">
-      <div className="text-neutral-500 space-y-0.5">
+      <div className="space-y-0.5 text-text-muted">
         <div>{"{"}</div>
         <div className="pl-3">
           <span className="text-amber-400">&quot;selector&quot;</span>:{" "}
@@ -181,15 +181,15 @@ function ExecuteVisual() {
     <div className="rounded-lg border border-border-subtle bg-surface p-3 text-caption font-mono">
       <div className="space-y-1">
         <div className="text-text-muted">
-          <span className="text-green">$</span> agent processing task…
+          <span className="text-[var(--color-green)]">$</span> agent processing task…
         </div>
         <div className="text-text-secondary">
-          <span className="text-green">✓</span> Located button.primary
+          <span className="text-[var(--color-green)]">✓</span> Located button.primary
         </div>
         <div className="text-text-secondary">
-          <span className="text-green">✓</span> Applied fix in checkout-form.tsx
+          <span className="text-[var(--color-green)]">✓</span> Applied fix in checkout-form.tsx
         </div>
-        <div className="text-green">
+        <div className="text-[var(--color-green)]">
           ✓ PR #42 ready for review
         </div>
       </div>

@@ -165,9 +165,9 @@ export function AnnotationPlayground() {
         <div className="mt-16 grid gap-8 lg:grid-cols-[minmax(0,1.45fr)_minmax(20rem,0.95fr)]">
           <div
             ref={frameRef}
-            className="relative overflow-hidden rounded-2xl border border-border bg-surface/90 shadow-[0_24px_80px_rgba(0,0,0,0.38)]"
+            className="relative overflow-hidden rounded-2xl border border-border bg-surface/90 shadow-[0_24px_80px_rgba(28,25,23,0.14)] dark:shadow-[0_24px_80px_rgba(0,0,0,0.38)]"
           >
-            <div className="flex items-center gap-3 border-b border-border-subtle bg-bg/80 px-5 py-4">
+            <div className="flex items-center gap-3 border-b border-border-subtle bg-surface-elevated/80 px-5 py-4">
               <div className="flex items-center gap-2">
                 <span className="h-3 w-3 rounded-full bg-dot-close" />
                 <span className="h-3 w-3 rounded-full bg-dot-minimize" />
@@ -182,7 +182,7 @@ export function AnnotationPlayground() {
             </div>
 
             <div className="grid gap-6 p-5 md:p-6">
-              <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border-subtle bg-bg/50 px-4 py-3">
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border-subtle bg-surface-elevated/60 px-4 py-3">
                 <nav className="flex flex-wrap items-center gap-2 text-sm text-text-secondary" aria-label="Sample dashboard navigation">
                   {playgroundIssues
                     .filter((issue) => issue.id === "nav-align")
@@ -219,7 +219,7 @@ export function AnnotationPlayground() {
               </div>
 
               <div className="grid gap-4 md:grid-cols-[minmax(0,1.2fr)_minmax(15rem,0.8fr)]">
-                <div className="rounded-2xl border border-border-subtle bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01))] p-5">
+                <div className="rounded-2xl border border-border-subtle bg-surface p-5">
                   <p className="text-caption uppercase tracking-[var(--tracking-wider)] text-text-muted">
                     Current sprint
                   </p>
@@ -324,7 +324,7 @@ export function AnnotationPlayground() {
 
             {isComposerOpen ? (
               <div
-                className="absolute z-20 w-[min(20rem,calc(100%-2rem))] rounded-2xl border border-accent/40 bg-bg/96 p-4 shadow-[0_20px_48px_rgba(0,0,0,0.45)] backdrop-blur-md"
+                className="absolute z-20 w-[min(20rem,calc(100%-2rem))] rounded-2xl border border-accent/40 bg-surface/96 p-4 shadow-[0_20px_48px_rgba(28,25,23,0.18)] backdrop-blur-md dark:shadow-[0_20px_48px_rgba(0,0,0,0.45)]"
                 style={{
                   left: `${composerPosition.left}px`,
                   top: `${composerPosition.top}px`
@@ -419,7 +419,7 @@ export function AnnotationPlayground() {
             ) : null}
           </div>
 
-          <aside className="playground-panel-enter rounded-2xl border border-border bg-bg p-5 shadow-[0_24px_80px_rgba(0,0,0,0.3)]">
+          <aside className="playground-panel-enter rounded-2xl border border-border bg-surface p-5 shadow-[0_24px_80px_rgba(28,25,23,0.12)] dark:shadow-[0_24px_80px_rgba(0,0,0,0.3)]">
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border-subtle pb-4">
               <div>
                 <p className="text-caption uppercase tracking-[var(--tracking-wider)] text-accent">
@@ -442,7 +442,7 @@ export function AnnotationPlayground() {
               {outputLines.map((line, index) => (
                 <li
                   key={`${submittedAnnotation.issueId}-${line.id}-${submittedAnnotation.comment}`}
-                  className="playground-output-line rounded-lg border border-border-subtle bg-white/[0.02] px-3 py-2"
+                  className="playground-output-line rounded-lg border border-border-subtle bg-surface-elevated/50 px-3 py-2"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <span className="text-text-secondary">{line.label}</span>

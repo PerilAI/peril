@@ -88,7 +88,7 @@ function DesignFeedbackIcon() {
       <circle cx="30" cy="12" r="5" fill="var(--color-amber-400)" opacity="0.9" />
       <path
         d="M28 12L29.5 13.5L33 10"
-        stroke="var(--color-neutral-950)"
+        stroke="var(--color-accent-foreground)"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -175,12 +175,12 @@ function BugReportVisual() {
           <span className="text-text-secondary">"Submit button unresponsive on mobile"</span>
         </div>
         <div className="flex items-start gap-2">
-          <span className="text-green shrink-0">✓</span>
+          <span className="shrink-0 text-[var(--color-green)]">✓</span>
           <span className="text-text-secondary">Agent fixed touch target in <span className="text-text-primary">checkout.tsx:42</span></span>
         </div>
         <div className="flex items-start gap-2">
-          <span className="text-green shrink-0">✓</span>
-          <span className="text-green">PR #87 merged</span>
+          <span className="shrink-0 text-[var(--color-green)]">✓</span>
+          <span className="text-[var(--color-green)]">PR #87 merged</span>
         </div>
       </div>
     </div>
@@ -191,21 +191,21 @@ function DesignFeedbackVisual() {
   return (
     <div className="rounded-lg border border-border-subtle bg-surface p-3 text-caption font-mono">
       <div className="flex items-center gap-2 mb-2">
-        <div className="w-1.5 h-1.5 rounded-full bg-purple" />
+        <div className="h-1.5 w-1.5 rounded-full bg-[var(--color-purple)]" />
         <span className="text-text-muted">design review</span>
       </div>
       <div className="space-y-1.5">
         <div className="flex items-start gap-2">
-          <span className="text-purple shrink-0">→</span>
+          <span className="shrink-0 text-[var(--color-purple)]">→</span>
           <span className="text-text-secondary">"Header spacing too tight, needs 24px gap"</span>
         </div>
         <div className="flex items-start gap-2">
-          <span className="text-green shrink-0">✓</span>
+          <span className="shrink-0 text-[var(--color-green)]">✓</span>
           <span className="text-text-secondary">Updated <span className="text-text-primary">gap-4</span> → <span className="text-text-primary">gap-6</span></span>
         </div>
         <div className="flex items-start gap-2">
-          <span className="text-green shrink-0">✓</span>
-          <span className="text-green">PR #91 ready for review</span>
+          <span className="shrink-0 text-[var(--color-green)]">✓</span>
+          <span className="text-[var(--color-green)]">PR #91 ready for review</span>
         </div>
       </div>
     </div>
@@ -216,7 +216,7 @@ function AccessibilityVisual() {
   return (
     <div className="rounded-lg border border-border-subtle bg-surface p-3 text-caption font-mono">
       <div className="flex items-center gap-2 mb-2">
-        <div className="w-1.5 h-1.5 rounded-full bg-green" />
+        <div className="h-1.5 w-1.5 rounded-full bg-[var(--color-green)]" />
         <span className="text-text-muted">a11y audit</span>
       </div>
       <div className="space-y-1.5">
@@ -225,12 +225,12 @@ function AccessibilityVisual() {
           <span className="text-text-secondary">3 contrast violations flagged</span>
         </div>
         <div className="flex items-start gap-2">
-          <span className="text-green shrink-0">✓</span>
+          <span className="shrink-0 text-[var(--color-green)]">✓</span>
           <span className="text-text-secondary">All fixed to <span className="text-text-primary">4.5:1+</span> ratio</span>
         </div>
         <div className="flex items-start gap-2">
-          <span className="text-green shrink-0">✓</span>
-          <span className="text-green">WCAG AA compliant</span>
+          <span className="shrink-0 text-[var(--color-green)]">✓</span>
+          <span className="text-[var(--color-green)]">WCAG AA compliant</span>
         </div>
       </div>
     </div>

@@ -100,7 +100,7 @@ export function HeroMicroDemo() {
 
   return (
     <div
-      className="rounded-[var(--radius-xl)] border border-border-subtle bg-surface overflow-hidden shadow-lg shadow-black/20 transition-opacity duration-[1000ms]"
+      className="overflow-hidden rounded-[var(--radius-xl)] border border-border-subtle bg-surface shadow-[0_24px_80px_rgba(28,25,23,0.14)] transition-opacity duration-[1000ms] dark:shadow-[0_24px_80px_rgba(0,0,0,0.32)]"
       style={{ opacity: fading ? 0 : 1 }}
     >
       {/* Browser chrome */}
@@ -111,7 +111,7 @@ export function HeroMicroDemo() {
           <span className="h-3 w-3 rounded-full bg-dot-expand" />
         </div>
         <div className="flex-1 flex justify-center">
-          <div className="rounded-[var(--radius-md)] bg-bg/60 border border-border-subtle px-4 py-1 text-caption text-text-muted font-mono max-w-[280px] w-full text-center truncate">
+          <div className="w-full max-w-[280px] truncate rounded-[var(--radius-md)] border border-border px-4 py-1 text-center font-mono text-caption text-text-muted bg-surface-elevated/80">
             localhost:3000/dashboard
           </div>
         </div>
@@ -147,10 +147,10 @@ export function HeroMicroDemo() {
           {/* Content grid */}
           <div className="grid gap-4 sm:grid-cols-3">
             {/* Card 1 */}
-            <div className="rounded-[var(--radius-lg)] border border-border-subtle bg-surface p-4">
-              <div className="h-2 w-16 rounded bg-border-subtle mb-3" />
-              <div className="h-6 w-12 rounded bg-surface-elevated mb-2 font-display" />
-              <div className="h-2 w-full rounded bg-border-subtle mb-4" />
+            <div className="rounded-[var(--radius-lg)] border border-border bg-surface p-4">
+              <div className="mb-3 h-2 w-16 rounded bg-border" />
+              <div className="mb-2 h-6 w-12 rounded bg-border font-display" />
+              <div className="mb-4 h-2 w-full rounded bg-border" />
               <div className="h-8 rounded-[var(--radius-md)] bg-surface-elevated" />
             </div>
 
@@ -160,7 +160,7 @@ export function HeroMicroDemo() {
               style={{
                 borderColor: showGlow
                   ? "var(--color-accent)"
-                  : "var(--color-border-subtle)",
+                  : "var(--color-border)",
                 boxShadow: showGlow
                   ? "0 0 20px hsla(38, 92%, 55%, 0.35), 0 0 6px hsla(38, 92%, 55%, 0.15)"
                   : "none",
@@ -171,7 +171,7 @@ export function HeroMicroDemo() {
               <div className="font-display text-h3 text-text-primary mb-1">
                 $49
               </div>
-              <div className="h-2 w-20 rounded bg-border-subtle mb-4" />
+              <div className="mb-4 h-2 w-20 rounded bg-border" />
               {/* Target button */}
               <div
                 className="h-8 rounded-[var(--radius-md)] bg-accent/20 border border-accent/30 flex items-center justify-center"
@@ -183,10 +183,10 @@ export function HeroMicroDemo() {
             </div>
 
             {/* Card 3 */}
-            <div className="rounded-[var(--radius-lg)] border border-border-subtle bg-surface p-4">
-              <div className="h-2 w-18 rounded bg-border-subtle mb-3" />
-              <div className="h-6 w-14 rounded bg-surface-elevated mb-2" />
-              <div className="h-2 w-full rounded bg-border-subtle mb-4" />
+            <div className="rounded-[var(--radius-lg)] border border-border bg-surface p-4">
+              <div className="mb-3 h-2 w-18 rounded bg-border" />
+              <div className="mb-2 h-6 w-14 rounded bg-border" />
+              <div className="mb-4 h-2 w-full rounded bg-border" />
               <div className="h-8 rounded-[var(--radius-md)] bg-surface-elevated" />
             </div>
           </div>
@@ -232,7 +232,7 @@ export function HeroMicroDemo() {
               : "translateX(20px) scale(0.95)",
           }}
         >
-          <div className="rounded-[var(--radius-lg)] border border-border bg-surface-elevated px-4 py-3 shadow-lg shadow-black/30 max-w-[220px]">
+          <div className="max-w-[220px] rounded-[var(--radius-lg)] border border-border bg-surface-elevated px-4 py-3 shadow-[0_18px_36px_rgba(28,25,23,0.14)] dark:shadow-[0_18px_36px_rgba(0,0,0,0.28)]">
             <div className="flex items-center gap-2 mb-2">
               <div className="h-5 w-5 rounded-full bg-accent/30 flex items-center justify-center shrink-0">
                 <span className="text-accent text-caption font-bold">J</span>
@@ -274,7 +274,7 @@ export function HeroMicroDemo() {
               >
                 <span className="text-accent">{line.key}</span>
                 <span className="text-text-muted">: </span>
-                <span className="text-amber-200">{line.value}</span>
+                <span className="text-text-primary">{line.value}</span>
               </div>
             ))}
           </div>
