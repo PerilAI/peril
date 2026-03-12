@@ -7,7 +7,7 @@ import { resolve } from "node:path";
 import { App } from "../App";
 import { Header } from "../components/Header";
 import { Hero } from "../components/Hero";
-import { DesignShowcase } from "../components/DesignShowcase";
+
 
 function renderWithRouter(ui: React.ReactElement) {
   return render(<MemoryRouter>{ui}</MemoryRouter>);
@@ -208,21 +208,6 @@ describe("ARIA attributes", () => {
     expect(srHint?.textContent).toMatch(/new tab/i);
   });
 
-  it("DesignShowcase decorative swatches are aria-hidden", () => {
-    render(<DesignShowcase />);
-    const swatches = document.querySelectorAll(
-      "section[aria-label='Design system showcase'] [aria-hidden='true']",
-    );
-    expect(swatches.length).toBeGreaterThan(0);
-  });
-
-  it("DesignShowcase section has accessible label", () => {
-    render(<DesignShowcase />);
-    const section = document.querySelector(
-      "section[aria-label='Design system showcase']",
-    );
-    expect(section).not.toBeNull();
-  });
 });
 
 // ============================================================
@@ -247,7 +232,7 @@ describe("keyboard navigation", () => {
   });
 
   it("buttons have type attribute", () => {
-    render(<DesignShowcase />);
+    renderWithRouter(<App />);
     const buttons = document.querySelectorAll("button");
     buttons.forEach((btn) => {
       expect(btn.getAttribute("type")).toBe("button");

@@ -2,7 +2,11 @@
 @import "./design-tokens.css";
 
 /*
- * Tailwind v4 theme — maps design tokens to Tailwind utilities
+ * Tailwind v4 theme — bridges design-tokens.css custom properties into
+ * Tailwind's utility namespace. Entries like `--color-surface: var(--color-surface)`
+ * are NOT self-references: the left side declares a Tailwind theme token and
+ * the right side reads the existing CSS custom property from design-tokens.css.
+ * Without this block Tailwind won't generate utilities such as bg-surface or text-primary.
  */
 @theme {
   /* Colors — semantic */
