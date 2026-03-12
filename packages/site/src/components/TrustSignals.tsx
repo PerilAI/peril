@@ -90,6 +90,17 @@ export function TrustSignals() {
           ))}
         </div>
 
+        {/* Usage metric placeholder */}
+        <p
+          className="text-center text-text-muted text-small tracking-[var(--tracking-wider)] uppercase font-medium mt-6"
+          style={{
+            opacity: inView ? 1 : 0,
+            transition: "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1) 300ms",
+          }}
+        >
+          Trusted by 50+ teams during early access
+        </p>
+
         {/* Subtle divider */}
         <div
           className="mt-12 mx-auto max-w-xs h-px"
