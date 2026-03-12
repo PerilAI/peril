@@ -201,7 +201,7 @@ describe("ARIA attributes", () => {
 
   it("external links inform screen readers about new tab", () => {
     render(<Header />);
-    const githubLink = screen.getByText(/GitHub/);
+    const githubLink = screen.getAllByText(/GitHub/)[0]!;
     // The link itself or a child should indicate new window
     const srHint = githubLink.querySelector(".sr-only") ??
       githubLink.closest("a")?.querySelector(".sr-only");
