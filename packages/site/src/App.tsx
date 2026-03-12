@@ -5,6 +5,7 @@ import { TrustSignals } from "./components/TrustSignals";
 import { AnnotationPlayground } from "./components/AnnotationPlayground";
 import { HowItWorks } from "./components/HowItWorks";
 import { UseCases } from "./components/UseCases";
+import { Footer } from "./components/Footer";
 import { DocsLayout } from "./docs/DocsLayout";
 import { docsRoutes } from "./docs/routes";
 
@@ -16,6 +17,7 @@ function HomePage() {
       <AnnotationPlayground />
       <HowItWorks />
       <UseCases />
+      <Footer />
     </main>
   );
 }
