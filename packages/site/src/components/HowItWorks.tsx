@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { useInView } from "../hooks/useInView";
 
 /* ─── Step data ─────────────────────────────────────────── */
 
@@ -371,42 +372,6 @@ function StepCard({
       <div className="mt-auto">{step.visual}</div>
     </article>
   );
-}
-
-/* ─── useInView hook ────────────────────────────────────── */
-
-function useInView(threshold = 0.2): [React.RefObject<HTMLElement | null>, boolean] {
-  const ref = useRef<HTMLElement | null>(null);
-  const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    // Respect prefers-reduced-motion: show immediately
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    if (prefersReducedMotion) {
-      setInView(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting) {
-          setInView(true);
-          observer.disconnect();
-        }
-      },
-      { threshold }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [threshold]);
-
-  return [ref, inView];
 }
 
 /* ─── Steps Data ────────────────────────────────────────── */
