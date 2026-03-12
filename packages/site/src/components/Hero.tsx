@@ -78,7 +78,7 @@ export function Hero() {
         </div>
       </section>
 
-      <MobileStickyCta />
+      <MobileStickyCta ctaText={ctaText} onCtaClick={() => { ctaConvert(); trackCTAClick(ctaText, "mobile-sticky"); }} />
     </>
   );
 }
@@ -108,7 +108,7 @@ function AccentHeadline({ accent, headline }: AccentHeadlineProps) {
   );
 }
 
-function MobileStickyCta() {
+function MobileStickyCta({ ctaText, onCtaClick }: { ctaText: string; onCtaClick: () => void }) {
   const [visible, setVisible] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
@@ -153,8 +153,9 @@ function MobileStickyCta() {
           href="#get-started"
           className="flex w-full items-center justify-center rounded-[var(--radius-md)] bg-accent px-6 py-3 text-base font-medium text-accent-fg shadow-glow-sm"
           tabIndex={visible ? 0 : -1}
+          onClick={onCtaClick}
         >
-          Try Peril Free
+          {ctaText}
         </a>
       </div>
     </>

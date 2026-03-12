@@ -44,7 +44,7 @@ export function trackPageView(path?: string) {
   });
 }
 
-export function trackCTAClick(label: string, variant: "primary" | "secondary") {
+export function trackCTAClick(label: string, variant: "primary" | "secondary" | "mobile-sticky" | "closing-cta") {
   track("cta_click", { label, variant });
 }
 
