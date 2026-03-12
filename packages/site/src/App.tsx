@@ -6,6 +6,7 @@ import { AnnotationPlayground } from "./components/AnnotationPlayground";
 import { HowItWorks } from "./components/HowItWorks";
 import { UseCases } from "./components/UseCases";
 import { Footer } from "./components/Footer";
+import { Pricing } from "./components/Pricing";
 import { DocsLayout } from "./docs/DocsLayout";
 import { docsRoutes } from "./docs/routes";
 
@@ -35,6 +36,15 @@ export function App() {
             <>
               <Header />
               <HomePage />
+            </>
+          }
+        />
+        <Route
+          path="/pricing"
+          element={
+            <>
+              <Header />
+              <Pricing />
             </>
           }
         />

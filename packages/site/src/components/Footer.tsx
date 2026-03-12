@@ -5,6 +5,7 @@ import { useInView } from "../hooks/useInView";
 
 const navLinks = [
   { href: "#how-it-works", label: "How it works" },
+  { href: "/pricing", label: "Pricing" },
   { href: "/docs", label: "Docs" },
   {
     href: "https://github.com/anthropics/peril",

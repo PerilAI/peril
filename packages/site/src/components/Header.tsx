@@ -3,6 +3,7 @@ import { ThemeToggle } from "./ThemeToggle";
 
 const NAV_LINKS = [
   { href: "#how-it-works", label: "How it works" },
+  { href: "/pricing", label: "Pricing" },
   { href: "/docs", label: "Docs" },
   {
     href: "https://github.com/anthropics/peril",
@@ -90,12 +91,12 @@ export function Header() {
               key={link.href}
               href={link.href}
               className="text-sm text-text-secondary transition-colors duration-[var(--duration-fast)] hover:text-text-primary"
-              {...(link.external
+              {...("external" in link && link.external
                 ? { target: "_blank", rel: "noopener noreferrer" }
                 : {})}
             >
               {link.label}
-              {link.external && (
+              {"external" in link && link.external && (
                 <span className="sr-only"> (opens in new tab)</span>
               )}
             </a>
@@ -163,12 +164,12 @@ export function Header() {
               className="rounded-[var(--radius-sm)] px-4 py-3 text-base text-text-secondary transition-colors duration-[var(--duration-fast)] hover:bg-surface hover:text-text-primary"
               tabIndex={menuOpen ? 0 : -1}
               onClick={closeMenu}
-              {...(link.external
+              {...("external" in link && link.external
                 ? { target: "_blank", rel: "noopener noreferrer" }
                 : {})}
             >
               {link.label}
-              {link.external && (
+              {"external" in link && link.external && (
                 <span className="sr-only"> (opens in new tab)</span>
               )}
             </a>
