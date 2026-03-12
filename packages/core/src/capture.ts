@@ -5,6 +5,7 @@ import { maxArtifactPayloadBytes } from "./limits";
 export type ScreenshotFormat = "dataUrl" | "blob";
 export type ElementScreenshotFormat = ScreenshotFormat;
 export type PageScreenshotFormat = ScreenshotFormat;
+export type PageScreenshotScope = "document" | "viewport";
 
 export class CaptureElementScreenshotError extends Error {
   constructor(message: string) {
@@ -30,6 +31,7 @@ export interface CaptureElementScreenshotOptions {
 
 export interface CapturePageScreenshotOptions extends CaptureElementScreenshotOptions {
   document?: Document;
+  scope?: PageScreenshotScope;
   window?: Window;
 }
 
@@ -140,19 +142,52 @@ async function renderPage(
   const viewportHeight = targetWindow.innerHeight || rootElement.clientHeight || 0;
   const scrollX = targetWindow.scrollX ?? targetWindow.pageXOffset ?? 0;
   const scrollY = targetWindow.scrollY ?? targetWindow.pageYOffset ?? 0;
+  const scope = options.scope ?? "document";
+
+  if (scope === "viewport") {
+    return renderCanvas(rootElement as HTMLElement, {
+      backgroundColor: options.backgroundColor ?? null,
+      height: viewportHeight,
+      logging: false,
+      scrollX,
+      scrollY,
+      useCORS: true,
+      width: viewportWidth,
+      windowHeight: viewportHeight,
+      windowWidth: viewportWidth,
+      x: scrollX,
+      y: scrollY,
+      ...options.html2canvasOptions
+    });
+  }
+
+  const pageWidth = getDocumentDimension(
+    targetWindow.innerWidth,
+    rootElement.clientWidth,
+    rootElement.scrollWidth,
+    targetDocument.body?.clientWidth,
+    targetDocument.body?.scrollWidth
+  );
+  const pageHeight = getDocumentDimension(
+    targetWindow.innerHeight,
+    rootElement.clientHeight,
+    rootElement.scrollHeight,
+    targetDocument.body?.clientHeight,
+    targetDocument.body?.scrollHeight
+  );
 
   return renderCanvas(rootElement as HTMLElement, {
     backgroundColor: options.backgroundColor ?? null,
-    height: viewportHeight,
+    height: pageHeight,
     logging: false,
-    scrollX,
-    scrollY,
+    scrollX: 0,
+    scrollY: 0,
     useCORS: true,
-    width: viewportWidth,
-    windowHeight: viewportHeight,
-    windowWidth: viewportWidth,
-    x: scrollX,
-    y: scrollY,
+    width: pageWidth,
+    windowHeight: pageHeight,
+    windowWidth: pageWidth,
+    x: 0,
+    y: 0,
     ...options.html2canvasOptions
   });
 }
@@ -299,6 +334,16 @@ function getBase64ByteLength(value: string): number {
       : 0;
 
   return Math.max(0, Math.floor((normalizedValue.length * 3) / 4) - paddingLength);
+}
+
+function getDocumentDimension(...values: Array<number | undefined>): number {
+  return values.reduce<number>((largestValue, value) => {
+    if (typeof value !== "number" || !Number.isFinite(value)) {
+      return largestValue;
+    }
+
+    return Math.max(largestValue, value);
+  }, 0);
 }
 
 function formatMegabytes(value: number): number {

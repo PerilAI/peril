@@ -11,6 +11,7 @@ export {
   type ElementScreenshotFormat,
   type ElementScreenshotHtml2CanvasOptions,
   type PageScreenshotFormat,
+  type PageScreenshotScope,
   type PageScreenshotHtml2CanvasOptions,
   type ScreenshotFormat
 } from "./capture";
