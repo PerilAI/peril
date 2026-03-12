@@ -106,9 +106,9 @@ export function HeroMicroDemo() {
       {/* Browser chrome */}
       <div className="flex items-center gap-2 border-b border-border-subtle bg-surface-elevated px-4 py-3">
         <div className="flex gap-1.5">
-          <span className="h-3 w-3 rounded-full bg-neutral-700" />
-          <span className="h-3 w-3 rounded-full bg-neutral-700" />
-          <span className="h-3 w-3 rounded-full bg-neutral-700" />
+          <span className="h-3 w-3 rounded-full bg-dot-close" />
+          <span className="h-3 w-3 rounded-full bg-dot-minimize" />
+          <span className="h-3 w-3 rounded-full bg-dot-expand" />
         </div>
         <div className="flex-1 flex justify-center">
           <div className="rounded-[var(--radius-md)] bg-bg/60 border border-border-subtle px-4 py-1 text-caption text-text-muted font-mono max-w-[280px] w-full text-center truncate">
@@ -274,7 +274,7 @@ export function HeroMicroDemo() {
               >
                 <span className="text-accent">{line.key}</span>
                 <span className="text-text-muted">: </span>
-                <span className="text-amber-200">{line.value}</span>
+                <span className="text-[var(--color-amber-200)]">{line.value}</span>
               </div>
             ))}
           </div>

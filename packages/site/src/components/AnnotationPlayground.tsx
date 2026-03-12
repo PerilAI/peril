@@ -165,13 +165,13 @@ export function AnnotationPlayground() {
         <div className="mt-16 grid gap-8 lg:grid-cols-[minmax(0,1.45fr)_minmax(20rem,0.95fr)]">
           <div
             ref={frameRef}
-            className="relative overflow-hidden rounded-[28px] border border-border bg-surface/90 shadow-[0_24px_80px_rgba(0,0,0,0.38)]"
+            className="relative overflow-hidden rounded-2xl border border-border bg-surface/90 shadow-[0_24px_80px_rgba(0,0,0,0.38)]"
           >
             <div className="flex items-center gap-3 border-b border-border-subtle bg-bg/80 px-5 py-4">
               <div className="flex items-center gap-2">
-                <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
-                <span className="h-3 w-3 rounded-full bg-[#febc2e]" />
-                <span className="h-3 w-3 rounded-full bg-[#28c840]" />
+                <span className="h-3 w-3 rounded-full bg-dot-close" />
+                <span className="h-3 w-3 rounded-full bg-dot-minimize" />
+                <span className="h-3 w-3 rounded-full bg-dot-expand" />
               </div>
               <div className="ml-3 flex-1 rounded-full border border-border-subtle bg-surface-elevated px-4 py-2 text-sm text-text-muted">
                 localhost:3000/dashboard
@@ -182,7 +182,7 @@ export function AnnotationPlayground() {
             </div>
 
             <div className="grid gap-6 p-5 md:p-6">
-              <div className="flex flex-wrap items-center justify-between gap-3 rounded-[22px] border border-border-subtle bg-bg/50 px-4 py-3">
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border-subtle bg-bg/50 px-4 py-3">
                 <nav className="flex flex-wrap items-center gap-2 text-sm text-text-secondary" aria-label="Sample dashboard navigation">
                   {playgroundIssues
                     .filter((issue) => issue.id === "nav-align")
@@ -219,7 +219,7 @@ export function AnnotationPlayground() {
               </div>
 
               <div className="grid gap-4 md:grid-cols-[minmax(0,1.2fr)_minmax(15rem,0.8fr)]">
-                <div className="rounded-[24px] border border-border-subtle bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01))] p-5">
+                <div className="rounded-2xl border border-border-subtle bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01))] p-5">
                   <p className="text-caption uppercase tracking-[var(--tracking-wider)] text-text-muted">
                     Current sprint
                   </p>
@@ -273,7 +273,7 @@ export function AnnotationPlayground() {
                         onClick={() => handleIssueClick(issue.id)}
                         className={getInteractiveClassName(
                           visibleIssueId === issue.id,
-                          "flex flex-col items-start rounded-[24px] border border-border-subtle bg-surface-elevated px-4 py-3 text-left"
+                          "flex flex-col items-start rounded-2xl border border-border-subtle bg-surface-elevated px-4 py-3 text-left"
                         )}
                       >
                         <span className="text-caption uppercase tracking-[var(--tracking-wider)] text-text-muted">
@@ -286,7 +286,7 @@ export function AnnotationPlayground() {
                       </button>
                     ))}
 
-                  <div className="rounded-[24px] border border-border-subtle bg-bg/55 px-4 py-4">
+                  <div className="rounded-2xl border border-border-subtle bg-bg/55 px-4 py-4">
                     <p className="text-caption uppercase tracking-[var(--tracking-wider)] text-text-muted">
                       Invite a reviewer
                     </p>
@@ -312,7 +312,7 @@ export function AnnotationPlayground() {
                             value="preview-url"
                             className={`${getInteractiveClassName(
                               visibleIssueId === issue.id,
-                              "mt-3 w-full cursor-pointer rounded-[18px] border border-border bg-surface px-4 py-3 text-sm text-text-secondary"
+                              "mt-3 w-full cursor-pointer rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text-secondary"
                             )} focus:outline-none`}
                           />
                         ))}
@@ -324,7 +324,7 @@ export function AnnotationPlayground() {
 
             {isComposerOpen ? (
               <div
-                className="absolute z-20 w-[min(20rem,calc(100%-2rem))] rounded-[22px] border border-accent/40 bg-bg/96 p-4 shadow-[0_20px_48px_rgba(0,0,0,0.45)] backdrop-blur-md"
+                className="absolute z-20 w-[min(20rem,calc(100%-2rem))] rounded-2xl border border-accent/40 bg-bg/96 p-4 shadow-[0_20px_48px_rgba(0,0,0,0.45)] backdrop-blur-md"
                 style={{
                   left: `${composerPosition.left}px`,
                   top: `${composerPosition.top}px`
@@ -344,7 +344,7 @@ export function AnnotationPlayground() {
                       }))
                     }
                     rows={3}
-                    className="mt-2 w-full resize-none rounded-[16px] border border-border bg-surface px-3 py-3 text-sm text-text-primary"
+                    className="mt-2 w-full resize-none rounded-xl border border-border bg-surface px-3 py-3 text-sm text-text-primary"
                   />
                 </label>
                 <div className="mt-3 grid gap-3 sm:grid-cols-2">
@@ -358,7 +358,7 @@ export function AnnotationPlayground() {
                           category: event.target.value as PlaygroundAnnotationDraft["category"]
                         }))
                       }
-                      className="mt-2 w-full rounded-[14px] border border-border bg-surface px-3 py-2.5 text-sm text-text-primary"
+                      className="mt-2 w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-text-primary"
                     >
                       <option value="bug">Bug</option>
                       <option value="polish">Polish</option>
@@ -377,7 +377,7 @@ export function AnnotationPlayground() {
                           severity: event.target.value as PlaygroundAnnotationDraft["severity"]
                         }))
                       }
-                      className="mt-2 w-full rounded-[14px] border border-border bg-surface px-3 py-2.5 text-sm text-text-primary"
+                      className="mt-2 w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-text-primary"
                     >
                       <option value="low">Low</option>
                       <option value="medium">Medium</option>
@@ -396,7 +396,7 @@ export function AnnotationPlayground() {
                         expected: event.target.value
                       }))
                     }
-                    className="mt-2 w-full rounded-[14px] border border-border bg-surface px-3 py-2.5 text-sm text-text-primary"
+                    className="mt-2 w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-text-primary"
                   />
                 </label>
                 <div className="mt-4 flex items-center justify-between gap-3">
@@ -419,7 +419,7 @@ export function AnnotationPlayground() {
             ) : null}
           </div>
 
-          <aside className="playground-panel-enter rounded-[28px] border border-border bg-[#10100f] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.3)]">
+          <aside className="playground-panel-enter rounded-2xl border border-border bg-bg p-5 shadow-[0_24px_80px_rgba(0,0,0,0.3)]">
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border-subtle pb-4">
               <div>
                 <p className="text-caption uppercase tracking-[var(--tracking-wider)] text-accent">
@@ -438,11 +438,11 @@ export function AnnotationPlayground() {
               {submittedAnnotation.summary}
             </p>
 
-            <ol className="mt-6 space-y-3 font-mono text-[0.85rem] leading-6">
+            <ol className="mt-6 space-y-3 font-mono text-[var(--text-small)] leading-6">
               {outputLines.map((line, index) => (
                 <li
                   key={`${submittedAnnotation.issueId}-${line.id}-${submittedAnnotation.comment}`}
-                  className="playground-output-line rounded-[14px] border border-border-subtle bg-white/[0.02] px-3 py-2"
+                  className="playground-output-line rounded-lg border border-border-subtle bg-white/[0.02] px-3 py-2"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <span className="text-text-secondary">{line.label}</span>
@@ -452,7 +452,7 @@ export function AnnotationPlayground() {
               ))}
             </ol>
 
-            <div className="mt-6 rounded-[20px] border border-border-subtle bg-surface/60 p-4">
+            <div className="mt-6 rounded-xl border border-border-subtle bg-surface/60 p-4">
               <p className="text-caption uppercase tracking-[var(--tracking-wider)] text-text-muted">
                 Why this matters
               </p>
@@ -471,7 +471,7 @@ export function AnnotationPlayground() {
 
 function getInteractiveClassName(isActive: boolean, extraClassName = ""): string {
   return [
-    "rounded-[18px] border transition-all duration-[var(--duration-fast)]",
+    "rounded-xl border transition-all duration-[var(--duration-fast)]",
     isActive
       ? "border-accent bg-accent/10 text-text-primary shadow-glow-md"
       : "border-transparent bg-transparent text-text-secondary hover:border-accent/40 hover:bg-accent/6 hover:text-text-primary hover:shadow-glow-sm",

@@ -77,13 +77,13 @@ function StructureIcon() {
       />
       {/* Data lines */}
       <rect x="15" y="13" width="10" height="2" rx="1" fill="var(--color-neutral-400)" opacity="0.5" />
-      <rect x="15" y="19" width="18" height="2" rx="1" fill="#64748b" />
-      <rect x="15" y="24" width="14" height="2" rx="1" fill="#64748b" />
-      <rect x="15" y="29" width="16" height="2" rx="1" fill="#64748b" />
-      <rect x="15" y="34" width="8" height="2" rx="1" fill="#64748b" opacity="0.5" />
+      <rect x="15" y="19" width="18" height="2" rx="1" fill="var(--color-neutral-500)" />
+      <rect x="15" y="24" width="14" height="2" rx="1" fill="var(--color-neutral-500)" />
+      <rect x="15" y="29" width="16" height="2" rx="1" fill="var(--color-neutral-500)" />
+      <rect x="15" y="34" width="8" height="2" rx="1" fill="var(--color-neutral-500)" opacity="0.5" />
       {/* Bracket accents */}
-      <path d="M32 17L35 17L35 27L32 27" stroke="#64748b" strokeWidth="1.5" fill="none" />
-      <circle cx="35" cy="22" r="2" fill="#64748b" opacity="0.4" />
+      <path d="M32 17L35 17L35 27L32 27" stroke="var(--color-neutral-500)" strokeWidth="1.5" fill="none" />
+      <circle cx="35" cy="22" r="2" fill="var(--color-neutral-500)" opacity="0.4" />
     </svg>
   );
 }
@@ -105,25 +105,25 @@ function ExecuteIcon() {
         width="36"
         height="32"
         rx="4"
-        stroke="hsl(150, 50%, 45%)"
+        stroke="var(--color-green)"
         strokeWidth="1.5"
         fill="none"
       />
       {/* Title bar dots */}
-      <circle cx="13" cy="14" r="1.5" fill="hsl(150, 50%, 45%)" opacity="0.4" />
-      <circle cx="18" cy="14" r="1.5" fill="hsl(150, 50%, 45%)" opacity="0.4" />
-      <circle cx="23" cy="14" r="1.5" fill="hsl(150, 50%, 45%)" opacity="0.4" />
+      <circle cx="13" cy="14" r="1.5" fill="var(--color-green)" opacity="0.4" />
+      <circle cx="18" cy="14" r="1.5" fill="var(--color-green)" opacity="0.4" />
+      <circle cx="23" cy="14" r="1.5" fill="var(--color-green)" opacity="0.4" />
       {/* Divider */}
-      <line x1="6" y1="19" x2="42" y2="19" stroke="hsl(150, 50%, 45%)" strokeWidth="0.75" opacity="0.3" />
+      <line x1="6" y1="19" x2="42" y2="19" stroke="var(--color-green)" strokeWidth="0.75" opacity="0.3" />
       {/* Prompt + checkmark */}
-      <path d="M13 26L16 26" stroke="hsl(150, 50%, 45%)" strokeWidth="1.5" strokeLinecap="round" />
-      <text x="19" y="27" fill="hsl(150, 50%, 45%)" fontSize="8" fontFamily="var(--font-mono)" opacity="0.7">
+      <path d="M13 26L16 26" stroke="var(--color-green)" strokeWidth="1.5" strokeLinecap="round" />
+      <text x="19" y="27" fill="var(--color-green)" fontSize="8" fontFamily="var(--font-mono)" opacity="0.7">
         fix applied
       </text>
       {/* Checkmark */}
       <path
         d="M30 32L34 36L40 28"
-        stroke="hsl(150, 50%, 45%)"
+        stroke="var(--color-green)"
         strokeWidth="2.5"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -144,7 +144,7 @@ function AnnotateVisual() {
       </div>
       <div className="space-y-1">
         <div className="px-2 py-1 rounded text-[var(--color-text-secondary)]">&lt;Button variant=&quot;primary&quot;&gt;</div>
-        <div className="px-2 py-1 rounded border border-[var(--color-amber-400)] bg-[rgba(251,191,36,0.08)] text-[var(--color-text)] shadow-[var(--glow-sm)]">
+        <div className="px-2 py-1 rounded border border-[var(--color-amber-400)] bg-accent-muted text-[var(--color-text)] shadow-[var(--glow-sm)]">
           Submit Order
         </div>
         <div className="px-2 py-1 rounded text-[var(--color-text-secondary)]">&lt;/Button&gt;</div>
@@ -156,7 +156,7 @@ function AnnotateVisual() {
 function StructureVisual() {
   return (
     <div className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-3 text-[var(--text-caption)] font-[family-name:var(--font-mono)]">
-      <div className="text-[#64748b] space-y-0.5">
+      <div className="text-neutral-500 space-y-0.5">
         <div>{"{"}</div>
         <div className="pl-3">
           <span className="text-[var(--color-amber-400)]">&quot;selector&quot;</span>:{" "}
@@ -181,15 +181,15 @@ function ExecuteVisual() {
     <div className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-3 text-[var(--text-caption)] font-[family-name:var(--font-mono)]">
       <div className="space-y-1">
         <div className="text-[var(--color-text-muted)]">
-          <span className="text-[hsl(150,50%,45%)]">$</span> agent processing task…
+          <span className="text-green">$</span> agent processing task…
         </div>
         <div className="text-[var(--color-text-secondary)]">
-          <span className="text-[hsl(150,50%,45%)]">✓</span> Located button.primary
+          <span className="text-green">✓</span> Located button.primary
         </div>
         <div className="text-[var(--color-text-secondary)]">
-          <span className="text-[hsl(150,50%,45%)]">✓</span> Applied fix in checkout-form.tsx
+          <span className="text-green">✓</span> Applied fix in checkout-form.tsx
         </div>
-        <div className="text-[hsl(150,50%,45%)]">
+        <div className="text-green">
           ✓ PR #42 ready for review
         </div>
       </div>
@@ -357,14 +357,13 @@ function StepCard({
 
       {/* Headline */}
       <h3
-        className="text-[1.25rem] font-semibold mb-2"
-        style={{ fontFamily: "var(--font-body)" }}
+        className="font-[family-name:var(--font-display)] text-[var(--text-h4)] font-semibold mb-2"
       >
         {step.headline}
       </h3>
 
       {/* Description */}
-      <p className="text-[var(--color-text-secondary)] text-[0.9375rem] leading-relaxed mb-5">
+      <p className="text-[var(--color-text-secondary)] text-[var(--text-small)] leading-relaxed mb-5">
         {step.description}
       </p>
 
@@ -383,7 +382,7 @@ const steps: Step[] = [
     description:
       "Select what's wrong in your live app. Add a comment with category and severity.",
     accentColor: "var(--color-amber-400)",
-    accentGlow: "rgba(251, 191, 36, 0.12)",
+    accentGlow: "var(--color-accent-muted)",
     icon: <AnnotateIcon />,
     visual: <AnnotateVisual />,
   },
@@ -392,8 +391,8 @@ const steps: Step[] = [
     headline: "Peril captures everything",
     description:
       "Locators, screenshots, DOM context, and your comment — structured for machines.",
-    accentColor: "#64748b",
-    accentGlow: "rgba(100, 116, 139, 0.12)",
+    accentColor: "var(--color-neutral-500)",
+    accentGlow: "var(--color-neutral-glow)",
     icon: <StructureIcon />,
     visual: <StructureVisual />,
   },
@@ -402,8 +401,8 @@ const steps: Step[] = [
     headline: "Your agent fixes it",
     description:
       "Any MCP-compatible agent receives the task and knows exactly where to look.",
-    accentColor: "hsl(150, 50%, 45%)",
-    accentGlow: "rgba(56, 161, 105, 0.12)",
+    accentColor: "var(--color-green)",
+    accentGlow: "var(--color-green-glow)",
     icon: <ExecuteIcon />,
     visual: <ExecuteVisual />,
   },

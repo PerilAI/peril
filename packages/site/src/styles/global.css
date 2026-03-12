@@ -22,6 +22,18 @@
   --color-accent-muted: var(--color-accent-muted);
   --color-accent-glow: var(--color-accent-glow);
 
+  /* Colors — use-case accents */
+  --color-green: var(--color-green);
+  --color-green-glow: var(--color-green-glow);
+  --color-purple: var(--color-purple);
+  --color-purple-glow: var(--color-purple-glow);
+  --color-neutral-glow: var(--color-neutral-glow);
+
+  /* Colors — browser chrome dots */
+  --color-dot-close: var(--color-dot-close);
+  --color-dot-minimize: var(--color-dot-minimize);
+  --color-dot-expand: var(--color-dot-expand);
+
   /* Colors — amber palette */
   --color-amber-50: var(--color-amber-50);
   --color-amber-100: var(--color-amber-100);
@@ -75,6 +87,7 @@
   --radius-md: var(--radius-md);
   --radius-lg: var(--radius-lg);
   --radius-xl: var(--radius-xl);
+  --radius-2xl: var(--radius-2xl);
 
   /* Shadows — glow effects */
   --shadow-glow-sm: var(--glow-sm);

@@ -76,14 +76,14 @@ function DesignFeedbackIcon() {
         width="28"
         height="28"
         rx="3"
-        stroke="hsl(260, 55%, 60%)"
+        stroke="var(--color-purple)"
         strokeWidth="1.5"
         fill="none"
       />
       {/* Layout blocks */}
-      <rect x="10" y="10" width="10" height="5" rx="1" fill="hsl(260, 55%, 60%)" opacity="0.25" />
-      <rect x="10" y="18" width="20" height="3" rx="1" fill="hsl(260, 55%, 60%)" opacity="0.15" />
-      <rect x="10" y="24" width="14" height="3" rx="1" fill="hsl(260, 55%, 60%)" opacity="0.15" />
+      <rect x="10" y="10" width="10" height="5" rx="1" fill="var(--color-purple)" opacity="0.25" />
+      <rect x="10" y="18" width="20" height="3" rx="1" fill="var(--color-purple)" opacity="0.15" />
+      <rect x="10" y="24" width="14" height="3" rx="1" fill="var(--color-purple)" opacity="0.15" />
       {/* Annotation pin */}
       <circle cx="30" cy="12" r="5" fill="var(--color-amber-400)" opacity="0.9" />
       <path
@@ -112,26 +112,26 @@ function AccessibilityIcon() {
         cx="20"
         cy="20"
         r="15"
-        stroke="hsl(150, 50%, 45%)"
+        stroke="var(--color-green)"
         strokeWidth="1.5"
         fill="none"
       />
       {/* Person figure */}
-      <circle cx="20" cy="13" r="2.5" fill="hsl(150, 50%, 45%)" />
+      <circle cx="20" cy="13" r="2.5" fill="var(--color-green)" />
       {/* Body */}
       <line
         x1="20"
         y1="16"
         x2="20"
         y2="25"
-        stroke="hsl(150, 50%, 45%)"
+        stroke="var(--color-green)"
         strokeWidth="1.5"
         strokeLinecap="round"
       />
       {/* Arms */}
       <path
         d="M13 20L20 18L27 20"
-        stroke="hsl(150, 50%, 45%)"
+        stroke="var(--color-green)"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -140,7 +140,7 @@ function AccessibilityIcon() {
       {/* Legs */}
       <path
         d="M20 25L15 32M20 25L25 32"
-        stroke="hsl(150, 50%, 45%)"
+        stroke="var(--color-green)"
         strokeWidth="1.5"
         strokeLinecap="round"
       />
@@ -175,12 +175,12 @@ function BugReportVisual() {
           <span className="text-[var(--color-text-secondary)]">"Submit button unresponsive on mobile"</span>
         </div>
         <div className="flex items-start gap-2">
-          <span className="text-[hsl(150,50%,45%)] shrink-0">✓</span>
+          <span className="text-green shrink-0">✓</span>
           <span className="text-[var(--color-text-secondary)]">Agent fixed touch target in <span className="text-[var(--color-text)]">checkout.tsx:42</span></span>
         </div>
         <div className="flex items-start gap-2">
-          <span className="text-[hsl(150,50%,45%)] shrink-0">✓</span>
-          <span className="text-[hsl(150,50%,45%)]">PR #87 merged</span>
+          <span className="text-green shrink-0">✓</span>
+          <span className="text-green">PR #87 merged</span>
         </div>
       </div>
     </div>
@@ -191,21 +191,21 @@ function DesignFeedbackVisual() {
   return (
     <div className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-3 text-[var(--text-caption)] font-[family-name:var(--font-mono)]">
       <div className="flex items-center gap-2 mb-2">
-        <div className="w-1.5 h-1.5 rounded-full bg-[hsl(260,55%,60%)]" />
+        <div className="w-1.5 h-1.5 rounded-full bg-purple" />
         <span className="text-[var(--color-text-muted)]">design review</span>
       </div>
       <div className="space-y-1.5">
         <div className="flex items-start gap-2">
-          <span className="text-[hsl(260,55%,60%)] shrink-0">→</span>
+          <span className="text-purple shrink-0">→</span>
           <span className="text-[var(--color-text-secondary)]">"Header spacing too tight, needs 24px gap"</span>
         </div>
         <div className="flex items-start gap-2">
-          <span className="text-[hsl(150,50%,45%)] shrink-0">✓</span>
+          <span className="text-green shrink-0">✓</span>
           <span className="text-[var(--color-text-secondary)]">Updated <span className="text-[var(--color-text)]">gap-4</span> → <span className="text-[var(--color-text)]">gap-6</span></span>
         </div>
         <div className="flex items-start gap-2">
-          <span className="text-[hsl(150,50%,45%)] shrink-0">✓</span>
-          <span className="text-[hsl(150,50%,45%)]">PR #91 ready for review</span>
+          <span className="text-green shrink-0">✓</span>
+          <span className="text-green">PR #91 ready for review</span>
         </div>
       </div>
     </div>
@@ -216,7 +216,7 @@ function AccessibilityVisual() {
   return (
     <div className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-3 text-[var(--text-caption)] font-[family-name:var(--font-mono)]">
       <div className="flex items-center gap-2 mb-2">
-        <div className="w-1.5 h-1.5 rounded-full bg-[hsl(150,50%,45%)]" />
+        <div className="w-1.5 h-1.5 rounded-full bg-green" />
         <span className="text-[var(--color-text-muted)]">a11y audit</span>
       </div>
       <div className="space-y-1.5">
@@ -225,12 +225,12 @@ function AccessibilityVisual() {
           <span className="text-[var(--color-text-secondary)]">3 contrast violations flagged</span>
         </div>
         <div className="flex items-start gap-2">
-          <span className="text-[hsl(150,50%,45%)] shrink-0">✓</span>
+          <span className="text-green shrink-0">✓</span>
           <span className="text-[var(--color-text-secondary)]">All fixed to <span className="text-[var(--color-text)]">4.5:1+</span> ratio</span>
         </div>
         <div className="flex items-start gap-2">
-          <span className="text-[hsl(150,50%,45%)] shrink-0">✓</span>
-          <span className="text-[hsl(150,50%,45%)]">WCAG AA compliant</span>
+          <span className="text-green shrink-0">✓</span>
+          <span className="text-green">WCAG AA compliant</span>
         </div>
       </div>
     </div>
@@ -246,7 +246,7 @@ const useCases: UseCase[] = [
     description:
       "Spot a broken button or layout glitch? Click it, leave a note, and your coding agent delivers a fix — no ticket triage, no context switching.",
     accentColor: "var(--color-amber-400)",
-    accentGlow: "rgba(251, 191, 36, 0.10)",
+    accentGlow: "var(--color-accent-muted)",
     icon: <BugReportIcon />,
     visual: <BugReportVisual />,
   },
@@ -255,8 +255,8 @@ const useCases: UseCase[] = [
     outcome: "Annotate what's wrong, get a PR back",
     description:
       "Mark spacing issues, wrong colors, or misaligned elements directly on the live page. Your agent reads the annotation and opens a PR with the exact changes.",
-    accentColor: "hsl(260, 55%, 60%)",
-    accentGlow: "rgba(124, 90, 199, 0.10)",
+    accentColor: "var(--color-purple)",
+    accentGlow: "var(--color-purple-glow)",
     icon: <DesignFeedbackIcon />,
     visual: <DesignFeedbackVisual />,
   },
@@ -265,8 +265,8 @@ const useCases: UseCase[] = [
     outcome: "Flag WCAG issues visually, get automated fixes",
     description:
       "Highlight contrast failures, missing alt text, or keyboard traps in context. Your agent receives structured data and knows exactly what to remediate.",
-    accentColor: "hsl(150, 50%, 45%)",
-    accentGlow: "rgba(56, 161, 105, 0.10)",
+    accentColor: "var(--color-green)",
+    accentGlow: "var(--color-green-glow)",
     icon: <AccessibilityIcon />,
     visual: <AccessibilityVisual />,
   },
@@ -311,8 +311,7 @@ function UseCaseCard({
       <div className="flex items-center gap-3 mb-3">
         <div className="shrink-0">{useCase.icon}</div>
         <h3
-          className="text-[var(--text-h4)] font-semibold"
-          style={{ fontFamily: "var(--font-body)" }}
+          className="font-[family-name:var(--font-display)] text-[var(--text-h4)] font-semibold"
         >
           {useCase.headline}
         </h3>
@@ -327,7 +326,7 @@ function UseCaseCard({
       </p>
 
       {/* Description */}
-      <p className="text-[var(--color-text-secondary)] text-[0.9375rem] leading-relaxed mb-6">
+      <p className="text-[var(--color-text-secondary)] text-[var(--text-small)] leading-relaxed mb-6">
         {useCase.description}
       </p>
 

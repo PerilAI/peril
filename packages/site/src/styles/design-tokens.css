@@ -60,6 +60,18 @@
   --color-accent-muted: rgba(251, 191, 36, 0.15);
   --color-accent-glow: rgba(251, 191, 36, 0.25);
 
+  /* Use-case accent colors */
+  --color-green: hsl(150, 50%, 45%);
+  --color-green-glow: rgba(56, 161, 105, 0.12);
+  --color-purple: hsl(260, 55%, 60%);
+  --color-purple-glow: rgba(124, 90, 199, 0.10);
+  --color-neutral-glow: rgba(120, 113, 108, 0.12);
+
+  /* Browser chrome dots (universal across themes) */
+  --color-dot-close: #ff5f57;
+  --color-dot-minimize: #febc2e;
+  --color-dot-expand: #28c840;
+
   /* --- Glow effect tokens (ties to annotation cursor pattern) --- */
   --glow-color: var(--color-amber-400);
   --glow-sm: 0 0 8px var(--color-accent-glow);
@@ -142,6 +154,7 @@
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
   --radius-full: 9999px;
 
   /* ============================================================
@@ -175,4 +188,9 @@
   --color-accent-foreground: var(--color-neutral-950); /* dark text on amber — 6.1:1 AA */
   --color-accent-muted: rgba(217, 119, 6, 0.1);
   --color-accent-glow: rgba(217, 119, 6, 0.2);
+
+  --color-green: hsl(150, 50%, 32%);
+  --color-green-glow: rgba(56, 161, 105, 0.08);
+  --color-purple: hsl(260, 55%, 48%);
+  --color-purple-glow: rgba(124, 90, 199, 0.08);
 }
