@@ -235,7 +235,7 @@ export function HeroMicroDemo() {
           <div className="rounded-[var(--radius-lg)] border border-border bg-surface-elevated px-4 py-3 shadow-lg shadow-black/30 max-w-[220px]">
             <div className="flex items-center gap-2 mb-2">
               <div className="h-5 w-5 rounded-full bg-accent/30 flex items-center justify-center shrink-0">
-                <span className="text-accent text-[10px] font-bold">J</span>
+                <span className="text-accent text-caption font-bold">J</span>
               </div>
               <span className="text-caption text-text-muted">Just now</span>
             </div>
@@ -274,7 +274,7 @@ export function HeroMicroDemo() {
               >
                 <span className="text-accent">{line.key}</span>
                 <span className="text-text-muted">: </span>
-                <span className="text-[var(--color-amber-200)]">{line.value}</span>
+                <span className="text-amber-200">{line.value}</span>
               </div>
             ))}
           </div>

@@ -70,7 +70,9 @@
   --text-h2: var(--text-h2);
   --text-h3: var(--text-h3);
   --text-h4: var(--text-h4);
+  --text-body: var(--text-body);
   --text-body-lg: var(--text-body-lg);
+  --text-small: var(--text-small);
   --text-caption: var(--text-caption);
 
   /* Spacing (extending default) */

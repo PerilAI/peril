@@ -49,7 +49,7 @@ function IntegrationBadge({
           backgroundColor: hovered ? integration.hoverColor : "var(--color-text-muted)",
         }}
       />
-      <span className="text-[var(--text-small)] font-medium whitespace-nowrap">
+      <span className="text-small font-medium whitespace-nowrap">
         {integration.name}
       </span>
     </div>
@@ -70,7 +70,7 @@ export function TrustSignals() {
       <div className="max-w-[var(--container-max)] mx-auto">
         {/* Tagline */}
         <p
-          className="text-center text-[var(--color-text-muted)] text-[var(--text-small)] tracking-[var(--tracking-wider)] uppercase font-medium mb-8"
+          className="text-center text-text-muted text-small tracking-[var(--tracking-wider)] uppercase font-medium mb-8"
           style={{
             opacity: inView ? 1 : 0,
             transition: "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1)",

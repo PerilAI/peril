@@ -137,17 +137,17 @@ function ExecuteIcon() {
 
 function AnnotateVisual() {
   return (
-    <div className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-3 text-[var(--text-caption)] font-[family-name:var(--font-mono)]">
-      <div className="flex items-center gap-2 mb-2 text-[var(--color-text-muted)]">
-        <div className="w-2 h-2 rounded-full bg-[var(--color-amber-400)]" />
+    <div className="rounded-lg border border-border-subtle bg-surface p-3 text-caption font-mono">
+      <div className="flex items-center gap-2 mb-2 text-text-muted">
+        <div className="w-2 h-2 rounded-full bg-amber-400" />
         <span>checkout-form.tsx</span>
       </div>
       <div className="space-y-1">
-        <div className="px-2 py-1 rounded text-[var(--color-text-secondary)]">&lt;Button variant=&quot;primary&quot;&gt;</div>
-        <div className="px-2 py-1 rounded border border-[var(--color-amber-400)] bg-accent-muted text-[var(--color-text)] shadow-[var(--glow-sm)]">
+        <div className="px-2 py-1 rounded text-text-secondary">&lt;Button variant=&quot;primary&quot;&gt;</div>
+        <div className="px-2 py-1 rounded border border-amber-400 bg-accent-muted text-text-primary shadow-glow-sm">
           Submit Order
         </div>
-        <div className="px-2 py-1 rounded text-[var(--color-text-secondary)]">&lt;/Button&gt;</div>
+        <div className="px-2 py-1 rounded text-text-secondary">&lt;/Button&gt;</div>
       </div>
     </div>
   );
@@ -155,20 +155,20 @@ function AnnotateVisual() {
 
 function StructureVisual() {
   return (
-    <div className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-3 text-[var(--text-caption)] font-[family-name:var(--font-mono)]">
+    <div className="rounded-lg border border-border-subtle bg-surface p-3 text-caption font-mono">
       <div className="text-neutral-500 space-y-0.5">
         <div>{"{"}</div>
         <div className="pl-3">
-          <span className="text-[var(--color-amber-400)]">&quot;selector&quot;</span>:{" "}
-          <span className="text-[var(--color-text-secondary)]">&quot;button.primary&quot;</span>
+          <span className="text-amber-400">&quot;selector&quot;</span>:{" "}
+          <span className="text-text-secondary">&quot;button.primary&quot;</span>
         </div>
         <div className="pl-3">
-          <span className="text-[var(--color-amber-400)]">&quot;comment&quot;</span>:{" "}
-          <span className="text-[var(--color-text-secondary)]">&quot;Wrong color&quot;</span>
+          <span className="text-amber-400">&quot;comment&quot;</span>:{" "}
+          <span className="text-text-secondary">&quot;Wrong color&quot;</span>
         </div>
         <div className="pl-3">
-          <span className="text-[var(--color-amber-400)]">&quot;screenshot&quot;</span>:{" "}
-          <span className="text-[var(--color-text-secondary)]">&quot;data:…&quot;</span>
+          <span className="text-amber-400">&quot;screenshot&quot;</span>:{" "}
+          <span className="text-text-secondary">&quot;data:…&quot;</span>
         </div>
         <div>{"}"}</div>
       </div>
@@ -178,15 +178,15 @@ function StructureVisual() {
 
 function ExecuteVisual() {
   return (
-    <div className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-3 text-[var(--text-caption)] font-[family-name:var(--font-mono)]">
+    <div className="rounded-lg border border-border-subtle bg-surface p-3 text-caption font-mono">
       <div className="space-y-1">
-        <div className="text-[var(--color-text-muted)]">
+        <div className="text-text-muted">
           <span className="text-green">$</span> agent processing task…
         </div>
-        <div className="text-[var(--color-text-secondary)]">
+        <div className="text-text-secondary">
           <span className="text-green">✓</span> Located button.primary
         </div>
-        <div className="text-[var(--color-text-secondary)]">
+        <div className="text-text-secondary">
           <span className="text-green">✓</span> Applied fix in checkout-form.tsx
         </div>
         <div className="text-green">
@@ -323,7 +323,7 @@ function StepCard({
 }) {
   return (
     <article
-      className="flex-1 rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-8 relative overflow-hidden"
+      className="flex-1 rounded-xl border border-border-subtle bg-surface p-8 relative overflow-hidden"
       style={{
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(20px)",
@@ -341,7 +341,7 @@ function StepCard({
 
       {/* Step number badge */}
       <div
-        className="inline-flex items-center justify-center w-6 h-6 rounded-full text-[var(--text-caption)] font-semibold mb-4"
+        className="inline-flex items-center justify-center w-6 h-6 rounded-full text-caption font-semibold mb-4"
         style={{
           backgroundColor: step.accentGlow,
           color: step.accentColor,
@@ -357,13 +357,13 @@ function StepCard({
 
       {/* Headline */}
       <h3
-        className="font-[family-name:var(--font-display)] text-[var(--text-h4)] font-semibold mb-2"
+        className="font-display text-h4 font-semibold mb-2"
       >
         {step.headline}
       </h3>
 
       {/* Description */}
-      <p className="text-[var(--color-text-secondary)] text-[var(--text-small)] leading-relaxed mb-5">
+      <p className="text-text-secondary text-small leading-relaxed mb-5">
         {step.description}
       </p>
 
@@ -433,11 +433,11 @@ export function HowItWorks() {
         >
           <h2
             id="how-it-works-heading"
-            className="text-[var(--text-h1)] font-[family-name:var(--font-display)] leading-[var(--leading-tight)] tracking-[var(--tracking-tight)] mb-4"
+            className="text-h1 font-display leading-[var(--leading-tight)] tracking-[var(--tracking-tight)] mb-4"
           >
             How Peril works
           </h2>
-          <p className="text-[var(--color-text-secondary)] text-[var(--text-body-lg)] max-w-md mx-auto">
+          <p className="text-text-secondary text-body-lg max-w-md mx-auto">
             Three steps. Zero translation.
           </p>
         </div>

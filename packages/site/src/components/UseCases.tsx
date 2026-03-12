@@ -164,19 +164,19 @@ interface UseCase {
 
 function BugReportVisual() {
   return (
-    <div className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-3 text-[var(--text-caption)] font-[family-name:var(--font-mono)]">
+    <div className="rounded-lg border border-border-subtle bg-surface p-3 text-caption font-mono">
       <div className="flex items-center gap-2 mb-2">
-        <div className="w-1.5 h-1.5 rounded-full bg-[var(--color-amber-400)]" />
-        <span className="text-[var(--color-text-muted)]">annotation #12</span>
+        <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+        <span className="text-text-muted">annotation #12</span>
       </div>
       <div className="space-y-1.5">
         <div className="flex items-start gap-2">
-          <span className="text-[var(--color-amber-400)] shrink-0">→</span>
-          <span className="text-[var(--color-text-secondary)]">"Submit button unresponsive on mobile"</span>
+          <span className="text-amber-400 shrink-0">→</span>
+          <span className="text-text-secondary">"Submit button unresponsive on mobile"</span>
         </div>
         <div className="flex items-start gap-2">
           <span className="text-green shrink-0">✓</span>
-          <span className="text-[var(--color-text-secondary)]">Agent fixed touch target in <span className="text-[var(--color-text)]">checkout.tsx:42</span></span>
+          <span className="text-text-secondary">Agent fixed touch target in <span className="text-text-primary">checkout.tsx:42</span></span>
         </div>
         <div className="flex items-start gap-2">
           <span className="text-green shrink-0">✓</span>
@@ -189,19 +189,19 @@ function BugReportVisual() {
 
 function DesignFeedbackVisual() {
   return (
-    <div className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-3 text-[var(--text-caption)] font-[family-name:var(--font-mono)]">
+    <div className="rounded-lg border border-border-subtle bg-surface p-3 text-caption font-mono">
       <div className="flex items-center gap-2 mb-2">
         <div className="w-1.5 h-1.5 rounded-full bg-purple" />
-        <span className="text-[var(--color-text-muted)]">design review</span>
+        <span className="text-text-muted">design review</span>
       </div>
       <div className="space-y-1.5">
         <div className="flex items-start gap-2">
           <span className="text-purple shrink-0">→</span>
-          <span className="text-[var(--color-text-secondary)]">"Header spacing too tight, needs 24px gap"</span>
+          <span className="text-text-secondary">"Header spacing too tight, needs 24px gap"</span>
         </div>
         <div className="flex items-start gap-2">
           <span className="text-green shrink-0">✓</span>
-          <span className="text-[var(--color-text-secondary)]">Updated <span className="text-[var(--color-text)]">gap-4</span> → <span className="text-[var(--color-text)]">gap-6</span></span>
+          <span className="text-text-secondary">Updated <span className="text-text-primary">gap-4</span> → <span className="text-text-primary">gap-6</span></span>
         </div>
         <div className="flex items-start gap-2">
           <span className="text-green shrink-0">✓</span>
@@ -214,19 +214,19 @@ function DesignFeedbackVisual() {
 
 function AccessibilityVisual() {
   return (
-    <div className="rounded-lg border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-3 text-[var(--text-caption)] font-[family-name:var(--font-mono)]">
+    <div className="rounded-lg border border-border-subtle bg-surface p-3 text-caption font-mono">
       <div className="flex items-center gap-2 mb-2">
         <div className="w-1.5 h-1.5 rounded-full bg-green" />
-        <span className="text-[var(--color-text-muted)]">a11y audit</span>
+        <span className="text-text-muted">a11y audit</span>
       </div>
       <div className="space-y-1.5">
         <div className="flex items-start gap-2">
-          <span className="text-[var(--color-amber-400)] shrink-0">!</span>
-          <span className="text-[var(--color-text-secondary)]">3 contrast violations flagged</span>
+          <span className="text-amber-400 shrink-0">!</span>
+          <span className="text-text-secondary">3 contrast violations flagged</span>
         </div>
         <div className="flex items-start gap-2">
           <span className="text-green shrink-0">✓</span>
-          <span className="text-[var(--color-text-secondary)]">All fixed to <span className="text-[var(--color-text)]">4.5:1+</span> ratio</span>
+          <span className="text-text-secondary">All fixed to <span className="text-text-primary">4.5:1+</span> ratio</span>
         </div>
         <div className="flex items-start gap-2">
           <span className="text-green shrink-0">✓</span>
@@ -285,7 +285,7 @@ function UseCaseCard({
 }) {
   return (
     <article
-      className="group relative rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-8 flex flex-col overflow-hidden transition-[border-color] duration-300"
+      className="group relative rounded-xl border border-border-subtle bg-surface p-8 flex flex-col overflow-hidden transition-[border-color] duration-300"
       style={{
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(24px)",
@@ -311,7 +311,7 @@ function UseCaseCard({
       <div className="flex items-center gap-3 mb-3">
         <div className="shrink-0">{useCase.icon}</div>
         <h3
-          className="font-[family-name:var(--font-display)] text-[var(--text-h4)] font-semibold"
+          className="font-display text-h4 font-semibold"
         >
           {useCase.headline}
         </h3>
@@ -319,14 +319,14 @@ function UseCaseCard({
 
       {/* Outcome tagline */}
       <p
-        className="text-[var(--text-body)] font-medium mb-3 leading-snug"
+        className="text-body font-medium mb-3 leading-snug"
         style={{ color: useCase.accentColor }}
       >
         {useCase.outcome}
       </p>
 
       {/* Description */}
-      <p className="text-[var(--color-text-secondary)] text-[var(--text-small)] leading-relaxed mb-6">
+      <p className="text-text-secondary text-small leading-relaxed mb-6">
         {useCase.description}
       </p>
 
@@ -360,11 +360,11 @@ export function UseCases() {
         >
           <h2
             id="use-cases-heading"
-            className="text-[var(--text-h1)] font-[family-name:var(--font-display)] leading-[var(--leading-tight)] tracking-[var(--tracking-tight)] mb-4"
+            className="text-h1 font-display leading-[var(--leading-tight)] tracking-[var(--tracking-tight)] mb-4"
           >
             What you can do with Peril
           </h2>
-          <p className="text-[var(--color-text-secondary)] text-[var(--text-body-lg)] max-w-lg mx-auto">
+          <p className="text-text-secondary text-body-lg max-w-lg mx-auto">
             Every visual annotation becomes a structured task your agent can act on immediately.
           </p>
         </div>
