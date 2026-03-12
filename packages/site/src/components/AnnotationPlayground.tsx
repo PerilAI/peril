@@ -11,6 +11,7 @@ import {
 } from "./annotationPlaygroundData";
 import { generatePlaygroundLocatorBundle } from "./annotationPlaygroundLocators";
 import { trackDemoInteraction } from "../analytics";
+import { useInView } from "../hooks/useInView";
 
 interface ComposerPosition {
   left: number;
@@ -18,8 +19,10 @@ interface ComposerPosition {
 }
 
 export function AnnotationPlayground() {
+  const [sectionRef, inView] = useInView(0.1);
   const frameRef = useRef<HTMLDivElement | null>(null);
   const issueElementsRef = useRef<Record<string, HTMLElement | null>>({});
+  const glowedRef = useRef(false);
   const [activeIssueId, setActiveIssueId] = useState<string>(initialPlaygroundIssueId);
   const [isComposerOpen, setIsComposerOpen] = useState(false);
   const [composerPosition, setComposerPosition] = useState<ComposerPosition>({
@@ -36,6 +39,29 @@ export function AnnotationPlayground() {
   useEffect(() => {
     syncAnnotation(initialPlaygroundIssueId);
   }, []);
+
+  // Glow-pulse the first clickable element 500ms after entering viewport
+  useEffect(() => {
+    if (!inView || glowedRef.current) return;
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReducedMotion) return;
+
+    glowedRef.current = true;
+    const firstEl = issueElementsRef.current[initialPlaygroundIssueId];
+    if (!firstEl) return;
+
+    const timeout = setTimeout(() => {
+      firstEl.style.animation = "glow-pulse-once 2s ease-in-out 1";
+      const cleanup = () => {
+        firstEl.style.animation = "";
+        firstEl.removeEventListener("animationend", cleanup);
+      };
+      firstEl.addEventListener("animationend", cleanup);
+    }, 500);
+    return () => clearTimeout(timeout);
+  }, [inView]);
 
   useEffect(() => {
     function handleResize() {
@@ -140,12 +166,21 @@ export function AnnotationPlayground() {
   return (
     <section
       id="get-started"
+      ref={sectionRef as React.RefObject<HTMLElement>}
       className="relative overflow-hidden border-t border-border-subtle px-6 py-24"
       aria-labelledby="annotation-playground-heading"
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(251,191,36,0.16),_transparent_38%),radial-gradient(circle_at_80%_20%,_rgba(255,255,255,0.07),_transparent_32%)]" />
       <div className="relative mx-auto max-w-[var(--container-max)]">
-        <div className="mx-auto max-w-[42rem] text-center">
+        <div
+          className="mx-auto max-w-[42rem] text-center"
+          style={{
+            opacity: inView ? 1 : 0,
+            transform: inView ? "translateY(0)" : "translateY(12px)",
+            transition:
+              "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1), transform 600ms cubic-bezier(0.16, 1, 0.3, 1)",
+          }}
+        >
           <p className="text-caption font-medium uppercase tracking-[var(--tracking-wider)] text-accent">
             Interactive demo
           </p>
@@ -162,7 +197,15 @@ export function AnnotationPlayground() {
           </p>
         </div>
 
-        <div className="mt-16 grid gap-8 lg:grid-cols-[minmax(0,1.45fr)_minmax(20rem,0.95fr)]">
+        <div
+          className="mt-16 grid gap-8 lg:grid-cols-[minmax(0,1.45fr)_minmax(20rem,0.95fr)]"
+          style={{
+            opacity: inView ? 1 : 0,
+            transform: inView ? "translateY(0)" : "translateY(20px)",
+            transition:
+              "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1) 200ms, transform 600ms cubic-bezier(0.16, 1, 0.3, 1) 200ms",
+          }}
+        >
           <div
             ref={frameRef}
             className="relative overflow-hidden rounded-2xl border border-border bg-surface/90 shadow-[0_24px_80px_rgba(28,25,23,0.14)] dark:shadow-[0_24px_80px_rgba(0,0,0,0.38)]"

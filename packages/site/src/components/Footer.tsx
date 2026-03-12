@@ -1,4 +1,5 @@
 import { trackCTAClick } from "../analytics";
+import { useInView } from "../hooks/useInView";
 
 /* ─── Navigation Links ─────────────────────────────────── */
 
@@ -15,12 +16,23 @@ const navLinks = [
 /* ─── Closing CTA Section ──────────────────────────────── */
 
 function ClosingCTA() {
+  const [sectionRef, inView] = useInView(0.2);
+
   return (
     <section
+      ref={sectionRef as React.RefObject<HTMLElement>}
       className="py-[var(--section-padding-y)] px-[var(--container-padding)]"
       aria-label="Get started with Peril"
     >
-      <div className="max-w-[var(--container-narrow)] mx-auto text-center">
+      <div
+        className="max-w-[var(--container-narrow)] mx-auto text-center"
+        style={{
+          opacity: inView ? 1 : 0,
+          transform: inView ? "translateY(0)" : "translateY(20px)",
+          transition:
+            "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1), transform 600ms cubic-bezier(0.16, 1, 0.3, 1)",
+        }}
+      >
         <h2 className="text-[var(--text-h1)] font-[family-name:var(--font-display)] leading-[var(--leading-tight)] tracking-[var(--tracking-tight)] mb-4">
           Ready to ship fixes faster?
         </h2>
@@ -28,7 +40,15 @@ function ClosingCTA() {
           Turn visual feedback into agent-ready tasks. Free for local
           development.
         </p>
-        <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+        <div
+          className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
+          style={{
+            opacity: inView ? 1 : 0,
+            transform: inView ? "translateY(0)" : "translateY(12px)",
+            transition:
+              "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1) 200ms, transform 600ms cubic-bezier(0.16, 1, 0.3, 1) 200ms",
+          }}
+        >
           <a
             href="#get-started"
             className="inline-flex items-center rounded-[var(--radius-md)] bg-accent px-7 py-3.5 text-base font-medium text-accent-fg shadow-glow-sm transition-all duration-[var(--duration-fast)] hover:bg-accent-hover hover:shadow-glow-md"

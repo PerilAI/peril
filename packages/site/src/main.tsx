@@ -8,6 +8,7 @@ import {
   observeWebVitals,
   bridgeABToAnalytics,
 } from "./analytics";
+import { initRevealObserver } from "./reveal";
 import "./styles/global.css";
 
 // Initialize analytics observers
@@ -15,6 +16,11 @@ trackPageView();
 observeScrollDepth();
 observeWebVitals();
 bridgeABToAnalytics();
+
+// Initialize scroll-reveal observer after first paint
+requestAnimationFrame(() => {
+  initRevealObserver();
+});
 
 const root = document.getElementById("root");
 if (!root) throw new Error("Root element not found");

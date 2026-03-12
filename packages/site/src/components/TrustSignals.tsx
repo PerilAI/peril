@@ -20,12 +20,8 @@ const integrations: Integration[] = [
 
 function IntegrationBadge({
   integration,
-  visible,
-  delay,
 }: {
   integration: Integration;
-  visible: boolean;
-  delay: number;
 }) {
   const [hovered, setHovered] = useState(false);
 
@@ -36,9 +32,6 @@ function IntegrationBadge({
         borderColor: hovered ? integration.hoverColor : "var(--color-border)",
         color: hovered ? integration.hoverColor : "var(--color-text-secondary)",
         backgroundColor: hovered ? `color-mix(in srgb, ${integration.hoverColor} 8%, transparent)` : "transparent",
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(8px)",
-        transition: `border-color 300ms ease, color 300ms ease, background-color 300ms ease, opacity 500ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 500ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -79,14 +72,20 @@ export function TrustSignals() {
           Works with any MCP-compatible agent
         </p>
 
-        {/* Integration badges */}
-        <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4">
-          {integrations.map((integration, i) => (
+        {/* Integration badges — fade in as a group, no individual stagger */}
+        <div
+          className="flex flex-wrap items-center justify-center gap-3 md:gap-4"
+          style={{
+            opacity: inView ? 1 : 0,
+            transform: inView ? "translateY(0)" : "translateY(8px)",
+            transition:
+              "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1) 100ms, transform 600ms cubic-bezier(0.16, 1, 0.3, 1) 100ms",
+          }}
+        >
+          {integrations.map((integration) => (
             <IntegrationBadge
               key={integration.name}
               integration={integration}
-              visible={inView}
-              delay={100 + i * 100}
             />
           ))}
         </div>
