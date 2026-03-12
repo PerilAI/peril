@@ -8,6 +8,7 @@ import rehypePrettyCode from "rehype-pretty-code";
 export default defineConfig({
   plugins: [
     mdx({
+      providerImportSource: "@mdx-js/react",
       remarkPlugins: [remarkGfm],
       rehypePlugins: [
         [
