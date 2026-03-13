@@ -1,4 +1,4 @@
-export type Theme = "dark" | "light";
+export type Theme = "dark";
 
 export const THEME_STORAGE_KEY = "peril-theme";
 export const THEME_MEDIA_QUERY = "(prefers-color-scheme: light)";
@@ -18,70 +18,30 @@ interface ThemeStorage {
   setItem?: (key: string, value: string) => void;
 }
 
-interface ThemeMediaQueryResult {
-  matches: boolean;
+type ThemeMatchMedia = (query: string) => { matches: boolean };
+
+export function getThemeFromRoot(_root?: ThemeRoot | null): Theme {
+  return "dark";
 }
 
-type ThemeMatchMedia = (query: string) => ThemeMediaQueryResult;
-
-function isTheme(value: string | null): value is Theme {
-  return value === "dark" || value === "light";
-}
-
-export function getThemeFromRoot(root: ThemeRoot | null | undefined): Theme {
-  if (!root) return "dark";
-
-  const dataTheme = root.getAttribute("data-theme");
-  if (isTheme(dataTheme)) return dataTheme;
-
-  return root.classList.contains("light") ? "light" : "dark";
-}
-
-export function applyTheme(root: ThemeRoot, theme: Theme): void {
+export function applyTheme(root: ThemeRoot, _theme: Theme): void {
   root.classList.remove("dark", "light");
-  root.classList.add(theme);
-  root.setAttribute("data-theme", theme);
+  root.classList.add("dark");
+  root.setAttribute("data-theme", "dark");
 }
 
-export function readStoredTheme(
-  storage: ThemeStorage | null | undefined,
-): Theme | null {
-  if (!storage) return null;
-
-  try {
-    const storedTheme = storage.getItem(THEME_STORAGE_KEY);
-    return isTheme(storedTheme) ? storedTheme : null;
-  } catch {
-    return null;
-  }
+export function readStoredTheme(_storage?: ThemeStorage | null): Theme {
+  return "dark";
 }
 
-export function persistTheme(
-  storage: ThemeStorage | null | undefined,
-  theme: Theme,
-): void {
-  if (!storage?.setItem) return;
-
-  try {
-    storage.setItem(THEME_STORAGE_KEY, theme);
-  } catch {
-    // Ignore storage failures so theme switching still works in restricted contexts.
-  }
+export function persistTheme(_storage?: ThemeStorage | null, _theme?: Theme): void {
+  // No-op: Solar Flare is dark-only
 }
 
-export function getSystemTheme(matchMedia?: ThemeMatchMedia): Theme {
-  if (!matchMedia) return "dark";
-
-  try {
-    return matchMedia(THEME_MEDIA_QUERY).matches ? "light" : "dark";
-  } catch {
-    return "dark";
-  }
+export function getSystemTheme(_matchMedia?: ThemeMatchMedia): Theme {
+  return "dark";
 }
 
-export function resolveTheme(
-  storage?: ThemeStorage | null,
-  matchMedia?: ThemeMatchMedia,
-): Theme {
-  return readStoredTheme(storage) ?? getSystemTheme(matchMedia);
+export function resolveTheme(_storage?: ThemeStorage | null, _matchMedia?: ThemeMatchMedia): Theme {
+  return "dark";
 }
