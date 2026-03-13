@@ -1,196 +1,243 @@
 /*
- * Peril Design System — Tokens
+ * Solar Flare Design System — Tokens
  *
- * Color palette: Dark mode base with amber/gold accent
- * Typography: DM Serif Display (headlines) + Inter (body)
+ * Color palette: Deep space dark with gradient arc (amber → coral → violet)
+ * Typography: Plus Jakarta Sans (headlines) + Inter (body) + JetBrains Mono (code)
  * Spacing: 8px grid system
  *
- * Reference: docs/marketing-site-research.md §2.4, §5
+ * Reference: docs/solar-flare-design-kit.md
  */
 
 /* ============================================================
-   COLOR TOKENS
-   ============================================================
-   Dark mode base: warm-tinted near-black (not pure #000)
-   Accent: amber/gold — warm, distinctive, NOT blue
+   SOLAR FLARE COLOR TOKENS
    ============================================================ */
 
 :root {
-  /* --- Base palette (HSL for easy manipulation) --- */
+  /* --- Backgrounds --- */
+  --sf-bg-void: #06060e;
+  --sf-bg-space: #0a0a14;
+  --sf-bg-elevated: #10101c;
+  --sf-bg-surface: #161625;
+  --sf-bg-overlay: rgba(6, 6, 14, 0.80);
 
-  /* Amber/gold accent ramp */
-  --color-amber-50: #fffbeb;
-  --color-amber-100: #fef3c7;
-  --color-amber-200: #fde68a;
-  --color-amber-300: #fcd34d;
-  --color-amber-400: #fbbf24;
-  --color-amber-500: #f59e0b;
-  --color-amber-600: #d97706;
-  --color-amber-700: #b45309;
-  --color-amber-800: #92400e;
-  --color-amber-900: #78350f;
+  /* --- Gradient Arc --- */
+  --sf-gradient-arc: linear-gradient(135deg, #f59e0b 0%, #f43f5e 50%, #8b5cf6 100%);
+  --sf-gradient-arc-soft: linear-gradient(135deg, rgba(245,158,11,0.15) 0%, rgba(244,63,94,0.10) 50%, rgba(139,92,246,0.08) 100%);
+  --sf-gradient-arc-border: linear-gradient(135deg, rgba(245,158,11,0.5) 0%, rgba(244,63,94,0.3) 50%, rgba(139,92,246,0.5) 100%);
+  --sf-gradient-amber: linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
+  --sf-gradient-glow: radial-gradient(ellipse at 30% 20%, rgba(245,158,11,0.12) 0%, rgba(244,63,94,0.06) 40%, transparent 70%);
 
-  /* Neutral ramp (warm-tinted) */
-  --color-neutral-50: #fafaf9;
-  --color-neutral-100: #f5f5f4;
-  --color-neutral-200: #e7e5e4;
-  --color-neutral-300: #d6d3d1;
-  --color-neutral-400: #a8a29e;
-  --color-neutral-500: #78716c;
-  --color-neutral-600: #57534e;
-  --color-neutral-700: #44403c;
-  --color-neutral-800: #292524;
-  --color-neutral-900: #1c1917;
-  --color-neutral-950: #0c0a09;
+  /* --- Accent Colors --- */
+  --sf-accent: #f59e0b;
+  --sf-accent-hover: #fbbf24;
+  --sf-accent-pressed: #d97706;
+  --sf-accent-muted: rgba(245, 158, 11, 0.12);
+  --sf-accent-glow: rgba(245, 158, 11, 0.20);
 
-  /* --- Semantic tokens (dark mode default) --- */
-  --color-background: var(--color-neutral-950);
-  --color-surface: var(--color-neutral-900);
-  --color-surface-elevated: var(--color-neutral-800);
-  --color-border: var(--color-neutral-800);
-  --color-border-subtle: rgba(255, 255, 255, 0.06);
+  /* --- Text Colors --- */
+  --sf-text-primary: #fafaf9;
+  --sf-text-secondary: #a1a1aa;
+  --sf-text-muted: #71717a;
+  --sf-text-accent: #f59e0b;
+  --sf-text-on-accent: #06060e;
 
-  --color-text: var(--color-neutral-50);
-  --color-text-secondary: var(--color-neutral-400);
-  --color-text-muted: #8a837d; /* neutral-450: 5.1:1 on dark bg, passes AA */
+  /* --- Semantic Colors --- */
+  --sf-success: #22c55e;
+  --sf-warning: #eab308;
+  --sf-error: #ef4444;
+  --sf-info: #3b82f6;
 
-  --color-accent: var(--color-amber-400);
-  --color-accent-hover: var(--color-amber-300);
-  --color-accent-foreground: var(--color-neutral-950);
-  --color-accent-muted: rgba(251, 191, 36, 0.15);
-  --color-accent-glow: rgba(251, 191, 36, 0.25);
+  /* --- Step Accent Colors (How It Works) --- */
+  --sf-step-annotate: #f59e0b;
+  --sf-step-structure: #f43f5e;
+  --sf-step-execute: #8b5cf6;
 
-  /* Use-case accent colors */
-  --color-green: hsl(150, 50%, 45%);
-  --color-green-glow: rgba(56, 161, 105, 0.12);
-  --color-purple: hsl(260, 55%, 60%);
-  --color-purple-glow: rgba(124, 90, 199, 0.10);
-  --color-neutral-glow: rgba(120, 113, 108, 0.12);
-
-  /* Browser chrome dots (universal across themes) */
+  /* Browser chrome dots (universal) */
   --color-dot-close: #ff5f57;
   --color-dot-minimize: #febc2e;
   --color-dot-expand: #28c840;
 
-  /* --- Glow effect tokens (ties to annotation cursor pattern) --- */
-  --glow-color: var(--color-amber-400);
-  --glow-sm: 0 0 8px var(--color-accent-glow);
-  --glow-md: 0 0 16px var(--color-accent-glow), 0 0 4px var(--color-accent-muted);
-  --glow-lg: 0 0 32px var(--color-accent-glow), 0 0 8px var(--color-accent-muted);
+  /* --- Glow effects --- */
+  --sf-glow-sm: 0 0 8px var(--sf-accent-glow);
+  --sf-glow-md: 0 0 16px var(--sf-accent-glow), 0 0 4px var(--sf-accent-muted);
+  --sf-glow-lg: 0 0 32px var(--sf-accent-glow), 0 0 8px var(--sf-accent-muted);
 
   /* ============================================================
      TYPOGRAPHY TOKENS
-     ============================================================
-     Headline: DM Serif Display — distinctive serif, breaks sans monoculture
-     Body: Inter — clean, variable, excellent readability
      ============================================================ */
 
-  --font-display: "DM Serif Display", Georgia, "Times New Roman", serif;
-  --font-body: "Inter", system-ui, -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  --sf-font-display: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --sf-font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --sf-font-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
 
-  /* Type scale (modular, ~1.25 ratio) */
-  --text-hero: clamp(3rem, 5vw + 1rem, 5rem);
-  --text-h1: clamp(2.25rem, 3vw + 0.5rem, 3.5rem);
-  --text-h2: clamp(1.75rem, 2.5vw + 0.25rem, 2.5rem);
-  --text-h3: clamp(1.375rem, 2vw + 0.125rem, 1.875rem);
-  --text-h4: clamp(1.125rem, 1.5vw, 1.375rem);
-  --text-body: 1rem;
-  --text-body-lg: 1.125rem;
-  --text-small: 0.875rem;
-  --text-caption: 0.75rem;
+  /* Type scale (1.25 modular ratio, fluid) */
+  --sf-text-hero: clamp(3.5rem, 6vw + 1rem, 6rem);
+  --sf-text-h1: clamp(2.5rem, 4vw + 0.5rem, 4rem);
+  --sf-text-h2: clamp(1.75rem, 2.5vw + 0.5rem, 2.5rem);
+  --sf-text-h3: clamp(1.25rem, 1.5vw + 0.5rem, 1.75rem);
+  --sf-text-body: 1.0625rem;
+  --sf-text-body-lg: 1.1875rem;
+  --sf-text-small: 0.875rem;
+  --sf-text-caption: 0.75rem;
+  --sf-text-mono: 0.8125rem;
 
   /* Line heights */
+  --sf-leading-hero: 1.05;
+  --sf-leading-h1: 1.1;
+  --sf-leading-h2: 1.15;
+  --sf-leading-h3: 1.2;
+  --sf-leading-body: 1.6;
+  --sf-leading-small: 1.5;
+
+  /* Letter spacing */
+  --sf-tracking-hero: -0.03em;
+  --sf-tracking-h1: -0.025em;
+  --sf-tracking-h2: -0.015em;
+  --sf-tracking-overline: 0.1em;
+
+  /* ============================================================
+     SPACING TOKENS (8px grid)
+     ============================================================ */
+  --sf-space-1: 0.25rem;
+  --sf-space-2: 0.5rem;
+  --sf-space-3: 0.75rem;
+  --sf-space-4: 1rem;
+  --sf-space-6: 1.5rem;
+  --sf-space-8: 2rem;
+  --sf-space-10: 2.5rem;
+  --sf-space-12: 3rem;
+  --sf-space-16: 4rem;
+  --sf-space-20: 5rem;
+  --sf-space-24: 6rem;
+  --sf-space-32: 8rem;
+  --sf-space-40: 10rem;
+
+  /* Container */
+  --sf-container-max: 1200px;
+  --sf-container-narrow: 800px;
+  --sf-container-wide: 1400px;
+  --sf-container-gutter: 24px;
+
+  /* Section spacing */
+  --sf-section-padding: var(--sf-space-32);
+  --sf-section-padding-sm: var(--sf-space-20);
+
+  /* ============================================================
+     BORDER & RADIUS TOKENS
+     ============================================================ */
+  --sf-radius-sm: 0.375rem;
+  --sf-radius-md: 0.5rem;
+  --sf-radius-lg: 0.75rem;
+  --sf-radius-xl: 1rem;
+  --sf-radius-2xl: 1.5rem;
+  --sf-radius-full: 9999px;
+
+  /* ============================================================
+     TIMING TOKENS
+     ============================================================ */
+  --sf-duration-fast: 150ms;
+  --sf-duration-normal: 300ms;
+  --sf-duration-slow: 600ms;
+  --sf-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --sf-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --sf-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ============================================================
+     BACKWARD-COMPATIBLE ALIASES
+     ============================================================
+     Map old token names to new ones so unmigrated components
+     don't break during incremental migration.
+     ============================================================ */
+  --color-background: var(--sf-bg-void);
+  --color-surface: var(--sf-bg-space);
+  --color-surface-elevated: var(--sf-bg-elevated);
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-subtle: rgba(255, 255, 255, 0.06);
+
+  --color-text: var(--sf-text-primary);
+  --color-text-secondary: var(--sf-text-secondary);
+  --color-text-muted: var(--sf-text-muted);
+
+  --color-accent: var(--sf-accent);
+  --color-accent-hover: var(--sf-accent-hover);
+  --color-accent-foreground: var(--sf-text-on-accent);
+  --color-accent-muted: var(--sf-accent-muted);
+  --color-accent-glow: var(--sf-accent-glow);
+
+  --color-amber-300: #fcd34d;
+  --color-amber-400: var(--sf-accent-hover);
+  --color-amber-500: var(--sf-accent);
+  --color-amber-600: var(--sf-accent-pressed);
+
+  --color-green: var(--sf-success);
+  --color-green-glow: rgba(34, 197, 94, 0.12);
+  --color-purple: #8b5cf6;
+  --color-purple-glow: rgba(139, 92, 246, 0.10);
+  --color-neutral-glow: rgba(113, 113, 122, 0.12);
+
+  --font-display: var(--sf-font-display);
+  --font-body: var(--sf-font-body);
+  --font-mono: var(--sf-font-mono);
+
+  --text-hero: var(--sf-text-hero);
+  --text-h1: var(--sf-text-h1);
+  --text-h2: var(--sf-text-h2);
+  --text-h3: var(--sf-text-h3);
+  --text-h4: var(--sf-text-h3);
+  --text-body: var(--sf-text-body);
+  --text-body-lg: var(--sf-text-body-lg);
+  --text-small: var(--sf-text-small);
+  --text-caption: var(--sf-text-caption);
+
+  --space-2: 0.5rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  --section-padding-y: var(--sf-section-padding);
+  --section-padding-y-sm: var(--sf-section-padding-sm);
+
+  --container-max: var(--sf-container-max);
+  --container-narrow: var(--sf-container-narrow);
+  --container-wide: var(--sf-container-wide);
+  --container-padding: var(--sf-container-gutter);
+
+  --radius-sm: var(--sf-radius-sm);
+  --radius-md: var(--sf-radius-md);
+  --radius-lg: var(--sf-radius-lg);
+  --radius-xl: var(--sf-radius-xl);
+  --radius-2xl: var(--sf-radius-2xl);
+  --radius-full: var(--sf-radius-full);
+
+  --duration-fast: var(--sf-duration-fast);
+  --duration-normal: var(--sf-duration-normal);
+  --duration-slow: var(--sf-duration-slow);
+  --ease-out: var(--sf-ease-out);
+  --ease-in-out: var(--sf-ease-in-out);
+
+  --glow-sm: var(--sf-glow-sm);
+  --glow-md: var(--sf-glow-md);
+  --glow-lg: var(--sf-glow-lg);
+
+  --glow-color: var(--sf-accent);
+
   --leading-tight: 1.1;
   --leading-snug: 1.25;
   --leading-normal: 1.5;
   --leading-relaxed: 1.625;
 
-  /* Font weights */
-  --weight-light: 300;
-  --weight-normal: 400;
-  --weight-medium: 500;
-  --weight-semibold: 600;
-  --weight-bold: 700;
-
-  /* Letter spacing */
   --tracking-tight: -0.02em;
   --tracking-normal: 0;
   --tracking-wide: 0.025em;
   --tracking-wider: 0.05em;
 
-  /* ============================================================
-     SPACING TOKENS (8px grid)
-     ============================================================ */
-  --space-0: 0;
-  --space-1: 0.25rem; /* 4px */
-  --space-2: 0.5rem; /* 8px */
-  --space-3: 0.75rem; /* 12px */
-  --space-4: 1rem; /* 16px */
-  --space-5: 1.25rem; /* 20px */
-  --space-6: 1.5rem; /* 24px */
-  --space-8: 2rem; /* 32px */
-  --space-10: 2.5rem; /* 40px */
-  --space-12: 3rem; /* 48px */
-  --space-16: 4rem; /* 64px */
-  --space-20: 5rem; /* 80px */
-  --space-24: 6rem; /* 96px */
-  --space-32: 8rem; /* 128px */
-
-  /* Section rhythm */
-  --section-padding-y: var(--space-24);
-  --section-padding-y-sm: var(--space-16);
-
-  /* Container */
-  --container-max: 72rem; /* 1152px */
-  --container-narrow: 48rem; /* 768px */
-  --container-wide: 80rem; /* 1280px */
-  --container-padding: var(--space-6);
-
-  /* ============================================================
-     BORDER & RADIUS TOKENS
-     ============================================================ */
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
-  --radius-full: 9999px;
-
-  /* ============================================================
-     TRANSITION TOKENS
-     ============================================================ */
-  --duration-fast: 150ms;
-  --duration-normal: 250ms;
-  --duration-slow: 400ms;
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* ============================================================
-   LIGHT MODE OVERRIDES
-   ============================================================ */
-
-:root.light,
-[data-theme="light"] {
-  --color-background: var(--color-neutral-50);
-  --color-surface: white;
-  --color-surface-elevated: var(--color-neutral-100);
-  --color-border: var(--color-neutral-200);
-  --color-border-subtle: rgba(0, 0, 0, 0.06);
-
-  --color-text: var(--color-neutral-900);
-  --color-text-secondary: var(--color-neutral-600);
-  --color-text-muted: var(--color-neutral-500);
-
-  --color-accent: var(--color-amber-700); /* amber-700 for text use: 4.81:1 on neutral-50, passes AA */
-  --color-accent-hover: var(--color-amber-600);
-  --color-accent-foreground: var(--color-neutral-950); /* dark text on amber — 6.1:1 AA */
-  --color-accent-muted: rgba(217, 119, 6, 0.1);
-  --color-accent-glow: rgba(217, 119, 6, 0.2);
-
-  --color-green: hsl(150, 50%, 32%);
-  --color-green-glow: rgba(56, 161, 105, 0.08);
-  --color-purple: hsl(260, 55%, 48%);
-  --color-purple-glow: rgba(124, 90, 199, 0.08);
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
 }
