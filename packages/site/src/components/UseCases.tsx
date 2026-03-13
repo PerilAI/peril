@@ -1,186 +1,66 @@
+import { useCallback, useRef } from "react";
 import { useInView } from "../hooks/useInView";
 
 /* ─── SVG Icons ─────────────────────────────────────────── */
 
 function BugReportIcon() {
   return (
-    <svg
-      width="40"
-      height="40"
-      viewBox="0 0 40 40"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      {/* Bug body */}
-      <ellipse
-        cx="20"
-        cy="22"
-        rx="9"
-        ry="11"
-        stroke="var(--color-amber-400)"
-        strokeWidth="1.5"
-        fill="none"
-      />
-      {/* Bug head */}
-      <circle
-        cx="20"
-        cy="11"
-        r="4"
-        stroke="var(--color-amber-400)"
-        strokeWidth="1.5"
-        fill="none"
-      />
-      {/* Antennae */}
-      <path
-        d="M17 8L13 4M23 8L27 4"
-        stroke="var(--color-amber-400)"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-      {/* Legs */}
-      <path
-        d="M11 18L7 15M11 24L7 26M11 30L8 34M29 18L33 15M29 24L33 26M29 30L32 34"
-        stroke="var(--color-amber-400)"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-      {/* Crosshair overlay */}
-      <circle
-        cx="20"
-        cy="22"
-        r="5"
-        stroke="var(--color-amber-300)"
-        strokeWidth="1"
-        strokeDasharray="3 2"
-        opacity="0.5"
-      />
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+      <ellipse cx="20" cy="22" rx="9" ry="11" stroke="var(--sf-accent)" strokeWidth="1.5" fill="none" />
+      <circle cx="20" cy="11" r="4" stroke="var(--sf-accent)" strokeWidth="1.5" fill="none" />
+      <path d="M17 8L13 4M23 8L27 4" stroke="var(--sf-accent)" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M11 18L7 15M11 24L7 26M11 30L8 34M29 18L33 15M29 24L33 26M29 30L32 34" stroke="var(--sf-accent)" strokeWidth="1.5" strokeLinecap="round" />
+      <circle cx="20" cy="22" r="5" stroke="var(--sf-accent-hover)" strokeWidth="1" strokeDasharray="3 2" opacity="0.5" />
     </svg>
   );
 }
 
 function DesignFeedbackIcon() {
   return (
-    <svg
-      width="40"
-      height="40"
-      viewBox="0 0 40 40"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      {/* Artboard frame */}
-      <rect
-        x="6"
-        y="6"
-        width="28"
-        height="28"
-        rx="3"
-        stroke="var(--color-purple)"
-        strokeWidth="1.5"
-        fill="none"
-      />
-      {/* Layout blocks */}
-      <rect x="10" y="10" width="10" height="5" rx="1" fill="var(--color-purple)" opacity="0.25" />
-      <rect x="10" y="18" width="20" height="3" rx="1" fill="var(--color-purple)" opacity="0.15" />
-      <rect x="10" y="24" width="14" height="3" rx="1" fill="var(--color-purple)" opacity="0.15" />
-      {/* Annotation pin */}
-      <circle cx="30" cy="12" r="5" fill="var(--color-amber-400)" opacity="0.9" />
-      <path
-        d="M28 12L29.5 13.5L33 10"
-        stroke="var(--color-accent-foreground)"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+      <rect x="6" y="6" width="28" height="28" rx="3" stroke="#8b5cf6" strokeWidth="1.5" fill="none" />
+      <rect x="10" y="10" width="10" height="5" rx="1" fill="#8b5cf6" opacity="0.25" />
+      <rect x="10" y="18" width="20" height="3" rx="1" fill="#8b5cf6" opacity="0.15" />
+      <rect x="10" y="24" width="14" height="3" rx="1" fill="#8b5cf6" opacity="0.15" />
+      <circle cx="30" cy="12" r="5" fill="var(--sf-accent)" opacity="0.9" />
+      <path d="M28 12L29.5 13.5L33 10" stroke="var(--sf-text-on-accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
 
 function AccessibilityIcon() {
   return (
-    <svg
-      width="40"
-      height="40"
-      viewBox="0 0 40 40"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      {/* Circle */}
-      <circle
-        cx="20"
-        cy="20"
-        r="15"
-        stroke="var(--color-green)"
-        strokeWidth="1.5"
-        fill="none"
-      />
-      {/* Person figure */}
-      <circle cx="20" cy="13" r="2.5" fill="var(--color-green)" />
-      {/* Body */}
-      <line
-        x1="20"
-        y1="16"
-        x2="20"
-        y2="25"
-        stroke="var(--color-green)"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-      {/* Arms */}
-      <path
-        d="M13 20L20 18L27 20"
-        stroke="var(--color-green)"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-      {/* Legs */}
-      <path
-        d="M20 25L15 32M20 25L25 32"
-        stroke="var(--color-green)"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+      <circle cx="20" cy="20" r="15" stroke="var(--sf-success)" strokeWidth="1.5" fill="none" />
+      <circle cx="20" cy="13" r="2.5" fill="var(--sf-success)" />
+      <line x1="20" y1="16" x2="20" y2="25" stroke="var(--sf-success)" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M13 20L20 18L27 20" stroke="var(--sf-success)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      <path d="M20 25L15 32M20 25L25 32" stroke="var(--sf-success)" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   );
 }
 
-/* ─── Use Case Data ─────────────────────────────────────── */
-
-interface UseCase {
-  headline: string;
-  outcome: string;
-  description: string;
-  accentColor: string;
-  accentGlow: string;
-  icon: React.ReactNode;
-  visual: React.ReactNode;
-}
-
-/* ─── Use Case Visuals ──────────────────────────────────── */
+/* ─── Visual Blocks ────────────────────────────────────── */
 
 function BugReportVisual() {
   return (
-    <div className="rounded-lg border border-border-subtle bg-surface p-3 text-caption font-mono">
-      <div className="flex items-center gap-2 mb-2">
-        <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-        <span className="text-text-muted">annotation #12</span>
+    <div className="sf-code-block">
+      <div className="flex items-center gap-2 mb-2" style={{ fontFamily: "var(--sf-font-mono)", fontSize: "var(--sf-text-caption)" }}>
+        <div className="w-1.5 h-1.5 rounded-full" style={{ background: "var(--sf-accent)" }} />
+        <span style={{ color: "var(--sf-text-muted)" }}>annotation #12</span>
       </div>
-      <div className="space-y-1.5">
+      <div className="space-y-1.5" style={{ fontFamily: "var(--sf-font-mono)", fontSize: "var(--sf-text-caption)" }}>
         <div className="flex items-start gap-2">
-          <span className="text-amber-400 shrink-0">→</span>
-          <span className="text-text-secondary">"Submit button unresponsive on mobile"</span>
+          <span className="shrink-0" style={{ color: "var(--sf-accent)" }}>→</span>
+          <span style={{ color: "var(--sf-text-secondary)" }}>"Submit button unresponsive on mobile"</span>
         </div>
         <div className="flex items-start gap-2">
-          <span className="shrink-0 text-[var(--color-green)]">✓</span>
-          <span className="text-text-secondary">Agent fixed touch target in <span className="text-text-primary">checkout.tsx:42</span></span>
+          <span className="shrink-0" style={{ color: "var(--sf-success)" }}>✓</span>
+          <span style={{ color: "var(--sf-text-secondary)" }}>Agent fixed touch target in <span style={{ color: "var(--sf-text-primary)" }}>checkout.tsx:42</span></span>
         </div>
         <div className="flex items-start gap-2">
-          <span className="shrink-0 text-[var(--color-green)]">✓</span>
-          <span className="text-[var(--color-green)]">PR #87 merged</span>
+          <span className="shrink-0" style={{ color: "var(--sf-success)" }}>✓</span>
+          <span style={{ color: "var(--sf-success)" }}>PR #87 merged</span>
         </div>
       </div>
     </div>
@@ -189,23 +69,23 @@ function BugReportVisual() {
 
 function DesignFeedbackVisual() {
   return (
-    <div className="rounded-lg border border-border-subtle bg-surface p-3 text-caption font-mono">
-      <div className="flex items-center gap-2 mb-2">
-        <div className="h-1.5 w-1.5 rounded-full bg-[var(--color-purple)]" />
-        <span className="text-text-muted">design review</span>
+    <div className="sf-code-block">
+      <div className="flex items-center gap-2 mb-2" style={{ fontFamily: "var(--sf-font-mono)", fontSize: "var(--sf-text-caption)" }}>
+        <div className="h-1.5 w-1.5 rounded-full" style={{ background: "#8b5cf6" }} />
+        <span style={{ color: "var(--sf-text-muted)" }}>design review</span>
       </div>
-      <div className="space-y-1.5">
+      <div className="space-y-1.5" style={{ fontFamily: "var(--sf-font-mono)", fontSize: "var(--sf-text-caption)" }}>
         <div className="flex items-start gap-2">
-          <span className="shrink-0 text-[var(--color-purple)]">→</span>
-          <span className="text-text-secondary">"Header spacing too tight, needs 24px gap"</span>
+          <span className="shrink-0" style={{ color: "#8b5cf6" }}>→</span>
+          <span style={{ color: "var(--sf-text-secondary)" }}>"Header spacing too tight, needs 24px gap"</span>
         </div>
         <div className="flex items-start gap-2">
-          <span className="shrink-0 text-[var(--color-green)]">✓</span>
-          <span className="text-text-secondary">Updated <span className="text-text-primary">gap-4</span> → <span className="text-text-primary">gap-6</span></span>
+          <span className="shrink-0" style={{ color: "var(--sf-success)" }}>✓</span>
+          <span style={{ color: "var(--sf-text-secondary)" }}>Updated <span style={{ color: "var(--sf-text-primary)" }}>gap-4</span> → <span style={{ color: "var(--sf-text-primary)" }}>gap-6</span></span>
         </div>
         <div className="flex items-start gap-2">
-          <span className="shrink-0 text-[var(--color-green)]">✓</span>
-          <span className="text-[var(--color-green)]">PR #91 ready for review</span>
+          <span className="shrink-0" style={{ color: "var(--sf-success)" }}>✓</span>
+          <span style={{ color: "var(--sf-success)" }}>PR #91 ready for review</span>
         </div>
       </div>
     </div>
@@ -214,129 +94,151 @@ function DesignFeedbackVisual() {
 
 function AccessibilityVisual() {
   return (
-    <div className="rounded-lg border border-border-subtle bg-surface p-3 text-caption font-mono">
-      <div className="flex items-center gap-2 mb-2">
-        <div className="h-1.5 w-1.5 rounded-full bg-[var(--color-green)]" />
-        <span className="text-text-muted">a11y audit</span>
+    <div className="sf-code-block">
+      <div className="flex items-center gap-2 mb-2" style={{ fontFamily: "var(--sf-font-mono)", fontSize: "var(--sf-text-caption)" }}>
+        <div className="h-1.5 w-1.5 rounded-full" style={{ background: "var(--sf-success)" }} />
+        <span style={{ color: "var(--sf-text-muted)" }}>a11y audit</span>
       </div>
-      <div className="space-y-1.5">
+      <div className="space-y-1.5" style={{ fontFamily: "var(--sf-font-mono)", fontSize: "var(--sf-text-caption)" }}>
         <div className="flex items-start gap-2">
-          <span className="text-amber-400 shrink-0">!</span>
-          <span className="text-text-secondary">3 contrast violations flagged</span>
+          <span className="shrink-0" style={{ color: "var(--sf-accent)" }}>!</span>
+          <span style={{ color: "var(--sf-text-secondary)" }}>3 contrast violations flagged</span>
         </div>
         <div className="flex items-start gap-2">
-          <span className="shrink-0 text-[var(--color-green)]">✓</span>
-          <span className="text-text-secondary">All fixed to <span className="text-text-primary">4.5:1+</span> ratio</span>
+          <span className="shrink-0" style={{ color: "var(--sf-success)" }}>✓</span>
+          <span style={{ color: "var(--sf-text-secondary)" }}>All fixed to <span style={{ color: "var(--sf-text-primary)" }}>4.5:1+</span> ratio</span>
         </div>
         <div className="flex items-start gap-2">
-          <span className="shrink-0 text-[var(--color-green)]">✓</span>
-          <span className="text-[var(--color-green)]">WCAG AA compliant</span>
+          <span className="shrink-0" style={{ color: "var(--sf-success)" }}>✓</span>
+          <span style={{ color: "var(--sf-success)" }}>WCAG AA compliant</span>
         </div>
       </div>
     </div>
   );
 }
 
-/* ─── Use Cases ─────────────────────────────────────────── */
+/* ─── Use Case Data ────────────────────────────────────── */
+
+interface UseCase {
+  headline: string;
+  outcome: string;
+  description: string;
+  icon: React.ReactNode;
+  visual: React.ReactNode;
+}
 
 const useCases: UseCase[] = [
   {
     headline: "Bug reports",
     outcome: "Click the bug, describe it, your agent fixes it",
-    description:
-      "Spot a broken button or layout glitch? Click it, leave a note, and your coding agent delivers a fix — no ticket triage, no context switching.",
-    accentColor: "var(--color-amber-400)",
-    accentGlow: "var(--color-accent-muted)",
+    description: "Spot a broken button or layout glitch? Click it, leave a note, and your coding agent delivers a fix — no ticket triage, no context switching.",
     icon: <BugReportIcon />,
     visual: <BugReportVisual />,
   },
   {
     headline: "Design feedback",
     outcome: "Annotate what's wrong, get a PR back",
-    description:
-      "Mark spacing issues, wrong colors, or misaligned elements directly on the live page. Your agent reads the annotation and opens a PR with the exact changes.",
-    accentColor: "var(--color-purple)",
-    accentGlow: "var(--color-purple-glow)",
+    description: "Mark spacing issues, wrong colors, or misaligned elements directly on the live page. Your agent reads the annotation and opens a PR with the exact changes.",
     icon: <DesignFeedbackIcon />,
     visual: <DesignFeedbackVisual />,
   },
   {
     headline: "Accessibility reviews",
     outcome: "Flag WCAG issues visually, get automated fixes",
-    description:
-      "Highlight contrast failures, missing alt text, or keyboard traps in context. Your agent receives structured data and knows exactly what to remediate.",
-    accentColor: "var(--color-green)",
-    accentGlow: "var(--color-green-glow)",
+    description: "Highlight contrast failures, missing alt text, or keyboard traps in context. Your agent receives structured data and knows exactly what to remediate.",
     icon: <AccessibilityIcon />,
     visual: <AccessibilityVisual />,
   },
 ];
 
-/* ─── Use Case Card ─────────────────────────────────────── */
+/* ─── Bento Card with Mouse Bloom ──────────────────────── */
 
-function UseCaseCard({
+function BentoCard({
   useCase,
   visible,
   delay,
+  className = "",
 }: {
   useCase: UseCase;
   visible: boolean;
   delay: number;
+  className?: string;
 }) {
+  const cardRef = useRef<HTMLElement>(null);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    const card = cardRef.current;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+    card.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+  }, []);
+
   return (
     <article
-      className="group relative rounded-xl border border-border-subtle bg-surface p-8 flex flex-col overflow-hidden transition-[border-color] duration-300"
+      ref={cardRef}
+      className={`sf-card flex flex-col ${className}`}
       style={{
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(24px)",
-        transition: `opacity 600ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 600ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, border-color 300ms ease`,
+        transition: `opacity 600ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 600ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
+        ["--mouse-x" as string]: "50%",
+        ["--mouse-y" as string]: "50%",
       }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLElement).style.borderColor = useCase.accentColor;
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLElement).style.borderColor = "";
-      }}
+      onMouseMove={handleMouseMove}
     >
-      {/* Accent top edge */}
-      <div
-        className="absolute top-0 left-0 right-0 h-[2px]"
-        style={{
-          background: `linear-gradient(90deg, transparent, ${useCase.accentColor}, transparent)`,
-          opacity: 0.35,
-        }}
-      />
-
-      {/* Icon + headline row */}
       <div className="flex items-center gap-3 mb-3">
         <div className="shrink-0">{useCase.icon}</div>
         <h3
-          className="font-display text-h4 font-semibold"
+          className="font-display font-bold"
+          style={{ fontSize: "var(--sf-text-h3)", color: "var(--sf-text-primary)" }}
         >
           {useCase.headline}
         </h3>
       </div>
 
-      {/* Outcome tagline */}
-      <p
-        className="text-body font-medium mb-3 leading-snug"
-        style={{ color: useCase.accentColor }}
-      >
+      <p className="font-medium mb-3 leading-snug" style={{
+        fontSize: "var(--sf-text-body)",
+        background: "var(--sf-gradient-arc)",
+        WebkitBackgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+        backgroundClip: "text",
+      }}>
         {useCase.outcome}
       </p>
 
-      {/* Description */}
-      <p className="text-text-secondary text-small leading-relaxed mb-6">
+      <p style={{ fontSize: "var(--sf-text-small)", lineHeight: "var(--sf-leading-body)", color: "var(--sf-text-secondary)" }} className="mb-6">
         {useCase.description}
       </p>
 
-      {/* Visual */}
       <div className="mt-auto">{useCase.visual}</div>
     </article>
   );
 }
 
-/* ─── Main Component ────────────────────────────────────── */
+/* ─── Stat Card ────────────────────────────────────────── */
+
+function StatCard({ visible, delay }: { visible: boolean; delay: number }) {
+  return (
+    <div
+      className="sf-card flex flex-col items-center justify-center text-center"
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(24px)",
+        transition: `opacity 600ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 600ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
+      }}
+    >
+      <div style={{ fontFamily: "var(--sf-font-mono)", fontSize: "var(--sf-text-h1)", fontWeight: 800, color: "var(--sf-text-primary)" }}>
+        99.7%
+      </div>
+      <p style={{ fontSize: "var(--sf-text-small)", color: "var(--sf-text-muted)", marginTop: "var(--sf-space-2)" }}>
+        locator accuracy
+      </p>
+    </div>
+  );
+}
+
+/* ─── Main Component ───────────────────────────────────── */
 
 export function UseCases() {
   const [sectionRef, inView] = useInView(0.1);
@@ -344,41 +246,55 @@ export function UseCases() {
   return (
     <section
       ref={sectionRef as React.RefObject<HTMLElement>}
-      className="py-[var(--section-padding-y)] px-[var(--container-padding)]"
+      className="px-[var(--sf-container-gutter)]"
+      style={{ paddingTop: "var(--sf-section-padding)", paddingBottom: "var(--sf-section-padding)" }}
       aria-labelledby="use-cases-heading"
     >
-      <div className="max-w-[var(--container-max)] mx-auto">
-        {/* Section Header */}
+      <div className="max-w-[var(--sf-container-max)] mx-auto">
+        {/* Section Header — left-aligned */}
         <div
-          className="text-center mb-16"
+          className="mb-16"
           style={{
             opacity: inView ? 1 : 0,
             transform: inView ? "translateY(0)" : "translateY(12px)",
-            transition:
-              "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1), transform 600ms cubic-bezier(0.16, 1, 0.3, 1)",
+            transition: "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1), transform 600ms cubic-bezier(0.16, 1, 0.3, 1)",
           }}
         >
+          <p
+            className="uppercase font-medium mb-4"
+            style={{
+              fontFamily: "var(--sf-font-mono)",
+              fontSize: "var(--sf-text-caption)",
+              letterSpacing: "var(--sf-tracking-overline)",
+              color: "var(--sf-text-accent)",
+            }}
+          >
+            Use cases
+          </p>
           <h2
             id="use-cases-heading"
-            className="text-h1 font-display leading-[var(--leading-tight)] tracking-[var(--tracking-tight)] mb-4"
+            className="font-display font-[800]"
+            style={{
+              fontSize: "var(--sf-text-h1)",
+              lineHeight: "var(--sf-leading-h1)",
+              letterSpacing: "var(--sf-tracking-h1)",
+              color: "var(--sf-text-primary)",
+            }}
           >
             What you can do with Peril
           </h2>
-          <p className="text-text-secondary text-body-lg max-w-lg mx-auto">
-            Every visual annotation becomes a structured task your agent can act on immediately.
-          </p>
         </div>
 
-        {/* Use case cards grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {useCases.map((uc, i) => (
-            <UseCaseCard
-              key={uc.headline}
-              useCase={uc}
-              visible={inView}
-              delay={200 + i * 200}
-            />
-          ))}
+        {/* Bento Row 1: 2/3 + 1/3 */}
+        <div className="sf-bento-primary mb-4">
+          <BentoCard useCase={useCases[0]!} visible={inView} delay={200} />
+          <BentoCard useCase={useCases[1]!} visible={inView} delay={400} />
+        </div>
+
+        {/* Bento Row 2: 1/3 + 2/3 */}
+        <div className="sf-bento-tertiary">
+          <BentoCard useCase={useCases[2]!} visible={inView} delay={600} />
+          <StatCard visible={inView} delay={800} />
         </div>
       </div>
     </section>

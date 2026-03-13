@@ -24,7 +24,7 @@ const faqs = [
   },
 ] as const;
 
-/* ─── Free Tier Features ───────────────────────────────── */
+/* ─── Tier Features ───────────────────────────────────── */
 
 const freeFeatures = [
   "Unlimited annotations",
@@ -35,8 +35,6 @@ const freeFeatures = [
   "React adapter included",
 ] as const;
 
-/* ─── Team Tier Preview Features ───────────────────────── */
-
 const teamFeatures = [
   "Everything in Free, plus:",
   "Cloud-hosted review backend",
@@ -45,36 +43,18 @@ const teamFeatures = [
   "CI/CD verification loop",
 ] as const;
 
-/* ─── Integration Data (mirrored from TrustSignals) ───── */
+/* ─── Integration Badges ───────────────────────────────── */
 
-interface Integration {
-  name: string;
-  hoverColor: string;
-}
-
-const integrations: Integration[] = [
-  { name: "Cursor", hoverColor: "#00b4d8" },
-  { name: "Claude Code", hoverColor: "#d4a574" },
-  { name: "VS Code", hoverColor: "#007acc" },
-  { name: "Windsurf", hoverColor: "#00c9a7" },
-  { name: "MCP", hoverColor: "var(--color-amber-400)" },
-];
+const integrations = ["Cursor", "Claude Code", "VS Code", "Windsurf", "MCP"] as const;
 
 /* ─── Checkmark Icon ───────────────────────────────────── */
 
 function Check({ muted }: { muted?: boolean }) {
   return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      className="shrink-0 mt-0.5"
-      aria-hidden="true"
-    >
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 mt-0.5" aria-hidden="true">
       <path
         d="M3.5 8.5L6.5 11.5L12.5 4.5"
-        stroke={muted ? "var(--color-text-muted)" : "var(--color-accent)"}
+        stroke={muted ? "var(--sf-text-muted)" : "var(--sf-success)"}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -89,14 +69,14 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="border-b border-border-subtle">
+    <div style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
       <button
         type="button"
         className="flex w-full items-center justify-between gap-4 py-5 text-left"
         onClick={() => setOpen(!open)}
         aria-expanded={open}
       >
-        <span className="text-[1rem] font-semibold text-text-primary">
+        <span className="text-[1rem] font-semibold" style={{ color: "var(--sf-text-primary)" }}>
           {question}
         </span>
         <svg
@@ -104,65 +84,23 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
           height="20"
           viewBox="0 0 20 20"
           fill="none"
-          className={`shrink-0 text-text-muted transition-transform duration-[var(--duration-normal)] ${open ? "rotate-180" : ""}`}
+          className={`shrink-0 transition-transform duration-[var(--sf-duration-normal)] ${open ? "rotate-180" : ""}`}
+          style={{ color: "var(--sf-text-muted)" }}
           aria-hidden="true"
         >
-          <path
-            d="M5 7.5L10 12.5L15 7.5"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </button>
       <div
-        className="grid transition-[grid-template-rows] duration-[var(--duration-normal)]"
+        className="grid transition-[grid-template-rows] duration-[var(--sf-duration-normal)]"
         style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
       >
         <div className="overflow-hidden">
-          <p className="pb-5 text-[0.9375rem] leading-[var(--leading-relaxed)] text-text-secondary">
+          <p className="pb-5 text-[0.9375rem]" style={{ lineHeight: "var(--sf-leading-body)", color: "var(--sf-text-secondary)" }}>
             {answer}
           </p>
         </div>
       </div>
-    </div>
-  );
-}
-
-/* ─── Integration Badge (reused from TrustSignals) ────── */
-
-function IntegrationBadge({ integration }: { integration: Integration }) {
-  const [hovered, setHovered] = useState(false);
-
-  return (
-    <div
-      className="flex items-center gap-2.5 rounded-full border px-5 py-2.5 cursor-default select-none transition-all duration-300"
-      style={{
-        borderColor: hovered
-          ? integration.hoverColor
-          : "var(--color-border)",
-        color: hovered
-          ? integration.hoverColor
-          : "var(--color-text-secondary)",
-        backgroundColor: hovered
-          ? `color-mix(in srgb, ${integration.hoverColor} 8%, transparent)`
-          : "transparent",
-      }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <span
-        className="h-2 w-2 rounded-full transition-colors duration-300"
-        style={{
-          backgroundColor: hovered
-            ? integration.hoverColor
-            : "var(--color-text-muted)",
-        }}
-      />
-      <span className="text-small font-medium whitespace-nowrap">
-        {integration.name}
-      </span>
     </div>
   );
 }
@@ -176,11 +114,11 @@ export function Pricing() {
   const [badgesRef, badgesInView] = useInView(0.3);
 
   return (
-    <main id="main">
+    <main id="main" className="sf-grain">
       {/* ─── Hero ───────────────────────────────────────── */}
       <section
         ref={heroRef as React.RefObject<HTMLElement>}
-        className="pt-[140px] pb-[var(--space-12)] px-[var(--container-padding)]"
+        className="pt-[140px] pb-[var(--sf-space-12)] px-[var(--sf-container-gutter)]"
         aria-labelledby="pricing-heading"
       >
         <div
@@ -188,17 +126,22 @@ export function Pricing() {
           style={{
             opacity: heroInView ? 1 : 0,
             transform: heroInView ? "translateY(0)" : "translateY(20px)",
-            transition:
-              "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1), transform 600ms cubic-bezier(0.16, 1, 0.3, 1)",
+            transition: "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1), transform 600ms cubic-bezier(0.16, 1, 0.3, 1)",
           }}
         >
           <h1
             id="pricing-heading"
-            className="font-[family-name:var(--font-display)] text-[var(--text-h1)] leading-[var(--leading-tight)] tracking-[var(--tracking-tight)] text-text-primary"
+            className="font-display font-[800]"
+            style={{
+              fontSize: "var(--sf-text-h1)",
+              lineHeight: "var(--sf-leading-h1)",
+              letterSpacing: "var(--sf-tracking-h1)",
+              color: "var(--sf-text-primary)",
+            }}
           >
             Simple, transparent pricing
           </h1>
-          <p className="mt-4 text-[var(--text-body-lg)] leading-[var(--leading-relaxed)] text-text-secondary max-w-md mx-auto">
+          <p className="mt-4 max-w-md mx-auto" style={{ fontSize: "var(--sf-text-body-lg)", lineHeight: "var(--sf-leading-body)", color: "var(--sf-text-secondary)" }}>
             Free for local development. Always.
           </p>
         </div>
@@ -207,44 +150,30 @@ export function Pricing() {
       {/* ─── Pricing Cards ──────────────────────────────── */}
       <section
         ref={cardsRef as React.RefObject<HTMLElement>}
-        className="py-[var(--space-8)] px-[var(--container-padding)]"
+        className="py-[var(--sf-space-8)] px-[var(--sf-container-gutter)]"
         aria-label="Pricing tiers"
       >
         <div className="max-w-[56rem] mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Free Tier — highlighted */}
+          {/* Free Tier — featured with gradient border */}
           <div
-            className="relative rounded-[var(--radius-lg)] border border-border-subtle bg-surface p-8 overflow-hidden"
+            className="sf-card-featured"
             style={{
               opacity: cardsInView ? 1 : 0,
               transform: cardsInView ? "translateY(0)" : "translateY(20px)",
-              transition:
-                "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1) 100ms, transform 600ms cubic-bezier(0.16, 1, 0.3, 1) 100ms",
+              transition: "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1) 100ms, transform 600ms cubic-bezier(0.16, 1, 0.3, 1) 100ms",
             }}
           >
-            {/* Amber top-border gradient */}
-            <div
-              className="absolute top-0 left-0 right-0 h-[2px]"
-              style={{
-                background:
-                  "linear-gradient(90deg, transparent, var(--color-accent), transparent)",
-              }}
-              aria-hidden="true"
-            />
-
-            <p className="text-[1.5rem] font-bold text-text-primary">Free</p>
-            <p className="mt-2 font-[family-name:var(--font-display)] text-[3rem] leading-none text-text-primary">
+            <p className="text-[1.5rem] font-bold" style={{ color: "var(--sf-text-primary)" }}>Free</p>
+            <p className="mt-2 font-display" style={{ fontSize: "var(--sf-text-hero)", lineHeight: 1, color: "var(--sf-text-primary)" }}>
               $0
             </p>
-            <p className="mt-1 text-[0.9375rem] text-text-secondary">
+            <p className="mt-1 text-[0.9375rem]" style={{ color: "var(--sf-text-muted)" }}>
               forever for local development
             </p>
 
             <ul className="mt-6 space-y-3" role="list">
               {freeFeatures.map((feature) => (
-                <li
-                  key={feature}
-                  className="flex items-start gap-3 text-[0.9375rem] text-text-primary"
-                >
+                <li key={feature} className="flex items-start gap-3 text-[0.9375rem]" style={{ color: "var(--sf-text-primary)" }}>
                   <Check />
                   {feature}
                 </li>
@@ -253,36 +182,33 @@ export function Pricing() {
 
             <a
               href="#get-started"
-              className="mt-8 flex items-center justify-center rounded-[var(--radius-md)] bg-accent px-7 py-3.5 text-base font-medium text-accent-fg shadow-glow-sm transition-all duration-[var(--duration-fast)] hover:bg-accent-hover hover:shadow-glow-md"
+              className="sf-btn-primary mt-8 w-full text-base"
+              style={{ display: "flex", justifyContent: "center" }}
               onClick={() => trackCTAClick("Get Started", "pricing-free")}
             >
               Get Started
             </a>
           </div>
 
-          {/* Team Tier — coming soon */}
+          {/* Team Tier — glass card */}
           <div
-            className="relative rounded-[var(--radius-lg)] border border-dashed border-border-subtle bg-surface/60 p-8 overflow-hidden"
+            className="sf-card"
             style={{
               opacity: cardsInView ? 1 : 0,
               transform: cardsInView ? "translateY(0)" : "translateY(20px)",
-              transition:
-                "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1) 250ms, transform 600ms cubic-bezier(0.16, 1, 0.3, 1) 250ms",
+              transition: "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1) 250ms, transform 600ms cubic-bezier(0.16, 1, 0.3, 1) 250ms",
             }}
           >
-            <p className="text-[1.25rem] font-semibold text-text-secondary">
+            <p className="text-[1.25rem] font-semibold" style={{ color: "var(--sf-text-secondary)" }}>
               Team
             </p>
-            <p className="mt-2 text-[1.5rem] text-text-secondary">
+            <p className="mt-2 text-[1.5rem]" style={{ color: "var(--sf-text-muted)" }}>
               Coming soon
             </p>
 
             <ul className="mt-6 space-y-3" role="list">
               {teamFeatures.map((feature) => (
-                <li
-                  key={feature}
-                  className="flex items-start gap-3 text-[0.9375rem] text-text-secondary"
-                >
+                <li key={feature} className="flex items-start gap-3 text-[0.9375rem]" style={{ color: "var(--sf-text-secondary)" }}>
                   <Check muted />
                   {feature}
                 </li>
@@ -291,10 +217,9 @@ export function Pricing() {
 
             <a
               href="#waitlist"
-              className="mt-8 flex items-center justify-center rounded-[var(--radius-md)] border border-border-subtle px-7 py-3.5 text-base font-medium text-text-secondary transition-all duration-[var(--duration-fast)] hover:border-text-secondary hover:bg-surface hover:text-text-primary"
-              onClick={() =>
-                trackCTAClick("Join the Waitlist", "pricing-team")
-              }
+              className="sf-btn-secondary mt-8 w-full text-base"
+              style={{ display: "flex", justifyContent: "center" }}
+              onClick={() => trackCTAClick("Join the Waitlist", "pricing-team")}
             >
               Join the Waitlist
             </a>
@@ -305,21 +230,27 @@ export function Pricing() {
       {/* ─── FAQ ────────────────────────────────────────── */}
       <section
         ref={faqRef as React.RefObject<HTMLElement>}
-        className="py-[var(--section-padding-y)] px-[var(--container-padding)]"
+        className="px-[var(--sf-container-gutter)]"
+        style={{ paddingTop: "var(--sf-section-padding)", paddingBottom: "var(--sf-section-padding)" }}
         aria-labelledby="faq-heading"
       >
         <div
-          className="max-w-[var(--container-narrow)] mx-auto"
+          className="sf-card max-w-[var(--sf-container-narrow)] mx-auto"
           style={{
             opacity: faqInView ? 1 : 0,
             transform: faqInView ? "translateY(0)" : "translateY(20px)",
-            transition:
-              "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1), transform 600ms cubic-bezier(0.16, 1, 0.3, 1)",
+            transition: "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1), transform 600ms cubic-bezier(0.16, 1, 0.3, 1)",
           }}
         >
           <h2
             id="faq-heading"
-            className="font-[family-name:var(--font-display)] text-[var(--text-h2)] leading-[var(--leading-tight)] tracking-[var(--tracking-tight)] text-text-primary text-center mb-10"
+            className="font-display font-bold text-center mb-10"
+            style={{
+              fontSize: "var(--sf-text-h2)",
+              lineHeight: "var(--sf-leading-h2)",
+              letterSpacing: "var(--sf-tracking-h2)",
+              color: "var(--sf-text-primary)",
+            }}
           >
             Frequently asked questions
           </h2>
@@ -331,19 +262,22 @@ export function Pricing() {
         </div>
       </section>
 
-      {/* ─── Integration Badges (repeated social proof) ── */}
+      {/* ─── Integration Badges ──────────────────────────── */}
       <section
         ref={badgesRef as React.RefObject<HTMLElement>}
-        className="py-[var(--section-padding-y-sm)] px-[var(--container-padding)]"
+        className="px-[var(--sf-container-gutter)]"
+        style={{ paddingTop: "var(--sf-section-padding-sm)", paddingBottom: "var(--sf-section-padding-sm)" }}
         aria-label="Compatible integrations"
       >
-        <div className="max-w-[var(--container-max)] mx-auto">
+        <div className="max-w-[var(--sf-container-max)] mx-auto">
           <p
-            className="text-center text-text-muted text-small tracking-[var(--tracking-wider)] uppercase font-medium mb-8"
+            className="text-center uppercase font-medium mb-8"
             style={{
+              fontSize: "var(--sf-text-small)",
+              letterSpacing: "var(--sf-tracking-overline)",
+              color: "var(--sf-text-muted)",
               opacity: badgesInView ? 1 : 0,
-              transition:
-                "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1)",
+              transition: "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1)",
             }}
           >
             Works with any MCP-compatible agent
@@ -353,21 +287,17 @@ export function Pricing() {
             style={{
               opacity: badgesInView ? 1 : 0,
               transform: badgesInView ? "translateY(0)" : "translateY(8px)",
-              transition:
-                "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1) 100ms, transform 600ms cubic-bezier(0.16, 1, 0.3, 1) 100ms",
+              transition: "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1) 100ms, transform 600ms cubic-bezier(0.16, 1, 0.3, 1) 100ms",
             }}
           >
-            {integrations.map((integration) => (
-              <IntegrationBadge
-                key={integration.name}
-                integration={integration}
-              />
+            {integrations.map((name) => (
+              <span key={name} className="sf-pill">{name}</span>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ─── Closing CTA + Footer ───────────────────────── */}
+      {/* ─── Footer ─────────────────────────────────────── */}
       <Footer />
     </main>
   );

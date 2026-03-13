@@ -167,13 +167,14 @@ export function AnnotationPlayground() {
     <section
       id="get-started"
       ref={sectionRef as React.RefObject<HTMLElement>}
-      className="relative overflow-hidden border-t border-border-subtle px-6 py-24"
+      className="relative overflow-hidden px-[var(--sf-container-gutter)]"
+      style={{ paddingTop: "var(--sf-section-padding)", paddingBottom: "var(--sf-section-padding)", borderTop: "1px solid rgba(255,255,255,0.04)" }}
       aria-labelledby="annotation-playground-heading"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(251,191,36,0.16),_transparent_38%),radial-gradient(circle_at_80%_20%,_rgba(255,255,255,0.07),_transparent_32%)]" />
-      <div className="relative mx-auto max-w-[var(--container-max)]">
+      <div className="pointer-events-none absolute inset-0" style={{ background: "var(--sf-gradient-glow)" }} />
+      <div className="relative mx-auto max-w-[var(--sf-container-wide)]">
         <div
-          className="mx-auto max-w-[42rem] text-center"
+          className="max-w-[42rem]"
           style={{
             opacity: inView ? 1 : 0,
             transform: inView ? "translateY(0)" : "translateY(12px)",
@@ -181,16 +182,37 @@ export function AnnotationPlayground() {
               "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1), transform 600ms cubic-bezier(0.16, 1, 0.3, 1)",
           }}
         >
-          <p className="text-caption font-medium uppercase tracking-[var(--tracking-wider)] text-accent">
+          <p
+            className="uppercase font-medium"
+            style={{
+              fontFamily: "var(--sf-font-mono)",
+              fontSize: "var(--sf-text-caption)",
+              letterSpacing: "var(--sf-tracking-overline)",
+              color: "var(--sf-text-accent)",
+            }}
+          >
             Interactive demo
           </p>
           <h2
             id="annotation-playground-heading"
-            className="mt-4 font-display text-h1 leading-[var(--leading-tight)] tracking-[var(--tracking-tight)] text-text-primary"
+            className="mt-4 font-display font-[800]"
+            style={{
+              fontSize: "var(--sf-text-h1)",
+              lineHeight: "var(--sf-leading-h1)",
+              letterSpacing: "var(--sf-tracking-h1)",
+              color: "var(--sf-text-primary)",
+            }}
           >
             Try it yourself
           </h2>
-          <p className="mx-auto mt-5 max-w-2xl text-body-lg leading-[var(--leading-relaxed)] text-text-secondary">
+          <p
+            className="mt-5 max-w-2xl"
+            style={{
+              fontSize: "var(--sf-text-body-lg)",
+              lineHeight: "var(--sf-leading-body)",
+              color: "var(--sf-text-secondary)",
+            }}
+          >
             Click any element below. A lightweight review composer opens inline,
             and the payload on the right updates with the locator bundle your
             agent would receive.
@@ -198,8 +220,8 @@ export function AnnotationPlayground() {
         </div>
 
         <noscript>
-          <div className="mt-12 rounded-2xl border border-border bg-surface p-8 text-center">
-            <p className="text-body-lg text-text-secondary">
+          <div className="mt-12 rounded-2xl p-8 text-center" style={{ border: "1px solid rgba(255,255,255,0.06)", background: "var(--sf-bg-surface)" }}>
+            <p style={{ fontSize: "var(--sf-text-body-lg)", color: "var(--sf-text-secondary)" }}>
               The interactive annotation playground requires JavaScript.
               Enable JavaScript to try clicking elements and see the
               structured payload Peril sends to your coding agent.
@@ -218,24 +240,24 @@ export function AnnotationPlayground() {
         >
           <div
             ref={frameRef}
-            className="relative overflow-hidden rounded-2xl border border-border bg-surface/90 shadow-[0_24px_80px_rgba(28,25,23,0.14)] dark:shadow-[0_24px_80px_rgba(0,0,0,0.38)]"
+            className="sf-card-theater relative overflow-hidden"
           >
-            <div className="flex items-center gap-3 border-b border-border-subtle bg-surface-elevated/80 px-5 py-4">
+            <div className="sf-glass-strong flex items-center gap-3 px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)", borderRadius: 0 }}>
               <div className="flex items-center gap-2">
                 <span className="h-3 w-3 rounded-full bg-dot-close" />
                 <span className="h-3 w-3 rounded-full bg-dot-minimize" />
                 <span className="h-3 w-3 rounded-full bg-dot-expand" />
               </div>
-              <div className="ml-3 flex-1 rounded-full border border-border-subtle bg-surface-elevated px-4 py-2 text-sm text-text-muted">
+              <div className="ml-3 flex-1 rounded-full px-4 py-2 text-sm" style={{ border: "1px solid rgba(255,255,255,0.06)", background: "var(--sf-bg-elevated)", color: "var(--sf-text-muted)" }}>
                 localhost:3000/dashboard
               </div>
-              <span className="hidden rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-caption uppercase tracking-[var(--tracking-wider)] text-accent md:inline-flex">
+              <span className="hidden rounded-full px-3 py-1 uppercase md:inline-flex" style={{ border: "1px solid rgba(245,158,11,0.3)", background: "var(--sf-accent-muted)", fontSize: "var(--sf-text-caption)", letterSpacing: "var(--sf-tracking-overline)", color: "var(--sf-text-accent)" }}>
                 Live playground
               </span>
             </div>
 
             <div className="grid gap-6 p-5 md:p-6">
-              <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border-subtle bg-surface-elevated/60 px-4 py-3">
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl px-4 py-3" style={{ border: "1px solid rgba(255,255,255,0.04)", background: "var(--sf-bg-elevated)" }}>
                 <nav className="flex flex-wrap items-center gap-2 text-sm text-text-secondary" aria-label="Sample dashboard navigation">
                   {playgroundIssues
                     .filter((issue) => issue.id === "nav-align")
@@ -266,13 +288,13 @@ export function AnnotationPlayground() {
                     Deploys
                   </button>
                 </nav>
-                <div className="rounded-full border border-border-subtle bg-surface-elevated px-3 py-2 text-sm text-text-muted">
+                <div className="rounded-full px-3 py-2 text-sm" style={{ border: "1px solid rgba(255,255,255,0.04)", background: "var(--sf-bg-elevated)", color: "var(--sf-text-muted)" }}>
                   12 open reviews
                 </div>
               </div>
 
               <div className="grid gap-4 md:grid-cols-[minmax(0,1.2fr)_minmax(15rem,0.8fr)]">
-                <div className="rounded-2xl border border-border-subtle bg-surface p-5">
+                <div className="rounded-2xl p-5" style={{ border: "1px solid rgba(255,255,255,0.04)", background: "var(--sf-bg-surface)" }}>
                   <p className="text-caption uppercase tracking-[var(--tracking-wider)] text-text-muted">
                     Current sprint
                   </p>
@@ -305,7 +327,8 @@ export function AnnotationPlayground() {
                       ))}
                     <button
                       type="button"
-                      className="rounded-full border border-border-subtle px-4 py-3 text-sm text-text-secondary transition-colors duration-[var(--duration-fast)] hover:text-text-primary"
+                      className="rounded-full px-4 py-3 text-sm transition-colors duration-[var(--duration-fast)] hover:text-[var(--sf-text-primary)]"
+                      style={{ border: "1px solid rgba(255,255,255,0.04)", color: "var(--sf-text-secondary)" }}
                     >
                       Watch walkthrough
                     </button>
@@ -326,7 +349,7 @@ export function AnnotationPlayground() {
                         onClick={() => handleIssueClick(issue.id)}
                         className={getInteractiveClassName(
                           visibleIssueId === issue.id,
-                          "flex flex-col items-start rounded-2xl border border-border-subtle bg-surface-elevated px-4 py-3 text-left"
+                          "flex flex-col items-start rounded-2xl px-4 py-3 text-left"
                         )}
                       >
                         <span className="text-caption uppercase tracking-[var(--tracking-wider)] text-text-muted">
@@ -339,7 +362,7 @@ export function AnnotationPlayground() {
                       </button>
                     ))}
 
-                  <div className="rounded-2xl border border-border-subtle bg-bg/55 px-4 py-4">
+                  <div className="rounded-2xl px-4 py-4" style={{ border: "1px solid rgba(255,255,255,0.04)", background: "rgba(6,6,14,0.55)" }}>
                     <p className="text-caption uppercase tracking-[var(--tracking-wider)] text-text-muted">
                       Invite a reviewer
                     </p>
@@ -365,8 +388,9 @@ export function AnnotationPlayground() {
                             value="preview-url"
                             className={`${getInteractiveClassName(
                               visibleIssueId === issue.id,
-                              "mt-3 w-full cursor-pointer rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text-secondary"
+                              "mt-3 w-full cursor-pointer rounded-xl px-4 py-3 text-sm"
                             )} focus:outline-none`}
+                            style={{ background: "var(--sf-bg-surface)", color: "var(--sf-text-secondary)" }}
                           />
                         ))}
                     </div>
@@ -377,16 +401,17 @@ export function AnnotationPlayground() {
 
             {isComposerOpen ? (
               <div
-                className="absolute z-20 w-[min(20rem,calc(100%-2rem))] rounded-2xl border border-accent/40 bg-surface/96 p-4 shadow-[0_20px_48px_rgba(28,25,23,0.18)] backdrop-blur-md dark:shadow-[0_20px_48px_rgba(0,0,0,0.45)]"
+                className="sf-glass absolute z-20 w-[min(20rem,calc(100%-2rem))] rounded-2xl p-4 shadow-[0_20px_48px_rgba(0,0,0,0.45)]"
                 style={{
+                  borderColor: "rgba(245,158,11,0.4)",
                   left: `${composerPosition.left}px`,
-                  top: `${composerPosition.top}px`
+                  top: `${composerPosition.top}px`,
                 }}
               >
-                <p className="text-caption uppercase tracking-[var(--tracking-wider)] text-accent">
+                <p className="uppercase" style={{ fontSize: "var(--sf-text-caption)", letterSpacing: "var(--sf-tracking-overline)", color: "var(--sf-text-accent)" }}>
                   Reviewing {getPlaygroundIssue(activeIssueId).headline}
                 </p>
-                <label className="mt-3 block text-sm text-text-secondary">
+                <label className="mt-3 block text-sm" style={{ color: "var(--sf-text-secondary)" }}>
                   Comment
                   <textarea
                     value={draft.comment}
@@ -397,11 +422,12 @@ export function AnnotationPlayground() {
                       }))
                     }
                     rows={3}
-                    className="mt-2 w-full resize-none rounded-xl border border-border bg-surface px-3 py-3 text-sm text-text-primary"
+                    className="mt-2 w-full resize-none rounded-xl px-3 py-3 text-sm"
+                    style={{ border: "1px solid rgba(255,255,255,0.06)", background: "var(--sf-bg-surface)", color: "var(--sf-text-primary)" }}
                   />
                 </label>
                 <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                  <label className="text-sm text-text-secondary">
+                  <label className="text-sm" style={{ color: "var(--sf-text-secondary)" }}>
                     Category
                     <select
                       value={draft.category}
@@ -411,7 +437,8 @@ export function AnnotationPlayground() {
                           category: event.target.value as PlaygroundAnnotationDraft["category"]
                         }))
                       }
-                      className="mt-2 w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-text-primary"
+                      className="mt-2 w-full rounded-lg px-3 py-2.5 text-sm"
+                      style={{ border: "1px solid rgba(255,255,255,0.06)", background: "var(--sf-bg-surface)", color: "var(--sf-text-primary)" }}
                     >
                       <option value="bug">Bug</option>
                       <option value="polish">Polish</option>
@@ -420,7 +447,7 @@ export function AnnotationPlayground() {
                       <option value="ux">UX</option>
                     </select>
                   </label>
-                  <label className="text-sm text-text-secondary">
+                  <label className="text-sm" style={{ color: "var(--sf-text-secondary)" }}>
                     Severity
                     <select
                       value={draft.severity}
@@ -430,7 +457,8 @@ export function AnnotationPlayground() {
                           severity: event.target.value as PlaygroundAnnotationDraft["severity"]
                         }))
                       }
-                      className="mt-2 w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-text-primary"
+                      className="mt-2 w-full rounded-lg px-3 py-2.5 text-sm"
+                      style={{ border: "1px solid rgba(255,255,255,0.06)", background: "var(--sf-bg-surface)", color: "var(--sf-text-primary)" }}
                     >
                       <option value="low">Low</option>
                       <option value="medium">Medium</option>
@@ -439,7 +467,7 @@ export function AnnotationPlayground() {
                     </select>
                   </label>
                 </div>
-                <label className="mt-3 block text-sm text-text-secondary">
+                <label className="mt-3 block text-sm" style={{ color: "var(--sf-text-secondary)" }}>
                   Expected outcome
                   <input
                     value={draft.expected}
@@ -449,7 +477,8 @@ export function AnnotationPlayground() {
                         expected: event.target.value
                       }))
                     }
-                    className="mt-2 w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-text-primary"
+                    className="mt-2 w-full rounded-lg px-3 py-2.5 text-sm"
+                    style={{ border: "1px solid rgba(255,255,255,0.06)", background: "var(--sf-bg-surface)", color: "var(--sf-text-primary)" }}
                   />
                 </label>
                 <div className="mt-4 flex items-center justify-between gap-3">
@@ -472,31 +501,31 @@ export function AnnotationPlayground() {
             ) : null}
           </div>
 
-          <aside className="playground-panel-enter rounded-2xl border border-border bg-surface p-5 shadow-[0_24px_80px_rgba(28,25,23,0.12)] dark:shadow-[0_24px_80px_rgba(0,0,0,0.3)]">
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border-subtle pb-4">
+          <aside className="sf-card playground-panel-enter rounded-2xl p-5">
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
               <div>
-                <p className="text-caption uppercase tracking-[var(--tracking-wider)] text-accent">
+                <p className="uppercase" style={{ fontSize: "var(--sf-text-caption)", letterSpacing: "var(--sf-tracking-overline)", color: "var(--sf-text-accent)" }}>
                   Structured payload
                 </p>
-                <h3 className="mt-2 text-h4 text-text-primary">
+                <h3 className="mt-2" style={{ fontSize: "var(--sf-text-h3)", color: "var(--sf-text-primary)" }}>
                   {submittedAnnotation.issueLabel}
                 </h3>
               </div>
-              <div className="rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-caption uppercase tracking-[var(--tracking-wider)] text-accent">
+              <div className="rounded-full px-3 py-1 uppercase" style={{ border: "1px solid rgba(245,158,11,0.2)", background: "var(--sf-accent-muted)", fontSize: "var(--sf-text-caption)", letterSpacing: "var(--sf-tracking-overline)", color: "var(--sf-text-accent)" }}>
                 live locator output
               </div>
             </div>
 
-            <p className="mt-4 text-sm leading-6 text-text-secondary">
+            <p className="mt-4 text-sm leading-6" style={{ color: "var(--sf-text-secondary)" }}>
               {submittedAnnotation.summary}
             </p>
 
-            <ol className="mt-6 space-y-3 font-mono text-[var(--text-small)] leading-6">
+            <ol className="mt-6 space-y-3 leading-6" style={{ fontFamily: "var(--sf-font-mono)", fontSize: "var(--sf-text-small)" }}>
               {outputLines.map((line, index) => (
                 <li
                   key={`${submittedAnnotation.issueId}-${line.id}-${submittedAnnotation.comment}`}
-                  className="playground-output-line rounded-lg border border-border-subtle bg-surface-elevated/50 px-3 py-2"
-                  style={{ animationDelay: `${index * 100}ms` }}
+                  className="playground-output-line rounded-lg px-3 py-2"
+                  style={{ border: "1px solid rgba(255,255,255,0.04)", background: "rgba(16,16,28,0.5)", animationDelay: `${index * 100}ms` }}
                 >
                   <span className="text-text-secondary">{line.label}</span>
                   <span className="text-text-muted">: </span>
@@ -505,11 +534,11 @@ export function AnnotationPlayground() {
               ))}
             </ol>
 
-            <div className="mt-6 rounded-xl border border-border-subtle bg-surface/60 p-4">
-              <p className="text-caption uppercase tracking-[var(--tracking-wider)] text-text-muted">
+            <div className="mt-6 rounded-xl p-4" style={{ border: "1px solid rgba(255,255,255,0.04)", background: "rgba(10,10,20,0.6)" }}>
+              <p className="uppercase" style={{ fontSize: "var(--sf-text-caption)", letterSpacing: "var(--sf-tracking-overline)", color: "var(--sf-text-muted)" }}>
                 Why this matters
               </p>
-              <p className="mt-2 text-sm leading-6 text-text-secondary">
+              <p className="mt-2 text-sm leading-6" style={{ color: "var(--sf-text-secondary)" }}>
                 Peril carries the click target, structured comment, locator
                 bundle, and artifact reference together so an agent can fix the
                 issue without a second round of human explanation.

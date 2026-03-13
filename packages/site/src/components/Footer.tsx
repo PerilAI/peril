@@ -12,6 +12,7 @@ const navLinks = [
     label: "GitHub",
     external: true,
   },
+  { href: "/docs/changelog", label: "Changelog" },
 ] as const;
 
 /* ─── Closing CTA Section ──────────────────────────────── */
@@ -22,11 +23,12 @@ function ClosingCTA() {
   return (
     <section
       ref={sectionRef as React.RefObject<HTMLElement>}
-      className="py-[var(--section-padding-y)] px-[var(--container-padding)]"
+      className="sf-aurora relative"
+      style={{ paddingTop: "160px", paddingBottom: "160px" }}
       aria-label="Get started with Peril"
     >
       <div
-        className="max-w-[var(--container-narrow)] mx-auto text-center"
+        className="max-w-[var(--sf-container-narrow)] mx-auto text-center px-[var(--sf-container-gutter)]"
         style={{
           opacity: inView ? 1 : 0,
           transform: inView ? "translateY(0)" : "translateY(20px)",
@@ -34,10 +36,27 @@ function ClosingCTA() {
             "opacity 600ms cubic-bezier(0.16, 1, 0.3, 1), transform 600ms cubic-bezier(0.16, 1, 0.3, 1)",
         }}
       >
-        <h2 className="text-[var(--text-h1)] font-[family-name:var(--font-display)] leading-[var(--leading-tight)] tracking-[var(--tracking-tight)] mb-4">
+        <h2
+          className="font-display font-[800] mb-4"
+          style={{
+            fontSize: "var(--sf-text-h1)",
+            lineHeight: "var(--sf-leading-h1)",
+            letterSpacing: "var(--sf-tracking-h1)",
+            background: "var(--sf-gradient-arc)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+          }}
+        >
           Ready to ship fixes faster?
         </h2>
-        <p className="text-[var(--color-text-secondary)] text-[var(--text-body-lg)] max-w-md mx-auto mb-8">
+        <p
+          className="max-w-md mx-auto mb-8"
+          style={{
+            fontSize: "var(--sf-text-body-lg)",
+            color: "var(--sf-text-secondary)",
+          }}
+        >
           Turn visual feedback into agent-ready tasks. Free for local
           development.
         </p>
@@ -52,14 +71,14 @@ function ClosingCTA() {
         >
           <a
             href="#get-started"
-            className="inline-flex items-center rounded-[var(--radius-md)] bg-accent px-7 py-3.5 text-base font-medium text-accent-fg shadow-glow-sm transition-all duration-[var(--duration-fast)] hover:bg-accent-hover hover:shadow-glow-md"
+            className="sf-btn-primary"
             onClick={() => trackCTAClick("Try Peril Free", "closing-cta")}
           >
             Try Peril Free
           </a>
           <a
             href="/docs"
-            className="inline-flex items-center rounded-[var(--radius-md)] border border-border px-7 py-3.5 text-base font-medium text-text-secondary transition-all duration-[var(--duration-fast)] hover:border-text-secondary hover:bg-surface hover:text-text-primary"
+            className="sf-btn-secondary"
             onClick={() => trackCTAClick("Read the Docs", "closing-cta")}
           >
             Read the Docs
@@ -80,29 +99,48 @@ export function Footer() {
       <ClosingCTA />
 
       <footer
-        className="border-t border-border px-[var(--container-padding)] py-[var(--space-12)]"
         role="contentinfo"
+        style={{
+          background: "var(--sf-bg-space)",
+          borderTop: "1px solid rgba(255,255,255,0.06)",
+        }}
+        className="px-[var(--sf-container-gutter)]"
       >
-        <div className="max-w-[var(--container-max)] mx-auto flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
-          {/* Brand */}
-          <div className="flex items-center gap-2 text-[var(--color-text)]">
-            <span
-              className="inline-block h-2 w-2 rounded-full bg-accent"
-              aria-hidden="true"
-            />
-            <span className="font-[family-name:var(--font-display)] text-[var(--text-body-lg)]">
-              Peril
-            </span>
+        <div className="max-w-[var(--sf-container-max)] mx-auto py-16 grid grid-cols-1 gap-12 md:grid-cols-3">
+          {/* Left: brand */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <span
+                className="inline-block h-2 w-2 rounded-full"
+                style={{ background: "var(--sf-accent)" }}
+                aria-hidden="true"
+              />
+              <span
+                className="font-display text-lg font-bold"
+                style={{ color: "var(--sf-text-primary)" }}
+              >
+                Peril
+              </span>
+            </div>
+            <p style={{ fontSize: "var(--sf-text-small)", color: "var(--sf-text-secondary)", maxWidth: "28ch" }}>
+              Visual feedback your agents understand.
+            </p>
+            <p className="mt-4" style={{ fontSize: "var(--sf-text-caption)", color: "var(--sf-text-muted)" }}>
+              &copy; {year} Peril
+            </p>
           </div>
 
-          {/* Navigation */}
+          {/* Center: nav links */}
           <nav aria-label="Footer navigation">
-            <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            <ul className="flex flex-col gap-3">
               {navLinks.map((link) => (
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-[var(--text-small)] text-[var(--color-text-secondary)] transition-colors duration-[var(--duration-fast)] hover:text-[var(--color-text)]"
+                    className="transition-colors duration-[var(--sf-duration-fast)]"
+                    style={{ fontSize: "var(--sf-text-small)", color: "var(--sf-text-secondary)" }}
+                    onMouseEnter={(e) => { (e.target as HTMLElement).style.color = "var(--sf-text-primary)"; }}
+                    onMouseLeave={(e) => { (e.target as HTMLElement).style.color = "var(--sf-text-secondary)"; }}
                     {...("external" in link && link.external
                       ? { target: "_blank", rel: "noopener noreferrer" }
                       : {})}
@@ -114,10 +152,29 @@ export function Footer() {
             </ul>
           </nav>
 
-          {/* Copyright */}
-          <p className="text-[var(--text-caption)] text-[var(--color-text-muted)]">
-            &copy; {year} Peril
-          </p>
+          {/* Right: install command */}
+          <div>
+            <p className="mb-3" style={{ fontSize: "var(--sf-text-caption)", color: "var(--sf-text-muted)", textTransform: "uppercase", letterSpacing: "var(--sf-tracking-overline)" }}>
+              Get started
+            </p>
+            <div className="sf-code-block" style={{ fontSize: "var(--sf-text-mono)" }}>
+              <span style={{ color: "var(--sf-text-muted)" }}>$</span>{" "}
+              <span style={{ color: "var(--sf-text-primary)" }}>npm install</span>{" "}
+              <span style={{ color: "var(--sf-accent)" }}>@anthropic/peril</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div
+          className="py-6 text-center"
+          style={{
+            borderTop: "1px solid rgba(255,255,255,0.04)",
+            fontSize: "var(--sf-text-caption)",
+            color: "var(--sf-text-muted)",
+          }}
+        >
+          Built for the agents that build your software.
         </div>
       </footer>
     </>

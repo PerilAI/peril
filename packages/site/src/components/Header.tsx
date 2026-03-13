@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ThemeToggle } from "./ThemeToggle";
 
 const NAV_LINKS = [
   { href: "#how-it-works", label: "How it works" },
@@ -72,14 +71,15 @@ export function Header() {
   }, [menuOpen]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-border-subtle bg-bg/80 backdrop-blur-md">
+    <header className="sf-header">
       <nav
-        className="mx-auto flex max-w-[var(--container-max)] items-center justify-between px-6 py-4"
+        className="mx-auto flex w-full max-w-[var(--sf-container-max)] items-center justify-between"
         aria-label="Main navigation"
       >
         <a
           href="/"
-          className="font-display text-xl tracking-tight text-text-primary"
+          className="font-display text-xl font-bold tracking-tight"
+          style={{ color: "var(--sf-text-primary)" }}
         >
           Peril
         </a>
@@ -90,7 +90,7 @@ export function Header() {
             <a
               key={link.href}
               href={link.href}
-              className="text-sm text-text-secondary transition-colors duration-[var(--duration-fast)] hover:text-text-primary"
+              className="sf-btn-ghost text-sm"
               {...("external" in link && link.external
                 ? { target: "_blank", rel: "noopener noreferrer" }
                 : {})}
@@ -101,10 +101,10 @@ export function Header() {
               )}
             </a>
           ))}
-          <ThemeToggle />
           <a
             href="#get-started"
-            className="inline-flex items-center rounded-[var(--radius-md)] bg-accent px-4 py-2 text-sm font-medium text-accent-fg transition-all duration-[var(--duration-fast)] hover:bg-accent-hover hover:shadow-glow-sm"
+            className="sf-btn-primary"
+            style={{ padding: "8px 20px", fontSize: "var(--sf-text-small)" }}
           >
             Try Peril Free
           </a>
@@ -114,7 +114,8 @@ export function Header() {
         <button
           ref={toggleRef}
           type="button"
-          className="inline-flex items-center justify-center rounded-[var(--radius-sm)] p-2 text-text-secondary transition-colors duration-[var(--duration-fast)] hover:text-text-primary sm:hidden"
+          className="inline-flex items-center justify-center rounded-[var(--sf-radius-sm)] p-2 transition-colors duration-[var(--sf-duration-fast)] sm:hidden"
+          style={{ color: "var(--sf-text-secondary)" }}
           aria-expanded={menuOpen}
           aria-controls="mobile-menu"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -151,8 +152,8 @@ export function Header() {
       <div
         ref={menuRef}
         id="mobile-menu"
-        className={`fixed inset-x-0 top-[calc(var(--header-height,61px))] bottom-0 z-40 border-t border-border-subtle bg-bg/95 backdrop-blur-lg transition-transform sm:hidden motion-reduce:transition-none ${
-          menuOpen ? "translate-y-0" : "-translate-y-[calc(100%+61px)]"
+        className={`sf-glass-strong fixed inset-x-0 top-[56px] bottom-0 z-40 transition-transform sm:hidden motion-reduce:transition-none ${
+          menuOpen ? "translate-y-0" : "-translate-y-[calc(100%+56px)]"
         }`}
         aria-hidden={!menuOpen}
       >
@@ -161,7 +162,8 @@ export function Header() {
             <a
               key={link.href}
               href={link.href}
-              className="rounded-[var(--radius-sm)] px-4 py-3 text-base text-text-secondary transition-colors duration-[var(--duration-fast)] hover:bg-surface hover:text-text-primary"
+              className="rounded-[var(--sf-radius-sm)] px-4 py-3 text-base transition-colors duration-[var(--sf-duration-fast)]"
+              style={{ color: "var(--sf-text-secondary)" }}
               tabIndex={menuOpen ? 0 : -1}
               onClick={closeMenu}
               {...("external" in link && link.external
@@ -174,13 +176,9 @@ export function Header() {
               )}
             </a>
           ))}
-          <div className="flex items-center gap-3 px-4 py-3">
-            <span className="text-sm text-text-muted">Theme</span>
-            <ThemeToggle />
-          </div>
           <a
             href="#get-started"
-            className="mt-2 flex items-center justify-center rounded-[var(--radius-md)] bg-accent px-6 py-3 text-base font-medium text-accent-fg shadow-glow-sm transition-all duration-[var(--duration-fast)] hover:bg-accent-hover"
+            className="sf-btn-primary mt-2 text-base"
             tabIndex={menuOpen ? 0 : -1}
             onClick={closeMenu}
           >

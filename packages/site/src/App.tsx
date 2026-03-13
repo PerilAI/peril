@@ -5,6 +5,7 @@ import { TrustSignals } from "./components/TrustSignals";
 import { AnnotationPlayground } from "./components/AnnotationPlayground";
 import { HowItWorks } from "./components/HowItWorks";
 import { UseCases } from "./components/UseCases";
+import { SocialProof } from "./components/SocialProof";
 import { Footer } from "./components/Footer";
 import { Pricing } from "./components/Pricing";
 import { DocsLayout } from "./docs/DocsLayout";
@@ -12,12 +13,13 @@ import { docsRoutes } from "./docs/routes";
 
 function HomePage() {
   return (
-    <main id="main">
+    <main id="main" className="sf-grain">
       <Hero />
-      <TrustSignals />
       <AnnotationPlayground />
+      <TrustSignals />
       <HowItWorks />
       <UseCases />
+      <SocialProof />
       <Footer />
     </main>
   );
