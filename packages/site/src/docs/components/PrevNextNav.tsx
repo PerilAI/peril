@@ -8,18 +8,52 @@ export function PrevNextNav() {
 
   if (!prev && !next) return null;
 
+  const cardStyle: React.CSSProperties = {
+    background: "var(--sf-bg-elevated)",
+    border: "1px solid rgba(255,255,255,0.06)",
+    borderRadius: "var(--sf-radius-md)",
+    transitionProperty: "border-color, transform, box-shadow",
+    transitionDuration: "var(--sf-duration-fast)",
+  };
+
+  const cardHover = (e: React.MouseEvent) => {
+    const el = e.currentTarget as HTMLElement;
+    el.style.borderColor = "rgba(255,255,255,0.12)";
+    el.style.transform = "translateY(-2px)";
+    el.style.boxShadow = "0 4px 16px rgba(245,158,11,0.06)";
+  };
+
+  const cardLeave = (e: React.MouseEvent) => {
+    const el = e.currentTarget as HTMLElement;
+    el.style.borderColor = "rgba(255,255,255,0.06)";
+    el.style.transform = "translateY(0)";
+    el.style.boxShadow = "none";
+  };
+
   return (
     <nav
       aria-label="Pagination"
-      className="mt-12 flex gap-4 border-t border-border-subtle pt-6"
+      className="mt-12 flex gap-4 pt-6"
+      style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
     >
       {prev ? (
         <Link
           to={prev.path ? `/docs/${prev.path}` : "/docs"}
-          className="group flex flex-1 flex-col rounded-[var(--radius-md)] border border-border-subtle bg-surface p-4 transition-all duration-[var(--duration-fast)] hover:-translate-y-0.5 hover:border-border hover:shadow-glow-sm"
+          className="flex flex-1 flex-col p-4 transition-all"
+          style={cardStyle}
+          onMouseEnter={cardHover}
+          onMouseLeave={cardLeave}
         >
-          <span className="text-xs text-text-muted">Previous</span>
-          <span className="mt-1 flex items-center gap-1 text-sm font-medium text-text-primary">
+          <span
+            className="text-xs"
+            style={{ color: "var(--sf-text-muted)" }}
+          >
+            Previous
+          </span>
+          <span
+            className="mt-1 flex items-center gap-1 text-sm font-medium"
+            style={{ color: "var(--sf-text-primary)" }}
+          >
             <svg
               width="16"
               height="16"
@@ -40,10 +74,21 @@ export function PrevNextNav() {
       {next ? (
         <Link
           to={next.path ? `/docs/${next.path}` : "/docs"}
-          className="group flex flex-1 flex-col items-end rounded-[var(--radius-md)] border border-border-subtle bg-surface p-4 transition-all duration-[var(--duration-fast)] hover:-translate-y-0.5 hover:border-border hover:shadow-glow-sm"
+          className="flex flex-1 flex-col items-end p-4 transition-all"
+          style={cardStyle}
+          onMouseEnter={cardHover}
+          onMouseLeave={cardLeave}
         >
-          <span className="text-xs text-text-muted">Next</span>
-          <span className="mt-1 flex items-center gap-1 text-sm font-medium text-text-primary">
+          <span
+            className="text-xs"
+            style={{ color: "var(--sf-text-muted)" }}
+          >
+            Next
+          </span>
+          <span
+            className="mt-1 flex items-center gap-1 text-sm font-medium"
+            style={{ color: "var(--sf-text-primary)" }}
+          >
             {next.title}
             <svg
               width="16"

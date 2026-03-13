@@ -5,15 +5,15 @@ type CalloutVariant = "tip" | "warning" | "note";
 const variantConfig: Record<CalloutVariant, { border: string; icon: string }> =
   {
     tip: {
-      border: "border-l-[hsl(150,50%,45%)]",
+      border: "hsl(150,50%,45%)",
       icon: "\u{1F4A1}",
     },
     warning: {
-      border: "border-l-amber-400",
+      border: "#fbbf24",
       icon: "\u26A0\uFE0F",
     },
     note: {
-      border: "border-l-[hsl(220,60%,55%)]",
+      border: "hsl(220,60%,55%)",
       icon: "\u2139\uFE0F",
     },
   };
@@ -28,7 +28,14 @@ export function Callout({
   const cfg = variantConfig[variant];
   return (
     <div
-      className={`my-4 rounded-[var(--radius-md)] border-l-4 ${cfg.border} bg-surface p-4`}
+      className="my-4 rounded-[var(--sf-radius-md)] p-4"
+      style={{
+        borderLeft: `4px solid ${cfg.border}`,
+        background: "var(--sf-bg-elevated)",
+        border: `1px solid rgba(255,255,255,0.06)`,
+        borderLeftWidth: "4px",
+        borderLeftColor: cfg.border,
+      }}
     >
       <div className="flex gap-3">
         <span className="shrink-0 text-lg" aria-hidden="true">

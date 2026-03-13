@@ -53,21 +53,48 @@ export function TableOfContents() {
       className="hidden w-48 shrink-0 xl:block"
     >
       <div className="sticky top-24">
-        <h4 className="mb-3 font-body text-xs font-semibold uppercase tracking-[0.1em] text-text-muted">
+        <h4
+          className="mb-3 text-xs font-semibold uppercase"
+          style={{
+            fontFamily: "var(--sf-font-mono)",
+            letterSpacing: "0.1em",
+            color: "var(--sf-text-muted)",
+          }}
+        >
           On this page
         </h4>
-        <ul className="space-y-1 border-l border-border-subtle">
+        <ul
+          className="space-y-1"
+          style={{ borderLeft: "1px solid rgba(255,255,255,0.06)" }}
+        >
           {headings.map((h) => (
             <li key={h.id}>
               <a
                 href={`#${h.id}`}
-                className={`block border-l-2 py-1 text-[0.8125rem] leading-snug transition-colors duration-[var(--duration-fast)] ${
-                  h.level === 3 ? "pl-5" : "pl-3"
-                } ${
-                  activeId === h.id
-                    ? "border-accent text-accent"
-                    : "border-transparent text-text-secondary hover:text-text-primary"
-                }`}
+                className="block border-l-2 py-1 text-[0.8125rem] leading-snug transition-colors"
+                style={{
+                  paddingLeft: h.level === 3 ? "1.25rem" : "0.75rem",
+                  transitionDuration: "var(--sf-duration-fast)",
+                  ...(activeId === h.id
+                    ? {
+                        borderLeftColor: "var(--sf-accent)",
+                        color: "var(--sf-accent)",
+                      }
+                    : {
+                        borderLeftColor: "transparent",
+                        color: "var(--sf-text-secondary)",
+                      }),
+                }}
+                onMouseEnter={(e) => {
+                  if (activeId !== h.id) {
+                    (e.currentTarget as HTMLElement).style.color = "var(--sf-text-primary)";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (activeId !== h.id) {
+                    (e.currentTarget as HTMLElement).style.color = "var(--sf-text-secondary)";
+                  }
+                }}
               >
                 {h.text}
               </a>

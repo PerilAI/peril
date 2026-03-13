@@ -7,13 +7,22 @@ interface DocsHeaderProps {
 
 export function DocsHeader({ onMenuToggle }: DocsHeaderProps) {
   return (
-    <header className="sticky top-0 z-30 border-b border-border-subtle bg-bg/80 backdrop-blur-md">
+    <header
+      className="sticky top-0 z-30"
+      style={{
+        background: "rgba(6,6,14,0.70)",
+        backdropFilter: "blur(20px) saturate(1.3)",
+        WebkitBackdropFilter: "blur(20px) saturate(1.3)",
+        borderBottom: "1px solid rgba(255,255,255,0.06)",
+      }}
+    >
       <div className="flex items-center gap-4 px-4 py-3 lg:px-6">
         {/* Mobile hamburger */}
         <button
           type="button"
           onClick={onMenuToggle}
-          className="rounded-[var(--radius-sm)] p-1 text-text-secondary hover:text-text-primary lg:hidden"
+          className="rounded-[var(--sf-radius-sm)] p-1 lg:hidden"
+          style={{ color: "var(--sf-text-secondary)" }}
           aria-label="Toggle navigation"
         >
           <svg
@@ -31,11 +40,24 @@ export function DocsHeader({ onMenuToggle }: DocsHeaderProps) {
         {/* Logo */}
         <Link
           to="/"
-          className="font-display text-lg tracking-tight text-text-primary"
+          className="text-lg tracking-tight"
+          style={{
+            fontFamily: "var(--sf-font-display)",
+            fontWeight: 700,
+            color: "var(--sf-text-primary)",
+          }}
         >
           Peril
         </Link>
-        <span className="rounded-[var(--radius-sm)] bg-surface-elevated px-2 py-0.5 font-mono text-xs text-text-muted">
+        <span
+          className="rounded-[var(--sf-radius-sm)] px-2 py-0.5 text-xs"
+          style={{
+            fontFamily: "var(--sf-font-mono)",
+            color: "var(--sf-text-muted)",
+            background: "var(--sf-bg-elevated)",
+            border: "1px solid rgba(255,255,255,0.06)",
+          }}
+        >
           Docs
         </span>
 
@@ -47,13 +69,19 @@ export function DocsHeader({ onMenuToggle }: DocsHeaderProps) {
         {/* Back to site */}
         <Link
           to="/"
-          className="hidden text-sm text-text-secondary transition-colors duration-[var(--duration-fast)] hover:text-text-primary md:inline-flex"
+          className="hidden text-sm transition-colors duration-[var(--sf-duration-fast)] md:inline-flex"
+          style={{ color: "var(--sf-text-secondary)" }}
+          onMouseEnter={(e) => { (e.target as HTMLElement).style.color = "var(--sf-text-primary)"; }}
+          onMouseLeave={(e) => { (e.target as HTMLElement).style.color = "var(--sf-text-secondary)"; }}
         >
           Home
         </Link>
         <a
           href="https://github.com/anthropics/peril"
-          className="hidden text-sm text-text-secondary transition-colors duration-[var(--duration-fast)] hover:text-text-primary md:inline-flex"
+          className="hidden text-sm transition-colors duration-[var(--sf-duration-fast)] md:inline-flex"
+          style={{ color: "var(--sf-text-secondary)" }}
+          onMouseEnter={(e) => { (e.target as HTMLElement).style.color = "var(--sf-text-primary)"; }}
+          onMouseLeave={(e) => { (e.target as HTMLElement).style.color = "var(--sf-text-secondary)"; }}
           target="_blank"
           rel="noopener noreferrer"
         >

@@ -3,7 +3,30 @@
 Peril is distributed as a set of npm packages. Install the ones you need for
 your workflow.
 
-## Package Overview
+## Agent-Assisted Installation
+
+The easiest way to install Peril is with the `peril-setup` skill. Your coding
+agent will detect your framework, install the right packages, configure MCP,
+and verify the setup.
+
+| Agent | Install command |
+|-------|----------------|
+| Claude Code | `claude install-skill https://github.com/anthropics/peril/tree/main/skill/peril-setup` |
+| Codex CLI | `codex install https://github.com/anthropics/peril/tree/main/skill/peril-setup` |
+| Gemini CLI | `gemini skill add https://github.com/anthropics/peril/tree/main/skill/peril-setup` |
+| OpenCode | Download `SKILL.md` and add to agent context |
+
+After installing the skill, tell your agent: _"Set up Peril in this project"_.
+
+<Callout variant="tip">
+  The skill automatically detects React, Vue, Svelte, and vanilla JS projects
+  and installs only the packages you need. It also handles MCP configuration
+  for your specific agent.
+</Callout>
+
+## Manual Package Installation
+
+### Package Overview
 
 ```bash
 # Core SDK (required)
@@ -19,11 +42,20 @@ npm install @peril/server
 npm install @peril/mcp
 ```
 
+Or install everything at once:
+
+```bash
+npm install @peril/core @peril/react @peril/server @peril/mcp
+```
+
+For non-React apps, skip `@peril/react` and use `@peril/core` directly — see
+[Core SDK Overview](/docs/core/overview) for the vanilla JS API.
+
 ## Requirements
 
 - **Node.js** 18.0 or later
 - **TypeScript** 5.0+ (recommended but not required)
-- **React** 18+ (for `@peril/react`)
+- **React** 18+ (for `@peril/react` only)
 
 ## Configuration
 

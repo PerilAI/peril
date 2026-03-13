@@ -24,7 +24,27 @@ await server.start();
 
 ## Agent Configuration
 
-### Claude (via claude_desktop_config.json)
+Add Peril's MCP server to your agent's config file. The config tells your agent
+how to launch the Peril MCP server and connect to it.
+
+### Claude Code
+
+Create or edit `.mcp.json` in your project root:
+
+```json
+{
+  "mcpServers": {
+    "peril": {
+      "command": "npx",
+      "args": ["@peril/mcp"]
+    }
+  }
+}
+```
+
+### Claude Desktop
+
+Add to `~/.claude/claude_desktop_config.json`:
 
 ```json
 {
@@ -39,7 +59,7 @@ await server.start();
 
 ### Cursor
 
-Add to your `.cursor/mcp.json`:
+Create or edit `.cursor/mcp.json` in your project root:
 
 ```json
 {
@@ -50,6 +70,47 @@ Add to your `.cursor/mcp.json`:
     }
   }
 }
+```
+
+### Codex CLI
+
+```json
+{
+  "mcpServers": {
+    "peril": {
+      "command": "npx",
+      "args": ["@peril/mcp"]
+    }
+  }
+}
+```
+
+### Gemini CLI
+
+```json
+{
+  "mcpServers": {
+    "peril": {
+      "command": "npx",
+      "args": ["@peril/mcp"]
+    }
+  }
+}
+```
+
+### Other MCP-Compatible Agents
+
+Any agent that supports the Model Context Protocol can connect to Peril. The
+MCP server uses stdio transport by default — just point your agent at:
+
+```bash
+npx @peril/mcp
+```
+
+Set `PERIL_SERVER_URL` if the backend runs on a non-default port:
+
+```bash
+PERIL_SERVER_URL=http://localhost:3001 npx @peril/mcp
 ```
 
 ## Options

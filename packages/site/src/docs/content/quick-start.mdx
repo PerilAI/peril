@@ -5,16 +5,79 @@ Get up and running with Peril in under 5 minutes.
 ## Prerequisites
 
 - Node.js 18+
-- A React application (Vite, Next.js, or similar)
-- An MCP-compatible coding agent (Claude, Cursor, etc.)
+- A web application (React, Vue, Svelte, vanilla JS, etc.)
+- A coding agent (Claude Code, Cursor, Codex CLI, Gemini CLI, OpenCode, etc.)
 
-## Install
+## Option A: Agent-Assisted Setup (Recommended)
+
+The fastest way to set up Peril is to let your coding agent do it. Install the
+`peril-setup` skill and ask your agent to configure everything for you.
+
+### Claude Code
+
+```bash
+claude install-skill https://github.com/anthropics/peril/tree/main/skill/peril-setup
+```
+
+Then tell Claude:
+
+```
+Set up Peril in this project so my team can annotate UI bugs
+```
+
+### Codex CLI
+
+```bash
+codex install https://github.com/anthropics/peril/tree/main/skill/peril-setup
+```
+
+Then:
+
+```
+Install and configure Peril for visual review annotations
+```
+
+### Gemini CLI
+
+```bash
+gemini skill add https://github.com/anthropics/peril/tree/main/skill/peril-setup
+```
+
+Then:
+
+```
+Set up Peril in my project for visual feedback and agent tasks
+```
+
+### OpenCode / Other Agents
+
+Download the skill and add it to your agent's context:
+
+```bash
+curl -O https://raw.githubusercontent.com/anthropics/peril/main/skill/peril-setup/SKILL.md
+```
+
+Provide `SKILL.md` as context to your agent, then ask it to set up Peril.
+
+<Callout variant="tip">
+  The setup skill handles everything — installing packages, wrapping your app,
+  configuring MCP, adding `.peril/` to `.gitignore`, and verifying the setup.
+  It works with React, Vue, Svelte, and vanilla JS projects.
+</Callout>
+
+## Option B: Manual Setup
+
+If you prefer to set things up yourself, follow these steps.
+
+### 1. Install
 
 ```bash
 npm install @peril/core @peril/react @peril/server @peril/mcp
 ```
 
-## Add the Provider
+For non-React apps, skip `@peril/react` and use `@peril/core` directly.
+
+### 2. Add the Provider
 
 Wrap your app with `ReviewProvider`:
 
@@ -30,15 +93,15 @@ function App() {
 }
 ```
 
-## Start the Server
+### 3. Start the Server
 
 ```bash
 npx peril-server --port 3000
 ```
 
-## Connect Your Agent
+### 4. Connect Your Agent
 
-Point your MCP agent at the Peril MCP server:
+Add Peril's MCP server to your agent's configuration:
 
 ```json
 {
@@ -51,14 +114,16 @@ Point your MCP agent at the Peril MCP server:
 }
 ```
 
-## Start Reviewing
+See [MCP Configuration](/docs/mcp/configuration) for agent-specific config file locations.
+
+### 5. Start Reviewing
 
 1. Open your app in the browser
-2. Activate review mode
+2. Press `Ctrl+Shift+R` to activate review mode
 3. Click any element and leave a comment
 4. Your agent will receive the structured task via MCP
 
 <Callout variant="note">
-  See the full [Installation](/docs/installation) guide for detailed setup
-  instructions and configuration options.
+  See the full [Installation](/docs/installation) guide for detailed
+  configuration options, non-React setup, and storage details.
 </Callout>

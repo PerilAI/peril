@@ -11,7 +11,10 @@ export function DocsLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div
+      className="flex min-h-screen flex-col"
+      style={{ background: "var(--sf-bg-void)", color: "var(--sf-text-primary)" }}
+    >
       <DocsHeader onMenuToggle={() => setSidebarOpen((prev) => !prev)} />
       <div className="flex flex-1">
         <DocsSidebar

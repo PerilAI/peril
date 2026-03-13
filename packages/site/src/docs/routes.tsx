@@ -21,8 +21,17 @@ const Troubleshooting = lazy(() => import("./content/troubleshooting.mdx"));
 
 function Loading() {
   return (
-    <div className="flex items-center gap-2 py-12 text-text-muted">
-      <div className="h-4 w-4 animate-spin rounded-full border-2 border-border-subtle border-t-accent" />
+    <div
+      className="flex items-center gap-2 py-12"
+      style={{ color: "var(--sf-text-muted)" }}
+    >
+      <div
+        className="h-4 w-4 animate-spin rounded-full"
+        style={{
+          border: "2px solid rgba(255,255,255,0.06)",
+          borderTopColor: "var(--sf-accent)",
+        }}
+      />
       Loading...
     </div>
   );
