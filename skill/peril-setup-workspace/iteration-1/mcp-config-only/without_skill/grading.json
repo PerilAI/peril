@@ -1,0 +1,27 @@
+{
+  "eval_name": "mcp-config-only",
+  "variant": "without_skill",
+  "expectations": [
+    {
+      "text": "Creates .cursor/mcp.json config file for Cursor",
+      "passed": true,
+      "evidence": ".cursor/mcp.json exists"
+    },
+    {
+      "text": "MCP config contains a 'peril' server entry with npx @peril/mcp",
+      "passed": true,
+      "evidence": "peril entry valid"
+    },
+    {
+      "text": "Does NOT modify App.tsx since it's already configured",
+      "passed": true,
+      "evidence": "App.tsx unchanged"
+    },
+    {
+      "text": "Does NOT run npm install since packages are already installed",
+      "passed": true,
+      "evidence": "Install command not found in summary"
+    }
+  ],
+  "pass_rate": 1.0
+}

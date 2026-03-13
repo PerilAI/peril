@@ -1,0 +1,32 @@
+{
+  "eval_name": "vanilla-js-setup",
+  "variant": "with_skill",
+  "expectations": [
+    {
+      "text": "Installs @peril/core but NOT @peril/react",
+      "passed": true,
+      "evidence": "core=yes, react=absent"
+    },
+    {
+      "text": "Uses createReviewOverlay from @peril/core to set up the overlay",
+      "passed": true,
+      "evidence": "createReviewOverlay found in source"
+    },
+    {
+      "text": ".gitignore includes .peril/ directory",
+      "passed": true,
+      "evidence": ".peril found in .gitignore"
+    },
+    {
+      "text": "An MCP configuration file is created",
+      "passed": true,
+      "evidence": "MCP config found"
+    },
+    {
+      "text": "No files import from @peril/react or use ReviewProvider",
+      "passed": true,
+      "evidence": "@peril/react imports absent"
+    }
+  ],
+  "pass_rate": 1.0
+}

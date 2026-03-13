@@ -1,0 +1,21 @@
+{
+  "name": "my-vanilla-app",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "peril": "peril-server",
+    "peril:dev": "peril-server --port 3001"
+  },
+  "dependencies": {
+    "@peril/core": "^0.1.0",
+    "@peril/server": "^0.1.0",
+    "@peril/mcp": "^0.1.0"
+  },
+  "devDependencies": {
+    "typescript": "~5.6.0",
+    "vite": "^6.0.0"
+  }
+}

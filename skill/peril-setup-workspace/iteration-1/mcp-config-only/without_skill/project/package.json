@@ -1,0 +1,24 @@
+{
+  "name": "existing-peril-app",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "peril": "peril-server"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "@peril/core": "^1.0.0",
+    "@peril/react": "^1.0.0",
+    "@peril/server": "^1.0.0",
+    "@peril/mcp": "^1.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.0",
+    "typescript": "~5.6.0",
+    "vite": "^6.0.0"
+  }
+}

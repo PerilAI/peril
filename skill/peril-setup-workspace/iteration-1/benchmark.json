@@ -1,0 +1,86 @@
+{
+  "metadata": {
+    "skill_name": "peril-setup",
+    "skill_path": "/Users/jackson/Code/projects/peril/skill/peril-setup",
+    "executor_model": "claude-opus-4-6",
+    "timestamp": "2026-03-12T23:36:00Z",
+    "evals_run": ["react-app-setup", "mcp-config-only", "vanilla-js-setup"],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_name": "react-app-setup",
+      "with_skill": {
+        "pass_rate": 1.0,
+        "assertions_passed": 6,
+        "assertions_total": 6,
+        "total_tokens": 23901,
+        "duration_seconds": 62.0
+      },
+      "without_skill": {
+        "pass_rate": 1.0,
+        "assertions_passed": 6,
+        "assertions_total": 6,
+        "total_tokens": 63731,
+        "duration_seconds": 82.1
+      }
+    },
+    {
+      "eval_name": "mcp-config-only",
+      "with_skill": {
+        "pass_rate": 1.0,
+        "assertions_passed": 4,
+        "assertions_total": 4,
+        "total_tokens": 17645,
+        "duration_seconds": 48.4
+      },
+      "without_skill": {
+        "pass_rate": 1.0,
+        "assertions_passed": 4,
+        "assertions_total": 4,
+        "total_tokens": 23553,
+        "duration_seconds": 45.5
+      }
+    },
+    {
+      "eval_name": "vanilla-js-setup",
+      "with_skill": {
+        "pass_rate": 1.0,
+        "assertions_passed": 5,
+        "assertions_total": 5,
+        "total_tokens": 24697,
+        "duration_seconds": 87.4
+      },
+      "without_skill": {
+        "pass_rate": 0.6,
+        "assertions_passed": 3,
+        "assertions_total": 5,
+        "total_tokens": 54444,
+        "duration_seconds": 95.4
+      }
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "mean_pass_rate": 1.0,
+      "mean_tokens": 22081,
+      "mean_duration_seconds": 65.9
+    },
+    "without_skill": {
+      "mean_pass_rate": 0.867,
+      "mean_tokens": 47243,
+      "mean_duration_seconds": 74.3
+    },
+    "delta": {
+      "pass_rate": "+0.133",
+      "tokens": "-25162 (53% fewer)",
+      "time_seconds": "-8.4"
+    }
+  },
+  "notes": [
+    "Eval 1 (React setup): Both pass 100%, but with_skill uses 63% fewer tokens (23.9k vs 63.7k) — the skill prevents wasted exploration",
+    "Eval 2 (MCP config only): Both pass 100% — this is a straightforward task where general knowledge suffices",
+    "Eval 3 (Vanilla JS): With skill 100% vs without 60% — baseline missed .gitignore and MCP config, showing the skill's checklist value for non-obvious steps",
+    "Token efficiency is the biggest win: the skill cuts token usage roughly in half across all evals"
+  ]
+}

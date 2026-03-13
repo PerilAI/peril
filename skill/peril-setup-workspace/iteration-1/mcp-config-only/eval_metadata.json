@@ -1,0 +1,31 @@
+{
+  "eval_id": 2,
+  "eval_name": "mcp-config-only",
+  "prompt": "I already have @peril/react installed and working, but I need to configure the MCP server so Cursor can see the reviews. Can you set that up?",
+  "assertions": [
+    {
+      "id": "cursor-mcp-config-created",
+      "text": "Creates .cursor/mcp.json config file for Cursor",
+      "type": "file_exists",
+      "check": ".cursor/mcp.json exists in the project"
+    },
+    {
+      "id": "config-has-peril-entry",
+      "text": "MCP config contains a 'peril' server entry with npx @peril/mcp",
+      "type": "file_contains",
+      "check": ".cursor/mcp.json has mcpServers.peril with command npx and args including @peril/mcp"
+    },
+    {
+      "id": "does-not-modify-app",
+      "text": "Does NOT modify App.tsx since it's already configured",
+      "type": "file_unchanged",
+      "check": "App.tsx should be identical to its original content"
+    },
+    {
+      "id": "does-not-reinstall",
+      "text": "Does NOT run npm install since packages are already installed",
+      "type": "output_check",
+      "check": "Summary should not include an npm/pnpm/yarn install command"
+    }
+  ]
+}

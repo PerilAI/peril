@@ -1,0 +1,37 @@
+{
+  "eval_id": 3,
+  "eval_name": "vanilla-js-setup",
+  "prompt": "I have a vanilla JS app built with Vite. I want to add Peril review annotations. I don't use React.",
+  "assertions": [
+    {
+      "id": "installs-core-not-react",
+      "text": "Installs @peril/core but NOT @peril/react",
+      "type": "file_contains",
+      "check": "Summary or package.json references @peril/core but not @peril/react"
+    },
+    {
+      "id": "uses-create-review-overlay",
+      "text": "Uses createReviewOverlay from @peril/core to set up the overlay",
+      "type": "file_contains",
+      "check": "main.ts or a new file imports createReviewOverlay from @peril/core"
+    },
+    {
+      "id": "gitignore-peril-dir",
+      "text": ".gitignore includes .peril/ directory",
+      "type": "file_contains",
+      "check": ".gitignore contains .peril"
+    },
+    {
+      "id": "mcp-config-created",
+      "text": "An MCP configuration file is created",
+      "type": "file_exists",
+      "check": "Some MCP config file exists"
+    },
+    {
+      "id": "no-react-imports",
+      "text": "No files import from @peril/react or use ReviewProvider",
+      "type": "file_check",
+      "check": "No source file contains import from @peril/react"
+    }
+  ]
+}

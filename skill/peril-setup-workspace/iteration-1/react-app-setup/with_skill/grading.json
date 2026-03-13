@@ -1,0 +1,37 @@
+{
+  "eval_name": "react-app-setup",
+  "variant": "with_skill",
+  "expectations": [
+    {
+      "text": "Install command includes @peril/core, @peril/react, @peril/server, and @peril/mcp",
+      "passed": true,
+      "evidence": "All 4 packages found in summary"
+    },
+    {
+      "text": "App.tsx wraps content with <ReviewProvider> component",
+      "passed": true,
+      "evidence": "ReviewProvider found in App.tsx"
+    },
+    {
+      "text": "ReviewProvider has serverUrl prop pointing to the Peril backend",
+      "passed": true,
+      "evidence": "serverUrl prop found in App.tsx"
+    },
+    {
+      "text": ".gitignore includes .peril/ directory",
+      "passed": true,
+      "evidence": ".peril found in .gitignore"
+    },
+    {
+      "text": "An MCP configuration file is created for an agent",
+      "passed": true,
+      "evidence": "MCP config file found"
+    },
+    {
+      "text": "A review mode toggle is added using useReviewMode hook",
+      "passed": true,
+      "evidence": "useReviewMode found in project files"
+    }
+  ],
+  "pass_rate": 1.0
+}

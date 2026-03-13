@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "peril": {
+      "command": "npx",
+      "args": ["peril-mcp"],
+      "env": {
+        "PERIL_SERVER_URL": "http://localhost:4173"
+      }
+    }
+  }
+}

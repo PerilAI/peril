@@ -1,0 +1,43 @@
+{
+  "eval_id": 1,
+  "eval_name": "react-app-setup",
+  "prompt": "I want to add Peril to my React app so my team can annotate bugs in the UI and my agent can pick them up. Can you set it up?",
+  "assertions": [
+    {
+      "id": "installs-all-packages",
+      "text": "Install command includes @peril/core, @peril/react, @peril/server, and @peril/mcp",
+      "type": "file_contains",
+      "check": "summary.md or package.json references all four @peril packages"
+    },
+    {
+      "id": "wraps-with-review-provider",
+      "text": "App.tsx wraps content with <ReviewProvider> component",
+      "type": "file_contains",
+      "check": "App.tsx contains ReviewProvider import and JSX usage"
+    },
+    {
+      "id": "review-provider-has-server-url",
+      "text": "ReviewProvider has serverUrl prop pointing to the Peril backend",
+      "type": "file_contains",
+      "check": "App.tsx ReviewProvider includes serverUrl prop"
+    },
+    {
+      "id": "gitignore-peril-dir",
+      "text": ".gitignore includes .peril/ directory",
+      "type": "file_contains",
+      "check": ".gitignore contains .peril"
+    },
+    {
+      "id": "mcp-config-created",
+      "text": "An MCP configuration file is created for an agent",
+      "type": "file_exists",
+      "check": "Some MCP config file exists (.mcp.json, .cursor/mcp.json, or similar)"
+    },
+    {
+      "id": "review-mode-toggle",
+      "text": "A review mode toggle is added using useReviewMode hook",
+      "type": "file_contains",
+      "check": "Some file imports useReviewMode and renders a toggle button"
+    }
+  ]
+}
