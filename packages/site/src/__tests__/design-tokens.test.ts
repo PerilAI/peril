@@ -8,71 +8,67 @@ const tokensCSS = readFileSync(
 );
 
 describe("design tokens", () => {
-  it("defines amber accent palette", () => {
-    expect(tokensCSS).toContain("--color-amber-400");
-    expect(tokensCSS).toContain("--color-amber-500");
-    expect(tokensCSS).toContain("--color-amber-600");
+  it("defines Solar Flare background tokens", () => {
+    expect(tokensCSS).toContain("--sf-bg-void: #06060e");
+    expect(tokensCSS).toContain("--sf-bg-space: #0a0a14");
+    expect(tokensCSS).toContain("--sf-bg-elevated: #10101c");
+    expect(tokensCSS).toContain("--sf-bg-surface: #161625");
   });
 
-  it("defines warm neutral palette (not pure gray)", () => {
-    expect(tokensCSS).toContain("--color-neutral-950");
-    // Warm neutrals — stone-tinted, not pure gray
-    expect(tokensCSS).toContain("#0c0a09");
+  it("defines gradient arc", () => {
+    expect(tokensCSS).toContain("--sf-gradient-arc");
+    expect(tokensCSS).toContain("#f59e0b");
+    expect(tokensCSS).toContain("#f43f5e");
+    expect(tokensCSS).toContain("#8b5cf6");
   });
 
-  it("defines semantic tokens for dark mode", () => {
-    expect(tokensCSS).toContain("--color-background");
-    expect(tokensCSS).toContain("--color-surface");
-    expect(tokensCSS).toContain("--color-text");
-    expect(tokensCSS).toContain("--color-accent");
-    expect(tokensCSS).toContain("--color-accent-foreground");
-    expect(tokensCSS).toContain("--color-accent-muted");
+  it("defines amber accent", () => {
+    expect(tokensCSS).toContain("--sf-accent: #f59e0b");
+    expect(tokensCSS).toContain("--sf-accent-hover: #fbbf24");
+    expect(tokensCSS).toContain("--sf-accent-pressed: #d97706");
   });
 
-  it("defines serif display font for headlines", () => {
-    expect(tokensCSS).toContain("--font-display");
-    expect(tokensCSS).toContain("DM Serif Display");
+  it("defines text colors", () => {
+    expect(tokensCSS).toContain("--sf-text-primary: #fafaf9");
+    expect(tokensCSS).toContain("--sf-text-secondary: #a1a1aa");
+    expect(tokensCSS).toContain("--sf-text-muted: #71717a");
+    expect(tokensCSS).toContain("--sf-text-accent: #f59e0b");
+  });
+
+  it("defines Plus Jakarta Sans for headlines", () => {
+    expect(tokensCSS).toContain("--sf-font-display");
+    expect(tokensCSS).toContain("Plus Jakarta Sans");
   });
 
   it("defines Inter for body text", () => {
-    expect(tokensCSS).toContain("--font-body");
+    expect(tokensCSS).toContain("--sf-font-body");
     expect(tokensCSS).toContain("Inter");
   });
 
   it("defines complete type scale", () => {
-    expect(tokensCSS).toContain("--text-hero");
-    expect(tokensCSS).toContain("--text-h1");
-    expect(tokensCSS).toContain("--text-h2");
-    expect(tokensCSS).toContain("--text-h3");
-    expect(tokensCSS).toContain("--text-h4");
-    expect(tokensCSS).toContain("--text-body");
-    expect(tokensCSS).toContain("--text-small");
-    expect(tokensCSS).toContain("--text-caption");
+    expect(tokensCSS).toContain("--sf-text-hero");
+    expect(tokensCSS).toContain("--sf-text-h1");
+    expect(tokensCSS).toContain("--sf-text-h2");
+    expect(tokensCSS).toContain("--sf-text-h3");
+    expect(tokensCSS).toContain("--sf-text-body");
+    expect(tokensCSS).toContain("--sf-text-small");
+    expect(tokensCSS).toContain("--sf-text-caption");
   });
 
-  it("uses 8px grid spacing system", () => {
-    expect(tokensCSS).toContain("--space-2: 0.5rem"); // 8px
-    expect(tokensCSS).toContain("--space-4: 1rem"); // 16px
-    expect(tokensCSS).toContain("--space-8: 2rem"); // 32px
+  it("defines backward-compatible aliases", () => {
+    expect(tokensCSS).toContain("--color-background: var(--sf-bg-void)");
+    expect(tokensCSS).toContain("--color-text: var(--sf-text-primary)");
+    expect(tokensCSS).toContain("--font-display: var(--sf-font-display)");
   });
 
-  it("defines glow effect tokens for annotation cursor", () => {
-    expect(tokensCSS).toContain("--glow-sm");
-    expect(tokensCSS).toContain("--glow-md");
-    expect(tokensCSS).toContain("--glow-lg");
+  it("does not define light mode overrides", () => {
+    expect(tokensCSS).not.toContain(":root.light");
+    expect(tokensCSS).not.toContain('[data-theme="light"]');
   });
 
-  it("defines light mode overrides", () => {
-    expect(tokensCSS).toContain('.light');
-    expect(tokensCSS).toContain('[data-theme="light"]');
-  });
-
-  it("does not use blue as primary accent", () => {
-    // Accent should be amber/gold, not blue
-    const accentSection = tokensCSS.match(
-      /--color-accent:\s*var\(--color-(\w+)/,
-    );
-    expect(accentSection).toBeTruthy();
-    expect(accentSection![1]).toContain("amber");
+  it("uses glow effect tokens", () => {
+    expect(tokensCSS).toContain("--sf-glow-sm");
+    expect(tokensCSS).toContain("--sf-glow-md");
+    expect(tokensCSS).toContain("--sf-glow-lg");
   });
 });

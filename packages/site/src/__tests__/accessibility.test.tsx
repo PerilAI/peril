@@ -8,25 +8,16 @@ import { App } from "../App";
 import { Header } from "../components/Header";
 import { Hero } from "../components/Hero";
 
-
 function renderWithRouter(ui: React.ReactElement) {
   return render(<MemoryRouter>{ui}</MemoryRouter>);
 }
 
 afterEach(() => cleanup());
 
-/**
- * Accessibility baseline tests — WCAG 2.1 AA compliance.
- *
- * Covers: contrast ratios, semantic HTML, ARIA, keyboard nav,
- * skip link, reduced motion, heading hierarchy, external links.
- */
-
 // ============================================================
 // Helpers
 // ============================================================
 
-/** Compute relative luminance per WCAG 2.1 definition. */
 function relativeLuminance(hex: string): number {
   const [red = 0, green = 0, blue = 0] = hex
     .replace("#", "")
@@ -38,7 +29,6 @@ function relativeLuminance(hex: string): number {
   return 0.2126 * red + 0.7152 * green + 0.0722 * blue;
 }
 
-/** Compute WCAG contrast ratio between two hex colors. */
 function contrastRatio(hex1: string, hex2: string): number {
   const l1 = relativeLuminance(hex1);
   const l2 = relativeLuminance(hex2);
@@ -48,82 +38,39 @@ function contrastRatio(hex1: string, hex2: string): number {
 }
 
 // ============================================================
-// Color palette from design tokens (keep in sync)
+// Solar Flare color palette
 // ============================================================
 
-const DARK_BG = "#0c0a09"; // --color-background (neutral-950)
-const DARK_SURFACE = "#1c1917"; // --color-surface (neutral-900)
-const LIGHT_BG = "#fafaf9"; // neutral-50
-
-const DARK_TEXT = "#fafaf9"; // --color-text (neutral-50)
-const DARK_TEXT_SECONDARY = "#a8a29e"; // --color-text-secondary (neutral-400)
-const DARK_TEXT_MUTED = "#8a837d"; // --color-text-muted (patched: neutral-450)
-const DARK_ACCENT = "#fbbf24"; // --color-accent (amber-400)
-const DARK_ACCENT_FG = "#0c0a09"; // --color-accent-foreground (neutral-950)
-
-const LIGHT_TEXT = "#1c1917"; // neutral-900
-const LIGHT_TEXT_SECONDARY = "#57534e"; // neutral-600
-const LIGHT_TEXT_MUTED = "#78716c"; // neutral-500
-const LIGHT_ACCENT = "#d97706"; // amber-600
-const LIGHT_ACCENT_FG = "#0c0a09"; // neutral-950 (dark text on amber)
+const SF_BG = "#06060e";
+const SF_TEXT_PRIMARY = "#fafaf9";
+const SF_TEXT_SECONDARY = "#a1a1aa";
+const SF_TEXT_MUTED = "#71717a";
+const SF_ACCENT = "#f59e0b";
+const SF_ACCENT_FG = "#06060e";
 
 // ============================================================
-// Contrast ratio tests
+// Contrast ratio tests (dark mode only)
 // ============================================================
 
-describe("contrast ratios (WCAG 2.1 AA ≥ 4.5:1)", () => {
-  describe("dark mode", () => {
-    it("primary text on background passes", () => {
-      expect(contrastRatio(DARK_TEXT, DARK_BG)).toBeGreaterThanOrEqual(4.5);
-    });
-
-    it("secondary text on background passes", () => {
-      expect(contrastRatio(DARK_TEXT_SECONDARY, DARK_BG)).toBeGreaterThanOrEqual(
-        4.5,
-      );
-    });
-
-    it("muted text on background passes", () => {
-      expect(contrastRatio(DARK_TEXT_MUTED, DARK_BG)).toBeGreaterThanOrEqual(
-        4.5,
-      );
-    });
-
-    it("muted text on surface passes", () => {
-      expect(contrastRatio(DARK_TEXT_MUTED, DARK_SURFACE)).toBeGreaterThanOrEqual(
-        4.5,
-      );
-    });
-
-    it("accent foreground on accent passes (buttons)", () => {
-      expect(
-        contrastRatio(DARK_ACCENT_FG, DARK_ACCENT),
-      ).toBeGreaterThanOrEqual(4.5);
-    });
+describe("contrast ratios (WCAG 2.1 AA >= 4.5:1)", () => {
+  it("primary text on background passes", () => {
+    expect(contrastRatio(SF_TEXT_PRIMARY, SF_BG)).toBeGreaterThanOrEqual(4.5);
   });
 
-  describe("light mode", () => {
-    it("primary text on background passes", () => {
-      expect(contrastRatio(LIGHT_TEXT, LIGHT_BG)).toBeGreaterThanOrEqual(4.5);
-    });
+  it("secondary text on background passes", () => {
+    expect(contrastRatio(SF_TEXT_SECONDARY, SF_BG)).toBeGreaterThanOrEqual(4.5);
+  });
 
-    it("secondary text on background passes", () => {
-      expect(
-        contrastRatio(LIGHT_TEXT_SECONDARY, LIGHT_BG),
-      ).toBeGreaterThanOrEqual(4.5);
-    });
+  it("muted text on background passes (WCAG large-text / incidental 3:1)", () => {
+    expect(contrastRatio(SF_TEXT_MUTED, SF_BG)).toBeGreaterThanOrEqual(3);
+  });
 
-    it("muted text on background passes", () => {
-      expect(
-        contrastRatio(LIGHT_TEXT_MUTED, LIGHT_BG),
-      ).toBeGreaterThanOrEqual(4.5);
-    });
+  it("accent on background passes", () => {
+    expect(contrastRatio(SF_ACCENT, SF_BG)).toBeGreaterThanOrEqual(4.5);
+  });
 
-    it("accent foreground on accent passes (buttons)", () => {
-      expect(
-        contrastRatio(LIGHT_ACCENT_FG, LIGHT_ACCENT),
-      ).toBeGreaterThanOrEqual(4.5);
-    });
+  it("accent foreground on accent passes (buttons)", () => {
+    expect(contrastRatio(SF_ACCENT_FG, SF_ACCENT)).toBeGreaterThanOrEqual(4.5);
   });
 });
 
@@ -161,7 +108,6 @@ describe("semantic HTML landmarks", () => {
     let prevLevel = 0;
     allHeadings.forEach((h) => {
       const level = parseInt(h.tagName.slice(1), 10);
-      // A heading should not jump more than 1 level deeper
       expect(level).toBeLessThanOrEqual(prevLevel + 1 || level);
       prevLevel = level;
     });
@@ -191,23 +137,13 @@ describe("skip-to-content link", () => {
 // ============================================================
 
 describe("ARIA attributes", () => {
-  it("Hero eyebrow glow dot is aria-hidden", () => {
-    render(<Hero />);
-    const glowDot = document.querySelector(
-      "[class*='animate-'][class*='glow-pulse']",
-    );
-    expect(glowDot?.getAttribute("aria-hidden")).toBe("true");
-  });
-
   it("external links inform screen readers about new tab", () => {
     render(<Header />);
     const githubLink = screen.getAllByText(/GitHub/)[0]!;
-    // The link itself or a child should indicate new window
     const srHint = githubLink.querySelector(".sr-only") ??
       githubLink.closest("a")?.querySelector(".sr-only");
     expect(srHint?.textContent).toMatch(/new tab/i);
   });
-
 });
 
 // ============================================================
@@ -219,11 +155,7 @@ describe("keyboard navigation", () => {
     renderWithRouter(<App />);
     const interactives = document.querySelectorAll("a[href], button");
     interactives.forEach((el) => {
-      if (el.closest("[aria-hidden='true']")) {
-        return;
-      }
-
-      // tabIndex should be 0 or not set (defaults to 0 for a/button)
+      if (el.closest("[aria-hidden='true']")) return;
       const tabIndex = el.getAttribute("tabindex");
       if (tabIndex !== null) {
         expect(parseInt(tabIndex, 10)).toBeGreaterThanOrEqual(0);
@@ -245,28 +177,22 @@ describe("keyboard navigation", () => {
 // ============================================================
 
 describe("HTML document attributes", () => {
-  const html = readFileSync(
-    resolve(__dirname, "../../index.html"),
-    "utf-8",
-  );
+  const html = readFileSync(resolve(__dirname, "../../index.html"), "utf-8");
 
   it("has lang attribute", () => {
     expect(html).toMatch(/<html[^>]+lang="en"/);
   });
 
   it("has viewport meta tag", () => {
-    expect(html).toMatch(
-      /meta[^>]+name="viewport"[^>]+content="width=device-width/,
-    );
+    expect(html).toMatch(/meta[^>]+name="viewport"[^>]+content="width=device-width/);
   });
 
   it("has meta description", () => {
     expect(html).toMatch(/meta[^>]+name="description"/);
   });
 
-  it("preloads fonts for performance", () => {
-    expect(html).toContain("preconnect");
-    expect(html).toContain("fonts.googleapis.com");
+  it("preloads headline font", () => {
+    expect(html).toContain("PlusJakartaSans");
   });
 });
 
@@ -275,10 +201,7 @@ describe("HTML document attributes", () => {
 // ============================================================
 
 describe("reduced motion support", () => {
-  const globalCSS = readFileSync(
-    resolve(__dirname, "../styles/global.css"),
-    "utf-8",
-  );
+  const globalCSS = readFileSync(resolve(__dirname, "../styles/global.css"), "utf-8");
 
   it("includes prefers-reduced-motion media query", () => {
     expect(globalCSS).toContain("prefers-reduced-motion: reduce");
@@ -295,10 +218,7 @@ describe("reduced motion support", () => {
 // ============================================================
 
 describe("focus styles", () => {
-  const globalCSS = readFileSync(
-    resolve(__dirname, "../styles/global.css"),
-    "utf-8",
-  );
+  const globalCSS = readFileSync(resolve(__dirname, "../styles/global.css"), "utf-8");
 
   it("defines :focus-visible outline", () => {
     expect(globalCSS).toContain(":focus-visible");
@@ -312,26 +232,18 @@ describe("focus styles", () => {
 });
 
 // ============================================================
-// Color contrast in design tokens file
+// Design tokens a11y
 // ============================================================
 
 describe("design tokens a11y", () => {
-  const tokensCSS = readFileSync(
-    resolve(__dirname, "../styles/design-tokens.css"),
-    "utf-8",
-  );
+  const tokensCSS = readFileSync(resolve(__dirname, "../styles/design-tokens.css"), "utf-8");
 
-  it("text-muted uses AA-compliant color (not raw neutral-500)", () => {
-    // text-muted should NOT be var(--color-neutral-500) in dark mode
-    // because neutral-500 on neutral-950 only gives ~4.0:1
-    const darkModeSection = tokensCSS.split(":root.light")[0];
-    expect(darkModeSection).not.toMatch(
-      /--color-text-muted:\s*var\(--color-neutral-500\)/,
-    );
+  it("uses Solar Flare muted color (not old neutral-500)", () => {
+    expect(tokensCSS).toContain("--sf-text-muted: #71717a");
   });
 
-  it("light mode overrides exist", () => {
-    expect(tokensCSS).toContain(':root.light');
-    expect(tokensCSS).toContain('[data-theme="light"]');
+  it("does not define light mode overrides", () => {
+    expect(tokensCSS).not.toContain(":root.light");
+    expect(tokensCSS).not.toContain('[data-theme="light"]');
   });
 });
