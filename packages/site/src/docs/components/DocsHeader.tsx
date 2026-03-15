@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { GITHUB_URL } from "../../constants";
 import { DocsSearch } from "./DocsSearch";
 
 interface DocsHeaderProps {
@@ -77,7 +78,7 @@ export function DocsHeader({ onMenuToggle }: DocsHeaderProps) {
           Home
         </Link>
         <a
-          href="https://github.com/anthropics/peril"
+          href={GITHUB_URL}
           className="hidden text-sm transition-colors duration-[var(--sf-duration-fast)] md:inline-flex"
           style={{ color: "var(--sf-text-secondary)" }}
           onMouseEnter={(e) => { (e.target as HTMLElement).style.color = "var(--sf-text-primary)"; }}

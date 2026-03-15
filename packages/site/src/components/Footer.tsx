@@ -1,4 +1,5 @@
 import { trackCTAClick } from "../analytics";
+import { GITHUB_URL } from "../constants";
 import { useInView } from "../hooks/useInView";
 
 /* ─── Navigation Links ─────────────────────────────────── */
@@ -8,7 +9,7 @@ const navLinks = [
   { href: "/pricing", label: "Pricing" },
   { href: "/docs", label: "Docs" },
   {
-    href: "https://github.com/anthropics/peril",
+    href: GITHUB_URL,
     label: "GitHub",
     external: true,
   },

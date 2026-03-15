@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { GITHUB_URL } from "../constants";
 
 const NAV_LINKS = [
   { href: "#how-it-works", label: "How it works" },
   { href: "/pricing", label: "Pricing" },
   { href: "/docs", label: "Docs" },
   {
-    href: "https://github.com/anthropics/peril",
+    href: GITHUB_URL,
     label: "GitHub",
     external: true,
   },
