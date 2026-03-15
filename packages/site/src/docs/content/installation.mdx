@@ -5,18 +5,18 @@ your workflow.
 
 ## Agent-Assisted Installation
 
-The easiest way to install Peril is with the `peril-setup` skill. Your coding
-agent will detect your framework, install the right packages, configure MCP,
-and verify the setup.
+The easiest way to install Peril is with the `peril-setup` skill. Download it
+into your project and your coding agent will detect your framework, install the
+right packages, configure MCP, and verify the setup.
 
-| Agent | Install command |
-|-------|----------------|
-| Claude Code | `claude install-skill https://github.com/PerilAI/peril/tree/main/skill/peril-setup` |
-| Codex CLI | `codex install https://github.com/PerilAI/peril/tree/main/skill/peril-setup` |
-| Gemini CLI | `gemini skill add https://github.com/PerilAI/peril/tree/main/skill/peril-setup` |
-| OpenCode | Download `SKILL.md` and add to agent context |
+```bash
+# Download the skill into your project
+curl -sL https://github.com/PerilAI/peril/raw/main/skill/peril-setup/SKILL.md \
+  -o .claude/commands/peril-setup.md --create-dirs
+```
 
-After installing the skill, tell your agent: _"Set up Peril in this project"_.
+Then tell your agent: _"Set up Peril in this project"_ (or run `/peril-setup`
+in Claude Code).
 
 <Callout variant="tip">
   The skill automatically detects React, Vue, Svelte, and vanilla JS projects

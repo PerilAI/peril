@@ -10,54 +10,22 @@ Get up and running with Peril in under 5 minutes.
 
 ## Option A: Agent-Assisted Setup (Recommended)
 
-The fastest way to set up Peril is to let your coding agent do it. Install the
+The fastest way to set up Peril is to let your coding agent do it. Download the
 `peril-setup` skill and ask your agent to configure everything for you.
 
-### Claude Code
-
 ```bash
-claude install-skill https://github.com/PerilAI/peril/tree/main/skill/peril-setup
+# Add the skill as a Claude Code slash command
+curl -sL https://github.com/PerilAI/peril/raw/main/skill/peril-setup/SKILL.md \
+  -o .claude/commands/peril-setup.md --create-dirs
 ```
 
-Then tell Claude:
+Then tell your agent:
 
 ```
 Set up Peril in this project so my team can annotate UI bugs
 ```
 
-### Codex CLI
-
-```bash
-codex install https://github.com/PerilAI/peril/tree/main/skill/peril-setup
-```
-
-Then:
-
-```
-Install and configure Peril for visual review annotations
-```
-
-### Gemini CLI
-
-```bash
-gemini skill add https://github.com/PerilAI/peril/tree/main/skill/peril-setup
-```
-
-Then:
-
-```
-Set up Peril in my project for visual feedback and agent tasks
-```
-
-### OpenCode / Other Agents
-
-Download the skill and add it to your agent's context:
-
-```bash
-curl -O https://raw.githubusercontent.com/anthropics/peril/main/skill/peril-setup/SKILL.md
-```
-
-Provide `SKILL.md` as context to your agent, then ask it to set up Peril.
+Or in Claude Code, run `/peril-setup` directly.
 
 <Callout variant="tip">
   The setup skill handles everything — installing packages, wrapping your app,
