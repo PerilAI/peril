@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ReviewProvider, useReviewMode } from "@peril/react";
+import { ReviewProvider, useReviewMode } from "@peril-ai/react";
 
 function ReviewToggle() {
   const { enabled, setEnabled } = useReviewMode();

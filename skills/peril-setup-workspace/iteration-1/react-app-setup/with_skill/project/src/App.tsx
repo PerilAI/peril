@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ReviewProvider } from "@peril/react";
+import { ReviewProvider } from "@peril-ai/react";
 import { ReviewButton } from "./ReviewButton";
 
 function App() {

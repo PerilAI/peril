@@ -5,15 +5,15 @@
   "assertions": [
     {
       "id": "installs-core-not-react",
-      "text": "Installs @peril/core but NOT @peril/react",
+      "text": "Installs @peril-ai/core but NOT @peril-ai/react",
       "type": "file_contains",
-      "check": "Summary or package.json references @peril/core but not @peril/react"
+      "check": "Summary or package.json references @peril-ai/core but not @peril-ai/react"
     },
     {
       "id": "uses-create-review-overlay",
-      "text": "Uses createReviewOverlay from @peril/core to set up the overlay",
+      "text": "Uses createReviewOverlay from @peril-ai/core to set up the overlay",
       "type": "file_contains",
-      "check": "main.ts or a new file imports createReviewOverlay from @peril/core"
+      "check": "main.ts or a new file imports createReviewOverlay from @peril-ai/core"
     },
     {
       "id": "gitignore-peril-dir",
@@ -29,9 +29,9 @@
     },
     {
       "id": "no-react-imports",
-      "text": "No files import from @peril/react or use ReviewProvider",
+      "text": "No files import from @peril-ai/react or use ReviewProvider",
       "type": "file_check",
-      "check": "No source file contains import from @peril/react"
+      "check": "No source file contains import from @peril-ai/react"
     }
   ]
 }

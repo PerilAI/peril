@@ -65,7 +65,7 @@ function createJsonResponse(body: unknown, status = 201): Response {
   });
 }
 
-describe("@peril/core transport error handling", () => {
+describe("@peril-ai/core transport error handling", () => {
   it("throws after exhausting all retry attempts on transient 503 errors", async () => {
     const input = createSubmitReviewInput();
     const fetchMock = vi.fn<typeof fetch>(async () =>

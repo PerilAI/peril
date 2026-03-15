@@ -7,7 +7,7 @@ Hooks for controlling review mode and accessing Peril state.
 Toggle and query the review mode state:
 
 ```tsx
-import { useReviewMode } from "@peril/react";
+import { useReviewMode } from "@peril-ai/react";
 
 function ReviewToggle() {
   const { active, toggle, activate, deactivate } = useReviewMode();
@@ -34,7 +34,7 @@ function ReviewToggle() {
 Access the list of reviews created in the current session:
 
 ```tsx
-import { useReviews } from "@peril/react";
+import { useReviews } from "@peril-ai/react";
 
 function ReviewList() {
   const { reviews, loading } = useReviews();

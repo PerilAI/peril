@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { ReviewProvider } from "@peril/react";
-import { useReviewMode } from "@peril/react";
+import { ReviewProvider } from "@peril-ai/react";
+import { useReviewMode } from "@peril-ai/react";
 
 function ReviewButton() {
   const { active, toggle } = useReviewMode();

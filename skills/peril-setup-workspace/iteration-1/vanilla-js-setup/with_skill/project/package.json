@@ -10,9 +10,9 @@
     "peril:dev": "peril-server --port 3001"
   },
   "dependencies": {
-    "@peril/core": "^0.1.0",
-    "@peril/server": "^0.1.0",
-    "@peril/mcp": "^0.1.0"
+    "@peril-ai/core": "^0.1.0",
+    "@peril-ai/server": "^0.1.0",
+    "@peril-ai/mcp": "^0.1.0"
   },
   "devDependencies": {
     "typescript": "~5.6.0",

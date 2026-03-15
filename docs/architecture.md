@@ -14,12 +14,12 @@ The system should be framework-agnostic at the core and use thin framework adapt
 
 Recommended initial package split:
 
-- `@peril/review-core`
-- `@peril/review-react`
-- `@peril/review-angular`
-- `@peril/review-html`
-- `@peril/review-server`
-- `@peril/review-mcp`
+- `@peril-ai/review-core`
+- `@peril-ai/review-react`
+- `@peril-ai/review-angular`
+- `@peril-ai/review-html`
+- `@peril-ai/review-server`
+- `@peril-ai/review-mcp`
 
 ## Layer Responsibilities
 

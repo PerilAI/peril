@@ -134,7 +134,7 @@ A three-layer system:
 **so that** reviewers can start annotating immediately.
 
 **Acceptance criteria:**
-- Install one package (`@peril/react`)
+- Install one package (`@peril-ai/react`)
 - Wrap app in `<ReviewProvider serverUrl="...">`
 - Review mode activates via `useReviewMode()` hook or keyboard shortcut
 - Overlay mounts client-side only, does not interfere with SSR/hydration

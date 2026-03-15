@@ -12,10 +12,10 @@ import { startServer } from "../packages/server/src/index";
  * Full-flow integration test (PER-66).
  *
  * Exercises the complete lifecycle:
- *   @peril/core createReview() -> submitReview() transport
- *   -> @peril/server receives and stores
- *   -> @peril/mcp retrieves via list_reviews, get_review, get_review_artifact
- *   -> @peril/mcp mark_review_resolved, update_review_status
+ *   @peril-ai/core createReview() -> submitReview() transport
+ *   -> @peril-ai/server receives and stores
+ *   -> @peril-ai/mcp retrieves via list_reviews, get_review, get_review_artifact
+ *   -> @peril-ai/mcp mark_review_resolved, update_review_status
  */
 
 const pngDataUrl =

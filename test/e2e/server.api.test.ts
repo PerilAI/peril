@@ -78,7 +78,7 @@ test.describe("Health endpoint", () => {
     const response = await request.get(`${baseUrl}/api/health`);
     expect(response.status()).toBe(200);
     const body = await response.json();
-    expect(body).toMatchObject({ status: "ok", service: "@peril/server" });
+    expect(body).toMatchObject({ status: "ok", service: "@peril-ai/server" });
     expect(body.timestamp).toBeTruthy();
   });
 });

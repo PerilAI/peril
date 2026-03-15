@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 import { ReviewProvider, useReviewMode } from "../src/index";
 
 /**
- * SSR safety tests for @peril/react (PER-65).
+ * SSR safety tests for @peril-ai/react (PER-65).
  *
  * Validates that ReviewProvider, useReviewMode, and the portal overlay
  * behave correctly in a server-side rendering environment where
@@ -195,7 +195,7 @@ describe("SSR safety", () => {
       vi.doMock("react-dom", () => ({
         createPortal: createPortalMock
       }));
-      vi.doMock("@peril/core", () => ({
+      vi.doMock("@peril-ai/core", () => ({
         createReviewOverlay: vi.fn(),
         getBestLocatorSummary: vi.fn(),
         getRankedLocators: vi.fn(),
@@ -242,7 +242,7 @@ describe("SSR safety", () => {
       vi.doMock("react-dom", () => ({
         createPortal: createPortalMock
       }));
-      vi.doMock("@peril/core", () => ({
+      vi.doMock("@peril-ai/core", () => ({
         createReviewOverlay: vi.fn(),
         getBestLocatorSummary: vi.fn(),
         getRankedLocators: vi.fn(),
@@ -292,7 +292,7 @@ describe("SSR safety", () => {
       vi.doMock("react-dom", () => ({
         createPortal: vi.fn((node) => node)
       }));
-      vi.doMock("@peril/core", () => ({
+      vi.doMock("@peril-ai/core", () => ({
         createReviewOverlay: createReviewOverlayMock,
         getBestLocatorSummary: vi.fn(),
         getRankedLocators: vi.fn(),

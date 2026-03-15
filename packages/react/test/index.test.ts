@@ -28,7 +28,7 @@ function UseReviewModeWithoutProvider() {
   }
 }
 
-describe("@peril/react", () => {
+describe("@peril-ai/react", () => {
   it("re-exports the shared locator order from core", () => {
     expect(locatorPriority).toEqual(["testId", "role", "css", "xpath", "text"]);
   });

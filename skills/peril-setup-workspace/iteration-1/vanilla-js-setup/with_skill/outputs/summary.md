@@ -8,18 +8,18 @@
 - **Entry point**: `src/main.ts`
 - **Existing Peril packages**: None
 
-Because the project does not use React, the skill directed us to skip `@peril/react` and use `@peril/core` directly with `createReviewOverlay()` (per `references/core-only-setup.md`).
+Because the project does not use React, the skill directed us to skip `@peril-ai/react` and use `@peril-ai/core` directly with `createReviewOverlay()` (per `references/core-only-setup.md`).
 
 ## Changes Made
 
 ### 1. `package.json` -- Added Peril dependencies and scripts
 
-- Added `@peril/core`, `@peril/server`, and `@peril/mcp` as dependencies (not `@peril/react`, since this is not a React project).
+- Added `@peril-ai/core`, `@peril-ai/server`, and `@peril-ai/mcp` as dependencies (not `@peril-ai/react`, since this is not a React project).
 - Added `"peril"` and `"peril:dev"` scripts to start the Peril backend server.
 
 ### 2. `src/main.ts` -- Integrated Peril review overlay
 
-- Imported `createReviewOverlay` from `@peril/core`.
+- Imported `createReviewOverlay` from `@peril-ai/core`.
 - Called `createReviewOverlay()` with full configuration: `document`/`window` refs, comment composer with categories and severities, element selection callback, keyboard shortcut (`Ctrl+Shift+R`), and high z-index.
 - Added a "Review Mode" toggle button to the DOM and wired it to `overlay.setEnabled()` / `overlay.isEnabled()` so users can activate review mode without the keyboard shortcut.
 
@@ -29,7 +29,7 @@ Because the project does not use React, the skill directed us to skip `@peril/re
 
 ### 4. `.mcp.json` -- Created MCP config for Claude Code
 
-- Created `.mcp.json` at the project root with the `peril` MCP server configured via `npx @peril/mcp`.
+- Created `.mcp.json` at the project root with the `peril` MCP server configured via `npx @peril-ai/mcp`.
 
 ## Files Changed
 

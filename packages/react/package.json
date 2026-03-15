@@ -1,5 +1,5 @@
 {
-  "name": "@peril/react",
+  "name": "@peril-ai/react",
   "version": "0.0.0",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -20,7 +20,7 @@
     "react-dom": ">=18"
   },
   "dependencies": {
-    "@peril/core": "workspace:*"
+    "@peril-ai/core": "workspace:*"
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json && vite build",

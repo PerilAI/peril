@@ -140,7 +140,7 @@ afterEach(async () => {
   await closeServerFixture();
 });
 
-describe("@peril/server storage errors", () => {
+describe("@peril-ai/server storage errors", () => {
   it("returns 400 when artifact references a non-existent source file", async () => {
     const review = createReview({
       id: "rev_01ARZ3NDEKTSV4RRFFQ69G5FER1",

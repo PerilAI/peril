@@ -1,17 +1,17 @@
 # Core-Only Setup (Vanilla JS / Non-React)
 
-If the project doesn't use React, use `@peril/core` directly. This gives you the full capture SDK — screenshots, locators, overlay UI — without any framework dependency.
+If the project doesn't use React, use `@peril-ai/core` directly. This gives you the full capture SDK — screenshots, locators, overlay UI — without any framework dependency.
 
 ## Install
 
 ```bash
-npm install @peril/core @peril/server @peril/mcp
+npm install @peril-ai/core @peril-ai/server @peril-ai/mcp
 ```
 
 ## Create the Overlay
 
 ```typescript
-import { createReviewOverlay } from "@peril/core";
+import { createReviewOverlay } from "@peril-ai/core";
 
 const overlay = createReviewOverlay({
   document,
@@ -62,7 +62,7 @@ import {
   capturePageScreenshot,
   generateLocatorBundle,
   submitReview,
-} from "@peril/core";
+} from "@peril-ai/core";
 
 async function captureAndSubmit(element: HTMLElement, comment: string) {
   const locators = generateLocatorBundle(element);
@@ -121,7 +121,7 @@ Mount the overlay in your root component's `onMounted`:
 
 ```typescript
 import { onMounted, onUnmounted } from "vue";
-import { createReviewOverlay } from "@peril/core";
+import { createReviewOverlay } from "@peril-ai/core";
 
 export default {
   setup() {
@@ -151,7 +151,7 @@ export default {
 ```svelte
 <script>
   import { onMount, onDestroy } from "svelte";
-  import { createReviewOverlay } from "@peril/core";
+  import { createReviewOverlay } from "@peril-ai/core";
 
   let overlay;
 
@@ -177,7 +177,7 @@ export default {
 
 ```html
 <script type="module">
-  import { createReviewOverlay } from "@peril/core";
+  import { createReviewOverlay } from "@peril-ai/core";
 
   const overlay = createReviewOverlay({
     document,

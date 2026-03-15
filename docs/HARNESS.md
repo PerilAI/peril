@@ -31,8 +31,8 @@ These files define the current product boundary, package split, and agent-facing
 
 - key reference files listed in `AGENTS.md` exist
 - documented package structure matches the workspace packages
-- locator priority in docs matches `@peril/core`
-- MCP tool names in docs match `@peril/mcp`
+- locator priority in docs matches `@peril-ai/core`
+- MCP tool names in docs match `@peril-ai/mcp`
 - Paperclip-managed local state stays ignored and untracked (`agents/*/memory/`, `agents/*/life/`, `.claude/skills/`, `.claude/worktrees/`) while agent instruction files stay tracked
 - merge-close guidance keeps the custom worktree policy, merge-back-to-`main` requirement, and `pnpm repo:audit` documented
 

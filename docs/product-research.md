@@ -283,11 +283,11 @@ The ideal reviewer journey has five stages. Peril must nail the first three in V
 **Time-to-value target: under 5 minutes.**
 
 ```
-npm install @peril/react
+npm install @peril-ai/react
 ```
 ```jsx
 // Add to app root
-import { ReviewProvider } from '@peril/react';
+import { ReviewProvider } from '@peril-ai/react';
 
 <ReviewProvider serverUrl="http://localhost:4400">
   <App />
@@ -304,10 +304,10 @@ That's it. Floating button appears. Click to annotate. Done.
 ### 3.2 SDK Architecture
 
 ```
-@peril/core       -- framework-agnostic capture engine (zero-dep, <15KB gzipped)
-@peril/react      -- React bindings (hooks, components, portal overlay)
-@peril/server     -- local dev server (stores annotations, serves artifacts)
-@peril/mcp        -- MCP server (exposes reviews to agents)
+@peril-ai/core       -- framework-agnostic capture engine (zero-dep, <15KB gzipped)
+@peril-ai/react      -- React bindings (hooks, components, portal overlay)
+@peril-ai/server     -- local dev server (stores annotations, serves artifacts)
+@peril-ai/mcp        -- MCP server (exposes reviews to agents)
 ```
 
 **Design rules:**
@@ -369,7 +369,7 @@ Best practices:
 ### 3.7 Monetization Strategy
 
 **Open Core model:**
-- **Free/OSS (MIT):** `@peril/core`, `@peril/react`, `@peril/server`, `@peril/mcp`
+- **Free/OSS (MIT):** `@peril-ai/core`, `@peril-ai/react`, `@peril-ai/server`, `@peril-ai/mcp`
 - **Paid:** Cloud dashboard, team collaboration, analytics, SSO, audit logs
 
 **Growth sequence:**

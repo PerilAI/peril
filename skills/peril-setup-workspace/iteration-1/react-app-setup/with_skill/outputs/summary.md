@@ -14,7 +14,7 @@
 - Added `"peril"` and `"peril:dev"` scripts for running the Peril backend server.
 
 ### `src/App.tsx`
-- Imported `ReviewProvider` from `@peril/react` and `ReviewButton` from `./ReviewButton`.
+- Imported `ReviewProvider` from `@peril-ai/react` and `ReviewButton` from `./ReviewButton`.
 - Wrapped the existing app content with `<ReviewProvider serverUrl="http://localhost:4173/api" captureScreenshots={true}>`.
 - Added `<ReviewButton />` inside the app for a visible review mode toggle.
 
@@ -24,17 +24,17 @@
 ## Files Created
 
 ### `src/ReviewButton.tsx`
-- New component using the `useReviewMode()` hook from `@peril/react`.
+- New component using the `useReviewMode()` hook from `@peril-ai/react`.
 - Renders a button that toggles review mode on/off.
 
 ### `.mcp.json`
-- MCP configuration for Claude Code, pointing to `@peril/mcp` via npx.
+- MCP configuration for Claude Code, pointing to `@peril-ai/mcp` via npx.
 
 ## Commands That Would Be Run
 
 ### Install Peril packages
 ```bash
-npm install @peril/core @peril/react @peril/server @peril/mcp
+npm install @peril-ai/core @peril-ai/react @peril-ai/server @peril-ai/mcp
 ```
 
 ### Start the Peril backend server

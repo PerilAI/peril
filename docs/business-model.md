@@ -105,7 +105,7 @@ The playbook: achieve ubiquity first, then monetize the convenience and collabor
 
 ### 4.1 Growth Model: Product-Led Growth (PLG)
 
-Peril grows bottom-up. A single developer adds `@peril/react` to their project. Their designer uses it to annotate bugs. The team sees value. They want shared history and cross-project queues. They upgrade to Team.
+Peril grows bottom-up. A single developer adds `@peril-ai/react` to their project. Their designer uses it to annotate bugs. The team sees value. They want shared history and cross-project queues. They upgrade to Team.
 
 **The PLG flywheel:**
 

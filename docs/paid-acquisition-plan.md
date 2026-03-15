@@ -119,7 +119,7 @@ visual basic, visual studio (unless targeting VS Code users)
 ```
 Headline 1: Visual Feedback for AI Agents
 Headline 2: Open Source, MCP-Native
-Headline 3: npm install @peril/react
+Headline 3: npm install @peril-ai/react
 Description 1: Point at a UI bug. Your coding agent gets locators, screenshots,
                and DOM context via MCP. Free and open source.
 Description 2: Multi-strategy locators. Agent-ready output. Works with Claude Code,
@@ -202,7 +202,7 @@ and the agent gets structured, actionable data.
 
 Free, MIT licensed. [Demo GIF]
 
-npm install @peril/react
+npm install @peril-ai/react
 
 Would love feedback from anyone using MCP with their agents.
 ```

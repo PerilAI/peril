@@ -10,9 +10,9 @@
     "test:repo-audit": "vitest run test/repo-audit.test.ts",
     "test:harness": "vitest run test/harness.test.ts",
     "repo:audit": "tsx scripts/repo-audit.ts",
-    "test:core": "pnpm --filter @peril/core test",
-    "test:server": "pnpm --filter @peril/server test",
-    "test:mcp": "pnpm --filter @peril/mcp test",
+    "test:core": "pnpm --filter @peril-ai/core test",
+    "test:server": "pnpm --filter @peril-ai/server test",
+    "test:mcp": "pnpm --filter @peril-ai/mcp test",
     "test:e2e": "playwright test",
     "test:e2e:api": "playwright test --project=api"
   },

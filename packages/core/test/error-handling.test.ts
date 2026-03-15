@@ -205,7 +205,7 @@ function createMouseEvent(target: unknown) {
   };
 }
 
-describe("@peril/core error handling", () => {
+describe("@peril-ai/core error handling", () => {
   afterEach(() => {
     html2canvasMock.mockReset();
   });

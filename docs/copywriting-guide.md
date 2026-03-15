@@ -110,13 +110,13 @@ That's the one-liner. Everything else ladders up to it.
 | Intent | Good | Bad |
 |---|---|---|
 | Trial | "Try the demo" | "Get started free" |
-| Install | "npm install @peril/react" (literal code) | "Download now" |
+| Install | "npm install @peril-ai/react" (literal code) | "Download now" |
 | Learn | "See how it works" | "Learn more" |
 | Compare | "See why teams switch" | "View pricing" |
 
 ### Dev-tools CTA insight
 
-Developers respond to literal code in CTAs. Showing `npm install @peril/react` as a clickable/copyable element is more effective than any marketing button. It signals "this is real and ready to use."
+Developers respond to literal code in CTAs. Showing `npm install @peril-ai/react` as a clickable/copyable element is more effective than any marketing button. It signals "this is real and ready to use."
 
 ---
 

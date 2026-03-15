@@ -1,4 +1,4 @@
-import { useReviewMode } from "@peril/react";
+import { useReviewMode } from "@peril-ai/react";
 
 export function ReviewButton() {
   const { active, toggle } = useReviewMode();

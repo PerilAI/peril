@@ -1,5 +1,5 @@
 {
-  "name": "@peril/core",
+  "name": "@peril-ai/core",
   "version": "0.0.0",
   "type": "module",
   "main": "./dist/index.cjs",

@@ -44,10 +44,10 @@
 
 **Framework Adapter Pattern:**
 ```
-@peril/core       -- framework-agnostic capture engine (smallest possible)
-@peril/react      -- React bindings (hooks, components)
-@peril/vue        -- Vue bindings (future)
-@peril/vanilla    -- Vanilla JS adapter (future)
+@peril-ai/core       -- framework-agnostic capture engine (smallest possible)
+@peril-ai/react      -- React bindings (hooks, components)
+@peril-ai/vue        -- Vue bindings (future)
+@peril-ai/vanilla    -- Vanilla JS adapter (future)
 ```
 
 **Key SDK Design Rules:**
@@ -113,7 +113,7 @@
 - Usage-based pricing is now the most common (2026), but 70% say AI delivery costs undermine profitability.
 
 **Recommended for Peril:**
-- Open source the core SDK (@peril/core, @peril/react) under MIT.
+- Open source the core SDK (@peril-ai/core, @peril-ai/react) under MIT.
 - Commercial: cloud dashboard, team features, MCP marketplace integrations.
 - Free tier generous enough to build community; paid tier targets team leads/managers.
 
@@ -427,14 +427,14 @@
 ## Summary: Key Takeaways for Peril
 
 ### Product Design
-1. **Time-to-value under 5 minutes**: `npm install @peril/react` -> add `<PerilProvider>` -> see floating button -> click -> annotate -> done.
+1. **Time-to-value under 5 minutes**: `npm install @peril-ai/react` -> add `<PerilProvider>` -> see floating button -> click -> annotate -> done.
 2. **Local-first architecture**: Capture and annotate without any server. MCP server runs locally. Cloud is optional.
 3. **Multiple activation methods**: Floating button (default) + keyboard shortcut + SDK method + URL parameter.
 4. **Popover-first annotation**: Quick annotations via anchored popover; expand to sidebar for threads.
 5. **SnapDOM or html-to-image for capture**: Fast, accurate, lightweight. Fallback to html2canvas for edge cases.
 
 ### SDK Design
-6. **Tree-shakeable ESM packages**: `@peril/core` (zero-dep engine) + `@peril/react` (framework adapter).
+6. **Tree-shakeable ESM packages**: `@peril-ai/core` (zero-dep engine) + `@peril-ai/react` (framework adapter).
 7. **Async-load heavy features**: Screenshot capture and annotation UI load on-demand, not at import time.
 8. **TypeScript-first**: Full type definitions; great autocomplete experience.
 

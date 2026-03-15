@@ -30,9 +30,9 @@ import {
   type ReviewOverlayOptions,
   submitReview,
   type SubmitReviewOptions
-} from "@peril/core";
+} from "@peril-ai/core";
 
-export { getBestLocatorSummary, getRankedLocators, locatorPriority } from "@peril/core";
+export { getBestLocatorSummary, getRankedLocators, locatorPriority } from "@peril-ai/core";
 
 export interface ReviewModeContextValue {
   enabled: boolean;

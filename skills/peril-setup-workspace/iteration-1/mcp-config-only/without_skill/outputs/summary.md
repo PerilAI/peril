@@ -8,7 +8,7 @@ Created `.cursor/mcp.json` in the project root to register the Peril MCP server 
 
 **`.cursor/mcp.json`** -- Cursor MCP server configuration that:
 
-- Runs the `peril-mcp` binary (from `@peril/mcp`, already in `package.json` dependencies) via `npx`
+- Runs the `peril-mcp` binary (from `@peril-ai/mcp`, already in `package.json` dependencies) via `npx`
 - Uses stdio transport (Cursor's default for `command`-based servers)
 - Sets `PERIL_SERVER_URL` to `http://localhost:4173` to match the `serverUrl` already configured in the app's `ReviewProvider`
 

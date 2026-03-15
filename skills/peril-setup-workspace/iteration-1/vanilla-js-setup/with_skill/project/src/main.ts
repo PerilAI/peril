@@ -1,4 +1,4 @@
-import { createReviewOverlay } from "@peril/core";
+import { createReviewOverlay } from "@peril-ai/core";
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <div>

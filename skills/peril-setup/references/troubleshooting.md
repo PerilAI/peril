@@ -71,12 +71,12 @@ Remember to update `serverUrl` in `ReviewProvider` and `PERIL_SERVER_URL` for th
 
 ### TypeScript errors after install
 
-**Symptom**: Type errors related to `@peril/*` packages.
+**Symptom**: Type errors related to `@peril-ai/*` packages.
 
 **Fixes**:
 1. Ensure TypeScript 5.0+ is installed
 2. Check `tsconfig.json` has `"moduleResolution": "bundler"` or `"node16"`
-3. If using path aliases, make sure they don't shadow `@peril/*`
+3. If using path aliases, make sure they don't shadow `@peril-ai/*`
 
 ## Environment Variables
 

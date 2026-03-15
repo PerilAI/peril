@@ -32,7 +32,7 @@ Supporting channels (Twitter/X, Reddit, email, Discord) amplify both spikes.
 Do not launch until all of these are true:
 
 - [ ] Core annotation flow works end-to-end (select element → comment → submit → agent receives via MCP)
-- [ ] `npm install @peril/react` works with zero config issues
+- [ ] `npm install @peril-ai/react` works with zero config issues
 - [ ] Marketing site is live with hero, demo, and install instructions
 - [ ] GitHub README is polished with screenshots, architecture diagram, and quick-start
 - [ ] At least 3 people outside the team have tried the tool and successfully annotated an element
@@ -222,7 +222,7 @@ Post 2-4 hours after HN (when the HN post has traction). Structure:
 **Tweet 6 (CTA):**
 > Try it:
 > ```
-> npm install @peril/react
+> npm install @peril-ai/react
 > ```
 > GitHub: [link]
 > Show HN: [link]
@@ -254,7 +254,7 @@ Send to anyone who signed up via the marketing site's email capture.
 **Body structure:**
 1. One sentence: what it does
 2. Link to demo
-3. Install command: `npm install @peril/react`
+3. Install command: `npm install @peril-ai/react`
 4. Link to Show HN (social proof)
 5. What's coming next (roadmap teaser)
 

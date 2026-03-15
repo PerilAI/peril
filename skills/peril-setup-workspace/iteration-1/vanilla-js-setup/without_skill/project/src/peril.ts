@@ -6,7 +6,7 @@ import {
   submitReview,
   type ReviewOverlayController,
   type ReviewCommentSubmission,
-} from "@peril/core";
+} from "@peril-ai/core";
 
 let overlay: ReviewOverlayController | null = null;
 
@@ -15,7 +15,7 @@ let overlay: ReviewOverlayController | null = null;
  *
  * Press Ctrl+Shift+R to toggle review mode. Click any element to select it,
  * fill out the comment form, and the review (with screenshots, locators, and
- * metadata) is submitted to the local @peril/server instance.
+ * metadata) is submitted to the local @peril-ai/server instance.
  */
 export function initPeril(): ReviewOverlayController {
   if (overlay) {

@@ -101,7 +101,7 @@ Include a code snippet if relevant.}
 ---
 
 **Full changelog:** [link to /changelog]
-**Try it:** `npm update @peril/react`
+**Try it:** `npm update @peril-ai/react`
 **Questions?** [Discord link]
 
 ---
@@ -154,7 +154,7 @@ gets locators, screenshots, and DOM context to fix it.
 
 **Try it:**
 
-    npm install @peril/react
+    npm install @peril-ai/react
 
 **See the demo:** [link]
 
@@ -194,7 +194,7 @@ Subject: Welcome to Peril
 
 You're in. Here's the quickest path to your first annotation:
 
-1. npm install @peril/react
+1. npm install @peril-ai/react
 2. Wrap your app in <ReviewProvider>
 3. Press Ctrl+Shift+R to toggle review mode
 4. Click any element and add a comment

@@ -33,7 +33,7 @@ interface LocatorBundle {
 You can extend the locator system with custom strategies:
 
 ```typescript
-import { registerLocatorStrategy } from "@peril/core";
+import { registerLocatorStrategy } from "@peril-ai/core";
 
 registerLocatorStrategy("customAttr", (element) => {
   return element.getAttribute("data-component") ?? null;

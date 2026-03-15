@@ -3,12 +3,12 @@
   "variant": "without_skill",
   "expectations": [
     {
-      "text": "Installs @peril/core but NOT @peril/react",
+      "text": "Installs @peril-ai/core but NOT @peril-ai/react",
       "passed": true,
       "evidence": "core=yes, react=absent"
     },
     {
-      "text": "Uses createReviewOverlay from @peril/core to set up the overlay",
+      "text": "Uses createReviewOverlay from @peril-ai/core to set up the overlay",
       "passed": true,
       "evidence": "createReviewOverlay found in source"
     },
@@ -23,9 +23,9 @@
       "evidence": "MCP config not found"
     },
     {
-      "text": "No files import from @peril/react or use ReviewProvider",
+      "text": "No files import from @peril-ai/react or use ReviewProvider",
       "passed": true,
-      "evidence": "@peril/react imports absent"
+      "evidence": "@peril-ai/react imports absent"
     }
   ],
   "pass_rate": 0.6

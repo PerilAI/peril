@@ -203,7 +203,7 @@ the approach."]
 Title: Built an annotation tool that outputs structured MCP tasks for Claude Code
 
 Body: [Demo GIF. 3-sentence description of what it does.
-"npm install @peril/react" and quick setup.
+"npm install @peril-ai/react" and quick setup.
 "It's free and open source. Would love feedback on what else agents need
 to fix visual bugs."]
 ```
@@ -260,7 +260,7 @@ The README is a permanent landing page. Structure:
 
 1. **One-liner:** What Peril does (1 sentence)
 2. **Demo GIF:** 15-second annotation flow
-3. **Install:** `npm install @peril/react` (copyable)
+3. **Install:** `npm install @peril-ai/react` (copyable)
 4. **Quick start:** 5-line code example
 5. **Features:** Bullet list, outcome-focused
 6. **Architecture:** Simple diagram

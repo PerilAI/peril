@@ -49,7 +49,7 @@ importers:
 
   packages/react:
     dependencies:
-      '@peril/core':
+      '@peril-ai/core':
         specifier: workspace:*
         version: link:../core
       react:

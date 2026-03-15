@@ -23,7 +23,7 @@ import { ReviewStorage, ReviewStorageError } from "./storage.js";
 
 export interface HealthResponse {
   status: "ok";
-  service: "@peril/server";
+  service: "@peril-ai/server";
   timestamp: string;
 }
 
@@ -416,7 +416,7 @@ async function handleRequest(
   if (request.method === "GET" && requestUrl.pathname === "/api/health") {
     const healthResponse: HealthResponse = {
       status: "ok",
-      service: "@peril/server",
+      service: "@peril-ai/server",
       timestamp: new Date().toISOString()
     };
 
@@ -601,7 +601,7 @@ const isEntrypoint = process.argv[1] === fileURLToPath(import.meta.url);
 
 if (isEntrypoint) {
   startServer().then(({ url }) => {
-    console.log(`@peril/server listening on ${url}`);
+    console.log(`@peril-ai/server listening on ${url}`);
   });
 }
 

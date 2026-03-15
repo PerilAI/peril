@@ -137,7 +137,7 @@ afterEach(async () => {
   await closeServerFixture();
 });
 
-describe("@peril/server", () => {
+describe("@peril-ai/server", () => {
   it("serves the health endpoint", async () => {
     const response = await fetch(`${activeServer?.url}/api/health`);
     const body = (await response.json()) as { status: string; service: string };
@@ -145,7 +145,7 @@ describe("@peril/server", () => {
     expect(response.status).toBe(200);
     expect(body).toMatchObject({
       status: "ok",
-      service: "@peril/server"
+      service: "@peril-ai/server"
     });
   });
 

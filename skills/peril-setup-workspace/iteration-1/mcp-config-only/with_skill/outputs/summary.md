@@ -8,7 +8,7 @@ Configure the Peril MCP server for Cursor so the coding agent can see and act on
 
 The project already had:
 
-- All four `@peril/*` packages installed in `package.json` (`@peril/core`, `@peril/react`, `@peril/server`, `@peril/mcp`)
+- All four `@peril-ai/*` packages installed in `package.json` (`@peril-ai/core`, `@peril-ai/react`, `@peril-ai/server`, `@peril-ai/mcp`)
 - `ReviewProvider` wrapping the app in `src/App.tsx` with `serverUrl="http://localhost:4173/api"` and `captureScreenshots={true}`
 - A `ReviewButton` component using the `useReviewMode` hook
 - `.peril/` in `.gitignore`
@@ -20,7 +20,7 @@ The project already had:
 
 **File:** `.cursor/mcp.json` (new file)
 
-Created the Cursor MCP configuration file at the project root. This tells Cursor to launch the Peril MCP server (`@peril/mcp`) via `npx` using stdio transport. Once Cursor reads this config, it gains access to five MCP tools:
+Created the Cursor MCP configuration file at the project root. This tells Cursor to launch the Peril MCP server (`@peril-ai/mcp`) via `npx` using stdio transport. Once Cursor reads this config, it gains access to five MCP tools:
 
 | Tool | Purpose |
 |------|---------|

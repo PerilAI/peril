@@ -3,22 +3,22 @@
 ## Install Command
 
 ```bash
-npm install @peril/core @peril/react @peril/server @peril/mcp
+npm install @peril-ai/core @peril-ai/react @peril-ai/server @peril-ai/mcp
 ```
 
 ## Changes Made
 
 ### 1. `package.json` — added Peril dependencies and scripts
 
-- Added `@peril/core` and `@peril/react` as production dependencies (needed at runtime for the overlay and screenshot capture).
-- Added `@peril/server` and `@peril/mcp` as dev dependencies (local review server and MCP bridge for agents).
+- Added `@peril-ai/core` and `@peril-ai/react` as production dependencies (needed at runtime for the overlay and screenshot capture).
+- Added `@peril-ai/server` and `@peril-ai/mcp` as dev dependencies (local review server and MCP bridge for agents).
 - Added two convenience scripts:
   - `peril:server` — starts the Peril review server on `http://127.0.0.1:4173`.
   - `peril:mcp` — starts the MCP stdio server so agents can consume reviews.
 
 ### 2. `src/App.tsx` — wrapped app in ReviewProvider
 
-- Imported `ReviewProvider` and `useReviewMode` from `@peril/react`.
+- Imported `ReviewProvider` and `useReviewMode` from `@peril-ai/react`.
 - Wrapped the existing app content with `<ReviewProvider>`, configured with:
   - `serverUrl="http://127.0.0.1:4173"` — points to the local Peril server.
   - `reviewerName="Team Reviewer"` — identifies who submitted the review.

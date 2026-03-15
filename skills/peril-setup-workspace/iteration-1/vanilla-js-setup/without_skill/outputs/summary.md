@@ -6,17 +6,17 @@
 npm install
 ```
 
-This will install `@peril/core` (runtime dependency) and `@peril/server` (dev dependency).
+This will install `@peril-ai/core` (runtime dependency) and `@peril-ai/server` (dev dependency).
 
 ## Files Changed
 
 ### `package.json`
-- Added `@peril/core` to `dependencies` -- the framework-agnostic SDK that provides the review overlay, screenshot capture, locator generation, and review transport.
-- Added `@peril/server` to `devDependencies` -- the local backend that stores reviews on disk and serves a dashboard.
+- Added `@peril-ai/core` to `dependencies` -- the framework-agnostic SDK that provides the review overlay, screenshot capture, locator generation, and review transport.
+- Added `@peril-ai/server` to `devDependencies` -- the local backend that stores reviews on disk and serves a dashboard.
 - Added `dev:peril` script (`peril-server`) to start the Peril server on port 4173.
 
 ### `vite.config.ts` (new)
-- Created a Vite config that proxies `/api` requests to `http://127.0.0.1:4173`, so the browser-side SDK can reach the local `@peril/server` without CORS issues.
+- Created a Vite config that proxies `/api` requests to `http://127.0.0.1:4173`, so the browser-side SDK can reach the local `@peril-ai/server` without CORS issues.
 
 ### `src/peril.ts` (new)
 - Created a Peril initialization module that:
@@ -50,7 +50,7 @@ This will install `@peril/core` (runtime dependency) and `@peril/server` (dev de
 
 ## Architecture Notes
 
-- **No React required.** `@peril/core` is fully framework-agnostic. The overlay, form, and all DOM interactions are handled internally by `createReviewOverlay()`.
-- **`@peril/react` is not used.** The React bindings package is unnecessary for this vanilla JS setup.
+- **No React required.** `@peril-ai/core` is fully framework-agnostic. The overlay, form, and all DOM interactions are handled internally by `createReviewOverlay()`.
+- **`@peril-ai/react` is not used.** The React bindings package is unnecessary for this vanilla JS setup.
 - **Proxy pattern.** The Vite dev server proxies `/api/*` to the Peril server so `submitReview()` works with its default endpoint (`/api/reviews`) without any extra configuration.
-- **MCP integration.** If you want agents to consume reviews, run `@peril/mcp` alongside `@peril/server`. The MCP server reads from the same `.peril` data directory.
+- **MCP integration.** If you want agents to consume reviews, run `@peril-ai/mcp` alongside `@peril-ai/server`. The MCP server reads from the same `.peril` data directory.

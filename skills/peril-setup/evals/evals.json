@@ -8,7 +8,7 @@
       "expected_output": "Installs @peril packages, wraps App with ReviewProvider, adds .peril/ to .gitignore, configures MCP, adds review mode toggle",
       "files": [],
       "assertions": [
-        { "id": "installs-all-packages", "text": "Install command includes @peril/core, @peril/react, @peril/server, and @peril/mcp" },
+        { "id": "installs-all-packages", "text": "Install command includes @peril-ai/core, @peril-ai/react, @peril-ai/server, and @peril-ai/mcp" },
         { "id": "wraps-with-review-provider", "text": "App.tsx wraps content with <ReviewProvider> component" },
         { "id": "review-provider-has-server-url", "text": "ReviewProvider has serverUrl prop pointing to the Peril backend" },
         { "id": "gitignore-peril-dir", "text": ".gitignore includes .peril/ directory" },
@@ -19,12 +19,12 @@
     {
       "id": 2,
       "name": "mcp-config-only",
-      "prompt": "I already have @peril/react installed and working, but I need to configure the MCP server so Cursor can see the reviews. Can you set that up?",
+      "prompt": "I already have @peril-ai/react installed and working, but I need to configure the MCP server so Cursor can see the reviews. Can you set that up?",
       "expected_output": "Creates .cursor/mcp.json with peril MCP config, explains how to start peril-mcp, does not reinstall packages or modify React code",
       "files": [],
       "assertions": [
         { "id": "cursor-mcp-config-created", "text": "Creates .cursor/mcp.json config file for Cursor" },
-        { "id": "config-has-peril-entry", "text": "MCP config contains a 'peril' server entry with npx @peril/mcp" },
+        { "id": "config-has-peril-entry", "text": "MCP config contains a 'peril' server entry with npx @peril-ai/mcp" },
         { "id": "does-not-modify-app", "text": "Does NOT modify App.tsx since it's already configured" },
         { "id": "does-not-reinstall", "text": "Does NOT run npm install since packages are already installed" }
       ]
@@ -33,14 +33,14 @@
       "id": 3,
       "name": "vanilla-js-setup",
       "prompt": "I have a vanilla JS app built with Vite. I want to add Peril review annotations. I don't use React.",
-      "expected_output": "Installs @peril/core (not @peril/react), uses createReviewOverlay from core, configures server and MCP",
+      "expected_output": "Installs @peril-ai/core (not @peril-ai/react), uses createReviewOverlay from core, configures server and MCP",
       "files": [],
       "assertions": [
-        { "id": "installs-core-not-react", "text": "Installs @peril/core but NOT @peril/react" },
-        { "id": "uses-create-review-overlay", "text": "Uses createReviewOverlay from @peril/core to set up the overlay" },
+        { "id": "installs-core-not-react", "text": "Installs @peril-ai/core but NOT @peril-ai/react" },
+        { "id": "uses-create-review-overlay", "text": "Uses createReviewOverlay from @peril-ai/core to set up the overlay" },
         { "id": "gitignore-peril-dir", "text": ".gitignore includes .peril/ directory" },
         { "id": "mcp-config-created", "text": "An MCP configuration file is created" },
-        { "id": "no-react-imports", "text": "No files import from @peril/react or use ReviewProvider" }
+        { "id": "no-react-imports", "text": "No files import from @peril-ai/react or use ReviewProvider" }
       ]
     }
   ]

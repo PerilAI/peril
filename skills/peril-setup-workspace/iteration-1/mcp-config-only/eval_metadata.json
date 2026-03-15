@@ -1,7 +1,7 @@
 {
   "eval_id": 2,
   "eval_name": "mcp-config-only",
-  "prompt": "I already have @peril/react installed and working, but I need to configure the MCP server so Cursor can see the reviews. Can you set that up?",
+  "prompt": "I already have @peril-ai/react installed and working, but I need to configure the MCP server so Cursor can see the reviews. Can you set that up?",
   "assertions": [
     {
       "id": "cursor-mcp-config-created",
@@ -11,9 +11,9 @@
     },
     {
       "id": "config-has-peril-entry",
-      "text": "MCP config contains a 'peril' server entry with npx @peril/mcp",
+      "text": "MCP config contains a 'peril' server entry with npx @peril-ai/mcp",
       "type": "file_contains",
-      "check": ".cursor/mcp.json has mcpServers.peril with command npx and args including @peril/mcp"
+      "check": ".cursor/mcp.json has mcpServers.peril with command npx and args including @peril-ai/mcp"
     },
     {
       "id": "does-not-modify-app",

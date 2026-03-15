@@ -8,7 +8,7 @@
       "evidence": ".cursor/mcp.json exists"
     },
     {
-      "text": "MCP config contains a 'peril' server entry with npx @peril/mcp",
+      "text": "MCP config contains a 'peril' server entry with npx @peril-ai/mcp",
       "passed": true,
       "evidence": "peril entry valid"
     },

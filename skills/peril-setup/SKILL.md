@@ -9,10 +9,10 @@ You are helping a developer set up Peril — a visual UX review tool that turns 
 
 | Package | Purpose |
 |---------|---------|
-| `@peril/core` | Framework-agnostic capture SDK (screenshots, element locators, overlay UI) |
-| `@peril/react` | React bindings (`ReviewProvider`, hooks) |
-| `@peril/server` | Local dev server with REST API, file storage, and web dashboard |
-| `@peril/mcp` | MCP server that exposes review tasks as tools to coding agents |
+| `@peril-ai/core` | Framework-agnostic capture SDK (screenshots, element locators, overlay UI) |
+| `@peril-ai/react` | React bindings (`ReviewProvider`, hooks) |
+| `@peril-ai/server` | Local dev server with REST API, file storage, and web dashboard |
+| `@peril-ai/mcp` | MCP server that exposes review tasks as tools to coding agents |
 
 The flow: a human opens the app in a browser → activates review mode → clicks an element → describes the issue → Peril captures a screenshot, generates resilient element locators, and stores the annotation → an MCP-compatible agent (Claude Code, Cursor, Claude Desktop) reads the annotation and makes the fix.
 
@@ -37,26 +37,26 @@ Install the packages the project needs. Most React apps want all four:
 
 ```bash
 # npm
-npm install @peril/core @peril/react @peril/server @peril/mcp
+npm install @peril-ai/core @peril-ai/react @peril-ai/server @peril-ai/mcp
 
 # pnpm
-pnpm add @peril/core @peril/react @peril/server @peril/mcp
+pnpm add @peril-ai/core @peril-ai/react @peril-ai/server @peril-ai/mcp
 
 # yarn
-yarn add @peril/core @peril/react @peril/server @peril/mcp
+yarn add @peril-ai/core @peril-ai/react @peril-ai/server @peril-ai/mcp
 
 # bun
-bun add @peril/core @peril/react @peril/server @peril/mcp
+bun add @peril-ai/core @peril-ai/react @peril-ai/server @peril-ai/mcp
 ```
 
-If the project is **not** a React app, skip `@peril/react` — the user can use `@peril/core` directly with `createReviewOverlay()`. See `references/core-only-setup.md` for the vanilla JS approach.
+If the project is **not** a React app, skip `@peril-ai/react` — the user can use `@peril-ai/core` directly with `createReviewOverlay()`. See `references/core-only-setup.md` for the vanilla JS approach.
 
 ### Step 3: Wrap the App with ReviewProvider
 
 Find the app's root component and wrap it with `ReviewProvider`. The provider must be near the top of the component tree so the overlay can render over everything.
 
 ```tsx
-import { ReviewProvider } from "@peril/react";
+import { ReviewProvider } from "@peril-ai/react";
 
 function App() {
   return (
@@ -87,7 +87,7 @@ function App() {
 Give users a way to activate review mode from the UI. This is optional because the keyboard shortcut (`Ctrl+Shift+R`) works without any UI, but a visible button helps discoverability.
 
 ```tsx
-import { useReviewMode } from "@peril/react";
+import { useReviewMode } from "@peril-ai/react";
 
 function ReviewButton() {
   const { active, toggle } = useReviewMode();
@@ -145,7 +145,7 @@ Add to the project's `.mcp.json` (create if it doesn't exist):
   "mcpServers": {
     "peril": {
       "command": "npx",
-      "args": ["@peril/mcp"]
+      "args": ["@peril-ai/mcp"]
     }
   }
 }
@@ -160,7 +160,7 @@ Add to `~/.claude/claude_desktop_config.json`:
   "mcpServers": {
     "peril": {
       "command": "npx",
-      "args": ["@peril/mcp"]
+      "args": ["@peril-ai/mcp"]
     }
   }
 }
@@ -175,7 +175,7 @@ Add to `.cursor/mcp.json` in the project root:
   "mcpServers": {
     "peril": {
       "command": "npx",
-      "args": ["@peril/mcp"]
+      "args": ["@peril-ai/mcp"]
     }
   }
 }
@@ -226,7 +226,7 @@ The agent workflow is: `list_reviews` → pick a task → `get_review` for detai
 
 ## Important Details
 
-- **React 18+ required** for `@peril/react`. Check `package.json` before installing.
+- **React 18+ required** for `@peril-ai/react`. Check `package.json` before installing.
 - **Screenshots require secure context** — the app must run on `localhost` or HTTPS. Screenshots silently fail on plain HTTP non-localhost origins.
 - **Locators are multi-strategy** — Peril generates `testId`, `role`, `css`, `xpath`, and `text` locators ranked by resilience. Agents should try them in that order.
 - **The server is local-only in V1** — it binds to `127.0.0.1` by default. Use `--host 0.0.0.0` only if you need network access (e.g., testing from a phone).

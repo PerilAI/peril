@@ -14,12 +14,12 @@ export default defineConfig({
     emptyOutDir: false,
     sourcemap: true,
     rollupOptions: {
-      external: ["@peril/core", "react", "react-dom"]
+      external: ["@peril-ai/core", "react", "react-dom"]
     }
   },
   test: {
     alias: {
-      "@peril/core": resolve(__dirname, "../core/src/index.ts")
+      "@peril-ai/core": resolve(__dirname, "../core/src/index.ts")
     },
     include: ["test/**/*.test.ts"]
   }

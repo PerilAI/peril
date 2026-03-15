@@ -205,7 +205,7 @@ afterEach(async () => {
   await closeServerFixture();
 });
 
-describe("@peril/mcp", () => {
+describe("@peril-ai/mcp", () => {
   it("exports the V1 review tool surface", () => {
     expect(listToolNames()).toEqual([
       "list_reviews",
@@ -217,7 +217,7 @@ describe("@peril/mcp", () => {
   });
 
   it("builds a manifest with the expected server name", () => {
-    expect(createManifest().serverName).toBe("@peril/mcp");
+    expect(createManifest().serverName).toBe("@peril-ai/mcp");
   });
 
   it("includes a version string in the manifest", () => {
@@ -467,7 +467,7 @@ describe("@peril/mcp", () => {
           tools: {}
         },
         serverInfo: {
-          name: "@peril/mcp"
+          name: "@peril-ai/mcp"
         }
       }
     });

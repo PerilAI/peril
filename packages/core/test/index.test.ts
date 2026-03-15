@@ -390,7 +390,7 @@ function findButtonByType(root: FakeElement, type: string): FakeElement | undefi
   return findElementByAttribute(root, "type", type);
 }
 
-describe("@peril/core", () => {
+describe("@peril-ai/core", () => {
   afterEach(() => {
     html2canvasMock.mockReset();
   });

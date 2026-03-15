@@ -426,7 +426,7 @@ function encodeListReviewsQuery(argumentsObject: Record<string, unknown>): strin
 
 export function createManifest(): McpManifest {
   return {
-    serverName: "@peril/mcp",
+    serverName: "@peril-ai/mcp",
     version: packageVersion,
     tools: [...toolDefinitions]
   };
@@ -442,7 +442,7 @@ export class PerilMcpServer {
 
   constructor(options: PerilMcpServerOptions = {}) {
     this.#baseUrl = parseBaseUrl(options.serverUrl);
-    this.#resolvedBy = options.resolvedBy ?? "@peril/mcp";
+    this.#resolvedBy = options.resolvedBy ?? "@peril-ai/mcp";
   }
 
   async callTool(name: ToolName, rawArguments: unknown = {}): Promise<unknown> {
@@ -497,7 +497,7 @@ export class PerilMcpServer {
             tools: {}
           },
           serverInfo: {
-            name: "@peril/mcp",
+            name: "@peril-ai/mcp",
             version: packageVersion
           }
         }

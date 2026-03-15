@@ -6,13 +6,13 @@ Model Context Protocol.
 ## Starting the Server
 
 ```bash
-npx @peril/mcp --port 3001
+npx @peril-ai/mcp --port 3001
 ```
 
 Or programmatically:
 
 ```typescript
-import { createMCPServer } from "@peril/mcp";
+import { createMCPServer } from "@peril-ai/mcp";
 
 const server = createMCPServer({
   port: 3001,
@@ -36,7 +36,7 @@ Create or edit `.mcp.json` in your project root:
   "mcpServers": {
     "peril": {
       "command": "npx",
-      "args": ["@peril/mcp"]
+      "args": ["@peril-ai/mcp"]
     }
   }
 }
@@ -51,7 +51,7 @@ Add to `~/.claude/claude_desktop_config.json`:
   "mcpServers": {
     "peril": {
       "command": "npx",
-      "args": ["@peril/mcp", "--port", "3001"]
+      "args": ["@peril-ai/mcp", "--port", "3001"]
     }
   }
 }
@@ -66,7 +66,7 @@ Create or edit `.cursor/mcp.json` in your project root:
   "mcpServers": {
     "peril": {
       "command": "npx",
-      "args": ["@peril/mcp"]
+      "args": ["@peril-ai/mcp"]
     }
   }
 }
@@ -79,7 +79,7 @@ Create or edit `.cursor/mcp.json` in your project root:
   "mcpServers": {
     "peril": {
       "command": "npx",
-      "args": ["@peril/mcp"]
+      "args": ["@peril-ai/mcp"]
     }
   }
 }
@@ -92,7 +92,7 @@ Create or edit `.cursor/mcp.json` in your project root:
   "mcpServers": {
     "peril": {
       "command": "npx",
-      "args": ["@peril/mcp"]
+      "args": ["@peril-ai/mcp"]
     }
   }
 }
@@ -104,13 +104,13 @@ Any agent that supports the Model Context Protocol can connect to Peril. The
 MCP server uses stdio transport by default — just point your agent at:
 
 ```bash
-npx @peril/mcp
+npx @peril-ai/mcp
 ```
 
 Set `PERIL_SERVER_URL` if the backend runs on a non-default port:
 
 ```bash
-PERIL_SERVER_URL=http://localhost:3001 npx @peril/mcp
+PERIL_SERVER_URL=http://localhost:3001 npx @peril-ai/mcp
 ```
 
 ## Options

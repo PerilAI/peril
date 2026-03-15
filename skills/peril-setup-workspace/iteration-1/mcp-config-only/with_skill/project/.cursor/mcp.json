@@ -2,7 +2,7 @@
   "mcpServers": {
     "peril": {
       "command": "npx",
-      "args": ["@peril/mcp"]
+      "args": ["@peril-ai/mcp"]
     }
   }
 }

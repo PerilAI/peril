@@ -71,7 +71,7 @@ function createJsonResponse(body: unknown, status = 201): Response {
   });
 }
 
-describe("@peril/core transport", () => {
+describe("@peril-ai/core transport", () => {
   it("posts serialized reviews as JSON when artifacts are already strings", async () => {
     const input = createSubmitReviewInput();
     const fetchMock = vi.fn<typeof fetch>(async (_input, init) =>

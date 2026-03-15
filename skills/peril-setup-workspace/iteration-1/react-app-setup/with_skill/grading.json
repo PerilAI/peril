@@ -3,7 +3,7 @@
   "variant": "with_skill",
   "expectations": [
     {
-      "text": "Install command includes @peril/core, @peril/react, @peril/server, and @peril/mcp",
+      "text": "Install command includes @peril-ai/core, @peril-ai/react, @peril-ai/server, and @peril-ai/mcp",
       "passed": true,
       "evidence": "All 4 packages found in summary"
     },

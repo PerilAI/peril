@@ -36,17 +36,17 @@ If you prefer to set things up yourself, follow these steps.
 ### 1. Install
 
 ```bash
-npm install @peril/core @peril/react @peril/server @peril/mcp
+npm install @peril-ai/core @peril-ai/react @peril-ai/server @peril-ai/mcp
 ```
 
-For non-React apps, skip `@peril/react` and use `@peril/core` directly.
+For non-React apps, skip `@peril-ai/react` and use `@peril-ai/core` directly.
 
 ### 2. Add the Provider
 
 Wrap your app with `ReviewProvider`:
 
 ```tsx
-import { ReviewProvider } from "@peril/react";
+import { ReviewProvider } from "@peril-ai/react";
 
 function App() {
   return (
@@ -72,7 +72,7 @@ Add Peril's MCP server to your agent's configuration:
   "mcpServers": {
     "peril": {
       "command": "npx",
-      "args": ["@peril/mcp", "--port", "3001"]
+      "args": ["@peril-ai/mcp", "--port", "3001"]
     }
   }
 }

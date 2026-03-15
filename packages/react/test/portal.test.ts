@@ -21,12 +21,12 @@ function mockCoreModule(
     ...overrides
   };
 
-  vi.doMock("@peril/core", () => coreModule);
+  vi.doMock("@peril-ai/core", () => coreModule);
 
   return coreModule;
 }
 
-describe("@peril/react portal bridge", () => {
+describe("@peril-ai/react portal bridge", () => {
   it("creates a portal-mounted bridge when a DOM target is available", async () => {
     vi.resetModules();
 

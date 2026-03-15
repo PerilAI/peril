@@ -6,10 +6,10 @@ Monorepo with the following packages:
 
 ```
 packages/
-  core/                    # @peril/core -- framework-agnostic overlay, capture, locators, serialization
-  react/                   # @peril/react -- React adapter (ReviewProvider, useReviewMode)
-  server/                  # @peril/server -- local dev server (REST API, storage, dashboard UI)
-  mcp/                     # @peril/mcp -- MCP server wrapping the REST API
+  core/                    # @peril-ai/core -- framework-agnostic overlay, capture, locators, serialization
+  react/                   # @peril-ai/react -- React adapter (ReviewProvider, useReviewMode)
+  server/                  # @peril-ai/server -- local dev server (REST API, storage, dashboard UI)
+  mcp/                     # @peril-ai/mcp -- MCP server wrapping the REST API
 ```
 
 Tooling: TypeScript, pnpm workspaces, Vite for SDK bundling, Vitest for tests.

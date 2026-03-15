@@ -57,10 +57,10 @@ def grade_react_setup(run_dir):
     # installs-all-packages
     has_all = all(
         pkg in summary
-        for pkg in ["@peril/core", "@peril/react", "@peril/server", "@peril/mcp"]
+        for pkg in ["@peril-ai/core", "@peril-ai/react", "@peril-ai/server", "@peril-ai/mcp"]
     )
     results.append({
-        "text": "Install command includes @peril/core, @peril/react, @peril/server, and @peril/mcp",
+        "text": "Install command includes @peril-ai/core, @peril-ai/react, @peril-ai/server, and @peril-ai/mcp",
         "passed": has_all,
         "evidence": "All 4 packages found in summary" if has_all else "Missing packages in summary",
     })
@@ -136,20 +136,20 @@ def grade_mcp_config(run_dir):
                 srv = servers["peril"]
                 has_peril_entry = (
                     srv.get("command") == "npx"
-                    and any("@peril/mcp" in a or "peril-mcp" in a for a in srv.get("args", []))
+                    and any("@peril-ai/mcp" in a or "peril-mcp" in a for a in srv.get("args", []))
                 )
         except json.JSONDecodeError:
             pass
     results.append({
-        "text": "MCP config contains a 'peril' server entry with npx @peril/mcp",
+        "text": "MCP config contains a 'peril' server entry with npx @peril-ai/mcp",
         "passed": has_peril_entry,
         "evidence": f"peril entry {'valid' if has_peril_entry else 'invalid or missing'}",
     })
 
     # does-not-modify-app
     original_app = '''import { useState } from "react";
-import { ReviewProvider } from "@peril/react";
-import { useReviewMode } from "@peril/react";
+import { ReviewProvider } from "@peril-ai/react";
+import { useReviewMode } from "@peril-ai/react";
 
 function ReviewButton() {
   const { active, toggle } = useReviewMode();
@@ -205,13 +205,13 @@ def grade_vanilla_js(run_dir):
     summary = read_file(os.path.join(run_dir, "outputs", "summary.md")) or ""
     results = []
 
-    # installs-core-not-react — check package.json (not summary, which may mention @peril/react in prose)
+    # installs-core-not-react — check package.json (not summary, which may mention @peril-ai/react in prose)
     pkg = read_file(os.path.join(project, "package.json")) or ""
-    pkg_has_core = "@peril/core" in pkg
-    pkg_no_react = "@peril/react" not in pkg
+    pkg_has_core = "@peril-ai/core" in pkg
+    pkg_no_react = "@peril-ai/react" not in pkg
     passed = pkg_has_core and pkg_no_react
     results.append({
-        "text": "Installs @peril/core but NOT @peril/react",
+        "text": "Installs @peril-ai/core but NOT @peril-ai/react",
         "passed": passed,
         "evidence": f"core={'yes' if pkg_has_core else 'no'}, react={'absent' if pkg_no_react else 'present'}",
     })
@@ -219,7 +219,7 @@ def grade_vanilla_js(run_dir):
     # uses-create-review-overlay
     has_overlay = any_file_contains(project, "createReviewOverlay")
     results.append({
-        "text": "Uses createReviewOverlay from @peril/core to set up the overlay",
+        "text": "Uses createReviewOverlay from @peril-ai/core to set up the overlay",
         "passed": has_overlay,
         "evidence": f"createReviewOverlay {'found' if has_overlay else 'not found'} in source",
     })
@@ -245,11 +245,11 @@ def grade_vanilla_js(run_dir):
     })
 
     # no-react-imports
-    no_react_import = not any_file_contains(project, "from \"@peril/react\"") and not any_file_contains(project, "from '@peril/react'")
+    no_react_import = not any_file_contains(project, "from \"@peril-ai/react\"") and not any_file_contains(project, "from '@peril-ai/react'")
     results.append({
-        "text": "No files import from @peril/react or use ReviewProvider",
+        "text": "No files import from @peril-ai/react or use ReviewProvider",
         "passed": no_react_import,
-        "evidence": f"@peril/react imports {'absent' if no_react_import else 'found'}",
+        "evidence": f"@peril-ai/react imports {'absent' if no_react_import else 'found'}",
     })
 
     return results

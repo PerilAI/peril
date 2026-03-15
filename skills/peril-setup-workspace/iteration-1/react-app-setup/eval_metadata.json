@@ -5,7 +5,7 @@
   "assertions": [
     {
       "id": "installs-all-packages",
-      "text": "Install command includes @peril/core, @peril/react, @peril/server, and @peril/mcp",
+      "text": "Install command includes @peril-ai/core, @peril-ai/react, @peril-ai/server, and @peril-ai/mcp",
       "type": "file_contains",
       "check": "summary.md or package.json references all four @peril packages"
     },

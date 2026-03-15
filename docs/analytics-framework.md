@@ -58,7 +58,7 @@ Engaged Visitor (interacts with demo or scrolls to features)
   ↓ [demo_interaction]
 Intent Signal (copies install command, clicks docs, stars repo)
   ↓ [install_intent]
-Installer (runs npm install @peril/react)
+Installer (runs npm install @peril-ai/react)
   ↓ [npm_install] (measured via npm stats, not on-site)
 Active User (creates first annotation)
   ↓ [first_annotation] (measured via opt-in telemetry or server-side)
