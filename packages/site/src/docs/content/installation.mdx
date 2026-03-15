@@ -5,14 +5,12 @@ your workflow.
 
 ## Agent-Assisted Installation
 
-The easiest way to install Peril is with the `peril-setup` skill. Download it
-into your project and your coding agent will detect your framework, install the
-right packages, configure MCP, and verify the setup.
+The easiest way to install Peril is with the `peril-setup` skill. It detects
+your framework, installs the right packages, configures MCP, and verifies the
+setup.
 
 ```bash
-# Add to your project (or ~/.claude/skills/ for all projects)
-curl -sL https://github.com/PerilAI/peril/raw/main/skill/peril-setup/SKILL.md \
-  -o .claude/skills/peril-setup.md --create-dirs
+npx skills add PerilAI/peril
 ```
 
 Then tell your agent: _"Set up Peril in this project"_.
