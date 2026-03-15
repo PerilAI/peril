@@ -10,13 +10,12 @@ into your project and your coding agent will detect your framework, install the
 right packages, configure MCP, and verify the setup.
 
 ```bash
-# Download the skill into your project
+# Add to your project (or ~/.claude/skills/ for all projects)
 curl -sL https://github.com/PerilAI/peril/raw/main/skill/peril-setup/SKILL.md \
-  -o .claude/commands/peril-setup.md --create-dirs
+  -o .claude/skills/peril-setup.md --create-dirs
 ```
 
-Then tell your agent: _"Set up Peril in this project"_ (or run `/peril-setup`
-in Claude Code).
+Then tell your agent: _"Set up Peril in this project"_.
 
 <Callout variant="tip">
   The skill automatically detects React, Vue, Svelte, and vanilla JS projects

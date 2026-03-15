@@ -14,9 +14,9 @@ The fastest way to set up Peril is to let your coding agent do it. Download the
 `peril-setup` skill and ask your agent to configure everything for you.
 
 ```bash
-# Add the skill as a Claude Code slash command
+# Add to your project (or ~/.claude/skills/ for all projects)
 curl -sL https://github.com/PerilAI/peril/raw/main/skill/peril-setup/SKILL.md \
-  -o .claude/commands/peril-setup.md --create-dirs
+  -o .claude/skills/peril-setup.md --create-dirs
 ```
 
 Then tell your agent:
@@ -24,8 +24,6 @@ Then tell your agent:
 ```
 Set up Peril in this project so my team can annotate UI bugs
 ```
-
-Or in Claude Code, run `/peril-setup` directly.
 
 <Callout variant="tip">
   The setup skill handles everything — installing packages, wrapping your app,
