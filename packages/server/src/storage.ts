@@ -309,6 +309,10 @@ export class ReviewStorage {
     artifactType: keyof Artifacts,
     value: string
   ): Promise<string> {
+    if (!value) {
+      return "";
+    }
+
     const config = artifactConfigs[artifactType];
     const destinationPath = resolve(this.getReviewDirectory(reviewId), config.fileName);
     const dataUrl = parseDataUrl(value);
