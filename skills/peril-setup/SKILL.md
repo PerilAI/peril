@@ -63,6 +63,7 @@ function App() {
     <ReviewProvider
       serverUrl="http://localhost:4173/api"
       captureScreenshots={true}
+      showToggle
     >
       {/* existing app content */}
     </ReviewProvider>
