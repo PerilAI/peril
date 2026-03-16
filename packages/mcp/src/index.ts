@@ -796,7 +796,15 @@ export function startStdioServer(options: PerilMcpServerOptions = {}): void {
   process.stdin.resume();
 }
 
-const isEntrypoint = process.argv[1]?.endsWith("/index.js") || process.argv[1]?.endsWith("/index.ts");
+import { fileURLToPath } from "node:url";
+import { realpathSync } from "node:fs";
+
+let isEntrypoint = false;
+try {
+  isEntrypoint = realpathSync(process.argv[1] ?? "") === realpathSync(fileURLToPath(import.meta.url));
+} catch {
+  isEntrypoint = process.argv[1]?.endsWith("/index.js") || process.argv[1]?.endsWith("/index.ts") || false;
+}
 
 if (isEntrypoint) {
   startStdioServer();

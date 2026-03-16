@@ -598,7 +598,13 @@ export async function startServer(
   };
 }
 
-const isEntrypoint = process.argv[1] === fileURLToPath(import.meta.url);
+let isEntrypoint = false;
+try {
+  const { realpathSync } = await import("node:fs");
+  isEntrypoint = realpathSync(process.argv[1] ?? "") === realpathSync(fileURLToPath(import.meta.url));
+} catch {
+  isEntrypoint = process.argv[1] === fileURLToPath(import.meta.url);
+}
 
 if (isEntrypoint) {
   startServer().then(({ url }) => {
