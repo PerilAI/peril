@@ -268,8 +268,8 @@ function ReviewOverlayBridge({
       return;
     }
 
-    let elementScreenshot: string;
-    let pageScreenshot: string;
+    let elementScreenshot = "";
+    let pageScreenshot = "";
 
     try {
       [elementScreenshot, pageScreenshot] = await Promise.all([
@@ -277,9 +277,7 @@ function ReviewOverlayBridge({
         capturePageScreenshot({ document, window })
       ]);
     } catch (error) {
-      console.error("[peril] Screenshot capture failed:", error);
-      latestOnReviewError.current?.(error, submission);
-      return;
+      console.warn("[peril] Screenshot capture failed (submitting without screenshots):", error instanceof Error ? error.message : error);
     }
 
     const metadata: ReviewMetadata = {
