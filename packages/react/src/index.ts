@@ -340,9 +340,17 @@ function resolveReviewEndpoint(serverUrl: string | undefined): string | undefine
     return undefined;
   }
 
-  return /\/api\/reviews\/?$/u.test(serverUrl)
-    ? serverUrl
-    : `${serverUrl.replace(/\/+$/u, "")}/api/reviews`;
+  const normalized = serverUrl.replace(/\/+$/u, "");
+
+  if (/\/api\/reviews$/u.test(normalized)) {
+    return normalized;
+  }
+
+  if (/\/api$/u.test(normalized)) {
+    return `${normalized}/reviews`;
+  }
+
+  return `${normalized}/api/reviews`;
 }
 
 interface ReviewToggleButtonProps {
