@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import { Buffer } from "node:buffer";
 import process from "node:process";
 
@@ -796,30 +795,3 @@ export function startStdioServer(options: PerilMcpServerOptions = {}): void {
   process.stdin.resume();
 }
 
-import { fileURLToPath } from "node:url";
-import { realpathSync } from "node:fs";
-
-function detectEntrypoint(): boolean {
-  const arg = process.argv[1];
-  if (!arg) return false;
-
-  // Direct invocation: node dist/index.js
-  const self = fileURLToPath(import.meta.url);
-  if (arg === self) return true;
-
-  // Symlinked bin (npm/pnpm link, node_modules/.bin)
-  try {
-    if (realpathSync(arg) === realpathSync(self)) return true;
-  } catch {}
-
-  // npx wrapper or bun shim — argv[1] is a temp script, not our file.
-  // Fall back to checking if the bin name matches.
-  const basename = arg.split("/").pop() ?? "";
-  if (basename === "peril-mcp" || basename === "@peril-ai/mcp") return true;
-
-  return false;
-}
-
-if (detectEntrypoint()) {
-  startStdioServer();
-}

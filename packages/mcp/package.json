@@ -11,7 +11,7 @@
     }
   },
   "bin": {
-    "peril-mcp": "./dist/index.js"
+    "peril-mcp": "./dist/bin.js"
   },
   "files": [
     "dist"

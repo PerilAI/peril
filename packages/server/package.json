@@ -11,7 +11,7 @@
     }
   },
   "bin": {
-    "peril-server": "./dist/index.js"
+    "peril-server": "./dist/bin.js"
   },
   "files": [
     "dist"
