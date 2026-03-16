@@ -153,7 +153,7 @@ Add to the project's `.mcp.json` (create if it doesn't exist):
   "mcpServers": {
     "peril": {
       "command": "npx",
-      "args": ["@peril-ai/mcp"]
+      "args": ["peril-mcp"]
     }
   }
 }
@@ -168,7 +168,7 @@ Add to `~/.claude/claude_desktop_config.json`:
   "mcpServers": {
     "peril": {
       "command": "npx",
-      "args": ["@peril-ai/mcp"]
+      "args": ["peril-mcp"]
     }
   }
 }
@@ -183,7 +183,7 @@ Add to `.cursor/mcp.json` in the project root:
   "mcpServers": {
     "peril": {
       "command": "npx",
-      "args": ["@peril-ai/mcp"]
+      "args": ["peril-mcp"]
     }
   }
 }
