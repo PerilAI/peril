@@ -52,7 +52,7 @@ npm run dev
 1. Start the Peril server: `npx peril-server` (runs on port 4173)
 2. Start the app: `npm run dev`
 3. Open the app in the browser
-4. Press `Ctrl+Shift+R` or click the "Review Mode" button to activate review mode
+4. Press `Ctrl+Shift+.` or click the "Review Mode" button to activate review mode
 5. Hover over any element to see the selection overlay
 6. Click an element, describe an issue, and submit
 7. Check the dashboard at `http://localhost:4173` to see the annotation

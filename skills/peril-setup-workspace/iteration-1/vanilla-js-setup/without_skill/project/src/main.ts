@@ -14,5 +14,5 @@ counter.addEventListener("click", () => {
   counter.textContent = `Count: ${count}`;
 });
 
-// Initialize Peril review overlay (Ctrl+Shift+R to toggle)
+// Initialize Peril review overlay (Ctrl+Shift+. to toggle)
 initPeril();

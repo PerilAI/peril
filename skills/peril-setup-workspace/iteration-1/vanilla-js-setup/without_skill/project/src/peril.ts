@@ -13,7 +13,7 @@ let overlay: ReviewOverlayController | null = null;
 /**
  * Initialize the Peril review overlay.
  *
- * Press Ctrl+Shift+R to toggle review mode. Click any element to select it,
+ * Press Ctrl+Shift+. to toggle review mode. Click any element to select it,
  * fill out the comment form, and the review (with screenshots, locators, and
  * metadata) is submitted to the local @peril-ai/server instance.
  */

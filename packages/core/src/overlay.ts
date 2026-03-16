@@ -123,7 +123,7 @@ const defaultComposerOffset = 12;
 const defaultKeyboardShortcut: Required<ReviewKeyboardShortcut> = {
   altKey: false,
   ctrlKey: true,
-  key: "r",
+  key: ".",
   metaKey: false,
   shiftKey: true
 };

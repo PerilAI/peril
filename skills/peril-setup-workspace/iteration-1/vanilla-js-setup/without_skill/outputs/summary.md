@@ -21,7 +21,7 @@ This will install `@peril-ai/core` (runtime dependency) and `@peril-ai/server` (
 ### `src/peril.ts` (new)
 - Created a Peril initialization module that:
   - Calls `createReviewOverlay()` to mount the interactive overlay (highlight-on-hover, click-to-select, built-in comment composer form).
-  - Default keyboard shortcut: **Ctrl+Shift+R** toggles review mode.
+  - Default keyboard shortcut: **Ctrl+Shift+.** toggles review mode.
   - On comment submission, captures an element screenshot and a full-page screenshot via `captureElementScreenshot()` / `capturePageScreenshot()`.
   - Generates a locator bundle (testId, role, CSS, XPath, text) via `generateLocatorBundle()`.
   - Submits the full review payload (selection, comment, artifacts, viewport, metadata) to the Peril server via `submitReview()`.
@@ -46,7 +46,7 @@ This will install `@peril-ai/core` (runtime dependency) and `@peril-ai/server` (
    npm run dev
    ```
 
-4. Open the app in a browser. Press **Ctrl+Shift+R** to activate review mode. Hover over elements to see them highlighted, click to select, fill in the review form, and submit. Reviews are stored locally and visible at `http://127.0.0.1:4173/`.
+4. Open the app in a browser. Press **Ctrl+Shift+.** to activate review mode. Hover over elements to see them highlighted, click to select, fill in the review form, and submit. Reviews are stored locally and visible at `http://127.0.0.1:4173/`.
 
 ## Architecture Notes
 

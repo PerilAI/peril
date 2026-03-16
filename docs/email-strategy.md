@@ -196,7 +196,7 @@ You're in. Here's the quickest path to your first annotation:
 
 1. npm install @peril-ai/react
 2. Wrap your app in <ReviewProvider>
-3. Press Ctrl+Shift+R to toggle review mode
+3. Press Ctrl+Shift+. to toggle review mode
 4. Click any element and add a comment
 
 Full quickstart: [link]

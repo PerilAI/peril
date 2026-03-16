@@ -23,7 +23,7 @@ npm install @peril-ai/core @peril-ai/react @peril-ai/server @peril-ai/mcp
   - `serverUrl="http://127.0.0.1:4173"` — points to the local Peril server.
   - `reviewerName="Team Reviewer"` — identifies who submitted the review.
 - Added a `<ReviewToggle>` floating button (fixed bottom-right) that lets any team member enter/exit review mode. When review mode is active, hovering highlights elements and clicking opens the built-in comment composer (category, severity, description, expected behavior). Submitting captures an element screenshot, a full-page screenshot, DOM locators, and posts the review to the server.
-- The default keyboard shortcut `Ctrl+Shift+R` also toggles review mode.
+- The default keyboard shortcut `Ctrl+Shift+.` also toggles review mode.
 
 ### 3. `.mcp.json` — MCP server configuration for agents
 
@@ -40,6 +40,6 @@ npm install @peril-ai/core @peril-ai/react @peril-ai/server @peril-ai/mcp
 1. Install dependencies: `npm install`
 2. Start the Peril review server: `npm run peril:server`
 3. Start your app in a separate terminal: `npm run dev`
-4. Open the app in the browser. Click the "Review UI" button (or press `Ctrl+Shift+R`) to enter review mode.
+4. Open the app in the browser. Click the "Review UI" button (or press `Ctrl+Shift+.`) to enter review mode.
 5. Hover over any element to highlight it, click to select, then fill out the comment form and hit "Save review".
 6. Your agent picks up reviews via MCP — it can list open reviews, read details and screenshots, and mark them resolved.

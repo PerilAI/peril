@@ -20,7 +20,7 @@ Because the project does not use React, the skill directed us to skip `@peril-ai
 ### 2. `src/main.ts` -- Integrated Peril review overlay
 
 - Imported `createReviewOverlay` from `@peril-ai/core`.
-- Called `createReviewOverlay()` with full configuration: `document`/`window` refs, comment composer with categories and severities, element selection callback, keyboard shortcut (`Ctrl+Shift+R`), and high z-index.
+- Called `createReviewOverlay()` with full configuration: `document`/`window` refs, comment composer with categories and severities, element selection callback, keyboard shortcut (`Ctrl+Shift+.`), and high z-index.
 - Added a "Review Mode" toggle button to the DOM and wired it to `overlay.setEnabled()` / `overlay.isEnabled()` so users can activate review mode without the keyboard shortcut.
 
 ### 3. `.gitignore` -- Added `.peril/`
@@ -46,7 +46,7 @@ Because the project does not use React, the skill directed us to skip `@peril-ai
 2. Start the Peril server: `npm run peril`
 3. Start the app dev server: `npm run dev`
 4. Open the app in a browser
-5. Press `Ctrl+Shift+R` or click the "Review Mode" button to activate review mode
+5. Press `Ctrl+Shift+.` or click the "Review Mode" button to activate review mode
 6. Hover over elements to see selection highlights; click to annotate
 7. Check the dashboard at `http://localhost:4173` for submitted reviews
 8. In Claude Code, use `list_reviews` to confirm the MCP integration works

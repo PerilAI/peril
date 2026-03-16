@@ -60,7 +60,7 @@ Tooling: TypeScript, pnpm workspaces, Vite for SDK bundling, Vitest for tests.
 | 3.1 | Review queue dashboard (web UI served by local server) | server | 2.1 |
 | 3.2 | Dashboard: list view with thumbnails, filters, status badges | server | 3.1 |
 | 3.3 | Dashboard: detail view with full annotation, screenshots, locators | server | 3.1 |
-| 3.4 | Keyboard shortcuts for review mode (Ctrl+Shift+R or configurable) | core | 2.5 |
+| 3.4 | Keyboard shortcuts for review mode (Ctrl+Shift+. or configurable) | core | 2.5 |
 | 3.5 | Review mode visual polish: smooth highlight transitions, z-index handling | core | 1.2 |
 | 3.6 | Error handling: network failures, storage errors, large DOM trees | core, server | -- |
 | 3.7 | Integration tests: full flow from annotation to MCP retrieval | all | 3.1 |

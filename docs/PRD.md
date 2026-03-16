@@ -39,7 +39,7 @@ A three-layer system:
 ### In scope
 
 1. **Review overlay SDK** (browser package)
-   - Toggle review mode on/off via button or keyboard shortcut (default `Ctrl+Shift+R`, configurable)
+   - Toggle review mode on/off via button or keyboard shortcut (default `Ctrl+Shift+.`, configurable)
    - Hover highlight on any DOM element
    - Click to select element
    - Comment composer (text + category + severity)
@@ -89,7 +89,7 @@ A three-layer system:
 **so that** coding agents receive a precise, structured description of the issue.
 
 **Acceptance criteria:**
-- Reviewer can toggle review mode via keyboard shortcut (default `Ctrl+Shift+R`, configurable) or button
+- Reviewer can toggle review mode via keyboard shortcut (default `Ctrl+Shift+.`, configurable) or button
 - Hovering highlights the element under the cursor with a visible outline
 - Clicking selects the element and opens a comment composer
 - Comment composer accepts: text, category (bug/polish/accessibility/copy/UX), severity (low/medium/high/critical), expected outcome

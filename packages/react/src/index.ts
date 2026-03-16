@@ -53,6 +53,7 @@ export interface ReviewProviderProps {
   onToggleRequest?: (enabled: boolean) => void;
   reviewerName?: string;
   serverUrl?: string;
+  showToggle?: boolean;
   submitOptions?: Omit<SubmitReviewOptions, "endpoint">;
   window?: Window;
   zIndex?: number;
@@ -73,6 +74,7 @@ export function ReviewProvider({
   onToggleRequest,
   reviewerName,
   serverUrl,
+  showToggle = false,
   submitOptions,
   window,
   zIndex
@@ -120,6 +122,12 @@ export function ReviewProvider({
       portalTarget
       ? createPortal(
           createElement(ReviewOverlayBridge, bridgeProps),
+          portalTarget
+        )
+      : null,
+      portalTarget && showToggle
+      ? createPortal(
+          createElement(ReviewToggleButton, { enabled, setEnabled }),
           portalTarget
         )
       : null
@@ -334,4 +342,69 @@ function resolveReviewEndpoint(serverUrl: string | undefined): string | undefine
   return /\/api\/reviews\/?$/u.test(serverUrl)
     ? serverUrl
     : `${serverUrl.replace(/\/+$/u, "")}/api/reviews`;
+}
+
+interface ReviewToggleButtonProps {
+  enabled: boolean;
+  setEnabled: Dispatch<SetStateAction<boolean>>;
+}
+
+function ReviewToggleButton({ enabled, setEnabled }: ReviewToggleButtonProps): ReactElement {
+  const baseStyle: Record<string, string> = {
+    position: "fixed",
+    bottom: "16px",
+    right: "16px",
+    zIndex: "2147483646",
+    width: "40px",
+    height: "40px",
+    borderRadius: "50%",
+    border: "none",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    transition: "transform 150ms ease, box-shadow 150ms ease",
+    boxShadow: enabled
+      ? "0 0 0 2px rgba(245,158,11,0.5), 0 2px 8px rgba(0,0,0,0.3)"
+      : "0 2px 8px rgba(0,0,0,0.3)",
+    background: enabled ? "#f59e0b" : "#1c1917",
+    color: enabled ? "#1c1917" : "#a8a29e"
+  };
+
+  return createElement(
+    "button",
+    {
+      type: "button",
+      "aria-label": enabled ? "Disable Peril review mode" : "Enable Peril review mode",
+      "aria-pressed": String(enabled),
+      style: baseStyle,
+      onClick() {
+        setEnabled((prev: boolean) => !prev);
+      },
+      onMouseEnter(e: { currentTarget: HTMLElement }) {
+        e.currentTarget.style.transform = "scale(1.1)";
+      },
+      onMouseLeave(e: { currentTarget: HTMLElement }) {
+        e.currentTarget.style.transform = "scale(1)";
+      }
+    },
+    createElement(
+      "svg",
+      {
+        width: "20",
+        height: "20",
+        viewBox: "0 0 20 20",
+        fill: "none",
+        xmlns: "http://www.w3.org/2000/svg",
+        "aria-hidden": "true"
+      },
+      createElement("path", {
+        d: "M3 3L7 3L7 7L3 7ZM3 10L7 10L3 14ZM10 3L14 3L10 7ZM17 3L17 7M17 3L13 3M17 3L12 8M3 17L3 13M3 17L7 17M3 17L8 12",
+        stroke: "currentColor",
+        strokeWidth: "1.5",
+        strokeLinecap: "round",
+        strokeLinejoin: "round"
+      })
+    )
+  );
 }

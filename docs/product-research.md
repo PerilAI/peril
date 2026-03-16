@@ -256,7 +256,7 @@ The ideal reviewer journey has five stages. Peril must nail the first three in V
 2. **Minimal composer with smart defaults.** Three required inputs: comment text, category (5 options), severity (4 options). "Expected outcome" optional but encouraged with placeholder text.
 3. **Inline confirmation toast.** After submission, brief toast anchored to selected element for 2 seconds. No modal, no page navigation. Reviewer stays in flow.
 4. **Persistent floating badge.** When review mode is active, show annotation count in session. Acts as running tally and "exit review mode" affordance.
-5. **Keyboard-first shortcuts.** `Cmd/Ctrl+Shift+R` toggle, `Escape` deselect, `Tab` through fields, `Cmd/Ctrl+Enter` submit.
+5. **Keyboard-first shortcuts.** `Cmd/Ctrl+Shift+.` toggle, `Escape` deselect, `Tab` through fields, `Cmd/Ctrl+Enter` submit.
 
 **Avoid:**
 1. **Sidebar panels.** BugHerd and Marker.io sidebars eat 300+ pixels of viewport width, distorting the layout being reviewed. Use overlay/modal approach.

@@ -74,7 +74,8 @@ function App() {
 - `serverUrl` (required) — where the Peril backend is running. Default port is 4173.
 - `captureScreenshots` — enables element + page screenshots. Needs localhost or HTTPS.
 - `reviewerName` — optional, tags annotations with the reviewer's name.
-- `keyboardShortcut` — defaults to `Ctrl+Shift+R` / `Cmd+Shift+R`. Set to `false` to disable.
+- `keyboardShortcut` — defaults to `Ctrl+Shift+.` / `Cmd+Shift+.`. Set to `false` to disable.
+- `showToggle` — set to `true` to render a floating toggle button in the bottom-right corner.
 
 **Framework-specific placement:**
 - **Vite/CRA**: wrap in `src/App.tsx` or `src/main.tsx`
@@ -84,7 +85,13 @@ function App() {
 
 ### Step 4: Add a Review Mode Toggle (Optional)
 
-Give users a way to activate review mode from the UI. This is optional because the keyboard shortcut (`Ctrl+Shift+R`) works without any UI, but a visible button helps discoverability.
+The easiest approach is to pass `showToggle` to the provider — this renders a floating button:
+
+```tsx
+<ReviewProvider serverUrl="http://localhost:4173/api" showToggle>
+```
+
+For a custom toggle, use the `useReviewMode` hook:
 
 ```tsx
 import { useReviewMode } from "@peril-ai/react";
@@ -202,7 +209,7 @@ Walk the user through a quick smoke test:
 1. Start the Peril server: `npx peril-server`
 2. Start the app's dev server (e.g., `npm run dev`)
 3. Open the app in the browser
-4. Press `Ctrl+Shift+R` (or click the review button) to activate review mode
+4. Press `Ctrl+Shift+.` (or click the review button) to activate review mode
 5. Hover over any element — it should highlight with a selection overlay
 6. Click an element, describe an issue, and submit
 7. Check the dashboard at `http://localhost:4173` — the review should appear

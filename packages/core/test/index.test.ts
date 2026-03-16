@@ -1218,13 +1218,13 @@ describe("@peril-ai/core", () => {
     overlay.destroy();
   });
 
-  it("toggles review mode with the default Ctrl+Shift+R shortcut", () => {
+  it("toggles review mode with the default Ctrl+Shift+. shortcut", () => {
     const harness = createOverlayHarness();
     const overlay = createReviewOverlay({
       document: harness.document as unknown as Document,
       window: harness.window as unknown as Window
     });
-    const keyboardEvent = createKeyboardEvent("R", {
+    const keyboardEvent = createKeyboardEvent(".", {
       ctrlKey: true,
       shiftKey: true
     });
@@ -1238,7 +1238,7 @@ describe("@peril-ai/core", () => {
 
     harness.document.dispatch(
       "keydown",
-      createKeyboardEvent("r", {
+      createKeyboardEvent(".", {
         ctrlKey: true,
         shiftKey: true
       })
@@ -1313,7 +1313,7 @@ describe("@peril-ai/core", () => {
 
     harness.document.dispatch(
       "keydown",
-      createKeyboardEvent("r", {
+      createKeyboardEvent(".", {
         ctrlKey: true,
         shiftKey: true
       })

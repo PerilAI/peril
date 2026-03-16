@@ -4,11 +4,11 @@
 
 ### Review mode doesn't activate
 
-**Symptom**: Pressing `Ctrl+Shift+R` or clicking the toggle does nothing.
+**Symptom**: Pressing `Ctrl+Shift+.` or clicking the toggle does nothing.
 
 **Causes & fixes**:
 1. **Missing `ReviewProvider`** — The `useReviewMode()` hook only works inside a `ReviewProvider`. Check that your root component wraps the app with it.
-2. **Keyboard shortcut conflict** — Another extension or app may intercept `Ctrl+Shift+R`. Try setting a custom shortcut via the `keyboardShortcut` prop, or use the `useReviewMode()` hook with a button instead.
+2. **Keyboard shortcut conflict** — Another extension or app may intercept `Ctrl+Shift+.`. Try setting a custom shortcut via the `keyboardShortcut` prop, or use the `useReviewMode()` hook with a button instead.
 3. **SSR hydration mismatch** — In Next.js or Remix, the overlay mounts client-side via a portal after hydration. If you see hydration warnings, make sure `ReviewProvider` is inside a `"use client"` boundary (App Router) or wraps only client components.
 
 ### Agent can't see reviews / MCP tools not available

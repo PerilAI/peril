@@ -36,7 +36,7 @@ To confirm the setup works:
 
 1. Start the Peril server: `npx peril-server`
 2. Start the app dev server: `npm run dev`
-3. Open the app in a browser and press `Ctrl+Shift+R` (or click the Review Mode button) to activate review mode
+3. Open the app in a browser and press `Ctrl+Shift+.` (or click the Review Mode button) to activate review mode
 4. Click an element, describe an issue, submit
 5. Open Cursor in this project directory -- it should detect `.cursor/mcp.json` and connect to the Peril MCP server
 6. Ask Cursor to list open reviews -- it should see the annotation
