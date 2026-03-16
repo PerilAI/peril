@@ -72,6 +72,9 @@ export async function submitReview(
 
   await validateArtifactPayloads(input.artifacts);
 
+  const endpoint = options.endpoint ?? defaultEndpoint;
+  console.debug("[peril] Submitting review to", endpoint);
+
   const reviewSkeleton = createReviewSkeleton(input);
   const jsonReview = await createJsonReview(reviewSkeleton, input.artifacts);
 
@@ -80,7 +83,7 @@ export async function submitReview(
       return await sendWithRetries(
         () =>
           sendMultipartReview(transport, reviewSkeleton, input.artifacts, {
-            endpoint: options.endpoint ?? defaultEndpoint,
+            endpoint,
             ...withOptionalTransportOptions(options)
           }),
         options
@@ -89,13 +92,14 @@ export async function submitReview(
       if (!(error instanceof MultipartFallbackError)) {
         throw error;
       }
+      console.debug("[peril] Multipart upload failed, falling back to JSON encoding");
     }
   }
 
   return sendWithRetries(
     () =>
       sendJsonReview(transport, jsonReview, {
-        endpoint: options.endpoint ?? defaultEndpoint,
+        endpoint,
         ...withOptionalTransportOptions(options)
       }),
     options
@@ -119,7 +123,9 @@ async function sendWithRetries(
         throw normalizedError;
       }
 
-      await delay(retryDelayMs * 2 ** attempt, options.signal);
+      const delayMs = retryDelayMs * 2 ** attempt;
+      console.warn(`[peril] Request failed (attempt ${attempt + 1}/${maxRetries + 1}), retrying in ${delayMs}ms:`, normalizedError instanceof Error ? normalizedError.message : normalizedError);
+      await delay(delayMs, options.signal);
     }
   }
 

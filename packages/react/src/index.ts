@@ -119,13 +119,13 @@ export function ReviewProvider({
       value: contextValue
     },
     children,
-      portalTarget
+    portalTarget
       ? createPortal(
           createElement(ReviewOverlayBridge, bridgeProps),
           portalTarget
         )
       : null,
-      portalTarget && showToggle
+    portalTarget && showToggle
       ? createPortal(
           createElement(ReviewToggleButton, { enabled, setEnabled }),
           portalTarget
@@ -268,49 +268,50 @@ function ReviewOverlayBridge({
       return;
     }
 
+    let elementScreenshot: string;
+    let pageScreenshot: string;
+
     try {
-      const [elementScreenshot, pageScreenshot] = await Promise.all([
+      [elementScreenshot, pageScreenshot] = await Promise.all([
         captureElementScreenshot(submission.selection.element),
-        capturePageScreenshot({
-          document,
-          window
-        })
+        capturePageScreenshot({ document, window })
       ]);
+    } catch (error) {
+      console.error("[peril] Screenshot capture failed:", error);
+      latestOnReviewError.current?.(error, submission);
+      return;
+    }
 
-      const metadata: ReviewMetadata = {
-        devicePixelRatio: window.devicePixelRatio ?? 1,
-        scrollPosition: {
-          x: window.scrollX ?? 0,
-          y: window.scrollY ?? 0
-        },
-        userAgent: window.navigator?.userAgent ?? ""
-      };
+    const metadata: ReviewMetadata = {
+      devicePixelRatio: window.devicePixelRatio ?? 1,
+      scrollPosition: {
+        x: window.scrollX ?? 0,
+        y: window.scrollY ?? 0
+      },
+      userAgent: window.navigator?.userAgent ?? ""
+    };
 
-      if (latestReviewerName.current !== undefined) {
-        metadata.reviewerName = latestReviewerName.current;
-      }
+    if (latestReviewerName.current !== undefined) {
+      metadata.reviewerName = latestReviewerName.current;
+    }
 
-      const transportOptions: SubmitReviewOptions = {
-        ...(latestSubmitOptions.current ?? {})
-      };
-      const endpoint = resolveReviewEndpoint(latestServerUrl.current);
+    const transportOptions: SubmitReviewOptions = {
+      ...(latestSubmitOptions.current ?? {})
+    };
+    const endpoint = resolveReviewEndpoint(latestServerUrl.current);
 
-      if (endpoint !== undefined) {
-        transportOptions.endpoint = endpoint;
-      }
+    if (endpoint !== undefined) {
+      transportOptions.endpoint = endpoint;
+    }
 
+    try {
       const review = await submitReview(
         {
-          artifacts: {
-            elementScreenshot,
-            pageScreenshot
-          },
+          artifacts: { elementScreenshot, pageScreenshot },
           comment: submission.comment,
           metadata,
           selection: {
-            boundingBox: {
-              ...submission.selection.boundingBox
-            },
+            boundingBox: { ...submission.selection.boundingBox },
             domSnippet: getElementOuterHtml(submission.selection.element),
             locators: generateLocatorBundle(submission.selection.element)
           },
@@ -323,6 +324,7 @@ function ReviewOverlayBridge({
         transportOptions
       );
 
+      console.debug("[peril] Review submitted:", review.id);
       latestOnReviewCreated.current?.(review);
     } catch (error) {
       console.error("[peril] Failed to submit review:", error);

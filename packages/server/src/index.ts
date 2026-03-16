@@ -556,15 +556,43 @@ async function handleRequest(
   });
 }
 
+function setCorsHeaders(response: ServerResponse): void {
+  response.setHeader("access-control-allow-origin", "*");
+  response.setHeader("access-control-allow-methods", "GET, POST, PATCH, DELETE, OPTIONS");
+  response.setHeader("access-control-allow-headers", "content-type");
+  response.setHeader("access-control-max-age", "86400");
+}
+
+function logRequest(method: string, url: string, statusCode: number): void {
+  const timestamp = new Date().toISOString().slice(11, 19);
+  console.log(`[peril] ${timestamp} ${method} ${url} → ${statusCode}`);
+}
+
 export function createServer(options: PerilServerOptions = {}): Server {
   const dataDir = resolve(options.dataDir ?? resolve(process.cwd(), ".peril"));
   const storage = new ReviewStorage({ dataDir });
 
   return createNodeServer((request, response) => {
+    setCorsHeaders(response);
+
+    if (request.method === "OPTIONS") {
+      response.statusCode = 204;
+      response.end();
+      return;
+    }
+
+    const requestUrl = request.url ?? "/";
+    const requestMethod = request.method ?? "GET";
+
+    response.on("finish", () => {
+      logRequest(requestMethod, requestUrl, response.statusCode);
+    });
+
     void storage
       .ensureReady()
       .then(() => handleRequest(request, response, storage))
       .catch((error: unknown) => {
+        console.error(`[peril] ${requestMethod} ${requestUrl} error:`, error instanceof Error ? error.message : error);
         const { body, statusCode } = createErrorResponse(error);
         writeJsonResponse(response, statusCode, body);
       });
@@ -608,7 +636,10 @@ try {
 
 if (isEntrypoint) {
   startServer().then(({ url }) => {
-    console.log(`@peril-ai/server listening on ${url}`);
+    console.log(`[peril] Server listening on ${url}`);
+    console.log(`[peril] Dashboard: ${url}`);
+    console.log(`[peril] API: ${url}/api/reviews`);
+    console.log(`[peril] CORS enabled for all origins`);
   });
 }
 
