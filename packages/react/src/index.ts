@@ -325,6 +325,7 @@ function ReviewOverlayBridge({
 
       latestOnReviewCreated.current?.(review);
     } catch (error) {
+      console.error("[peril] Failed to submit review:", error);
       latestOnReviewError.current?.(error, submission);
     }
   }
