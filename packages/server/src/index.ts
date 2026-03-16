@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { createServer as createNodeServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
+import { realpathSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -626,15 +627,24 @@ export async function startServer(
   };
 }
 
-let isEntrypoint = false;
-try {
-  const { realpathSync } = await import("node:fs");
-  isEntrypoint = realpathSync(process.argv[1] ?? "") === realpathSync(fileURLToPath(import.meta.url));
-} catch {
-  isEntrypoint = process.argv[1] === fileURLToPath(import.meta.url);
+function detectEntrypoint(): boolean {
+  const arg = process.argv[1];
+  if (!arg) return false;
+
+  const self = fileURLToPath(import.meta.url);
+  if (arg === self) return true;
+
+  try {
+    if (realpathSync(arg) === realpathSync(self)) return true;
+  } catch {}
+
+  const basename = arg.split("/").pop() ?? "";
+  if (basename === "peril-server" || basename === "@peril-ai/server") return true;
+
+  return false;
 }
 
-if (isEntrypoint) {
+if (detectEntrypoint()) {
   startServer().then(({ url }) => {
     console.log(`[peril] Server listening on ${url}`);
     console.log(`[peril] Dashboard: ${url}`);
