@@ -10,7 +10,7 @@ Common issues and their solutions.
 
 ```tsx
 // Make sure this wraps your app
-<ReviewProvider endpoint="http://localhost:3000/api">
+<ReviewProvider serverUrl="http://127.0.0.1:4173">
   <App />
 </ReviewProvider>
 ```
@@ -21,9 +21,9 @@ Common issues and their solutions.
 
 **Possible causes:**
 
-1. MCP server not running — start it with `npx @peril-ai/mcp`
+1. MCP server not running — start it with `npx peril-mcp`
 2. Peril server not running — start it with `npx peril-server`
-3. Wrong endpoint — check that the MCP server points to the correct Peril API URL
+3. Wrong server URL — check `serverUrl` in `ReviewProvider` and `PERIL_SERVER_URL` for the MCP server
 
 ## Screenshots Not Captured
 

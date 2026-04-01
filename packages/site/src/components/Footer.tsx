@@ -161,7 +161,7 @@ export function Footer() {
             <div className="sf-code-block" style={{ fontSize: "var(--sf-text-mono)" }}>
               <span style={{ color: "var(--sf-text-muted)" }}>$</span>{" "}
               <span style={{ color: "var(--sf-text-primary)" }}>npm install</span>{" "}
-              <span style={{ color: "var(--sf-accent)" }}>@anthropic/peril</span>
+              <span style={{ color: "var(--sf-accent)" }}>@peril-ai/react @peril-ai/server @peril-ai/mcp</span>
             </div>
           </div>
         </div>

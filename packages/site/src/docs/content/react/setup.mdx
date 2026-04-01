@@ -19,8 +19,9 @@ import { ReviewProvider } from "@peril-ai/react";
 function App() {
   return (
     <ReviewProvider
-      endpoint="http://localhost:3000/api"
-      captureScreenshots={true}
+      serverUrl="http://127.0.0.1:4173"
+      showToggle
+      reviewerName="QA"
     >
       <YourApp />
     </ReviewProvider>
@@ -32,9 +33,12 @@ function App() {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `endpoint` | `string` | Required | Peril server API URL |
-| `captureScreenshots` | `boolean` | `true` | Enable screenshot capture |
-| `locatorStrategy` | `string` | `"resilient"` | Locator generation strategy |
+| `serverUrl` | `string` | `undefined` | Base Peril server URL. Reviews post to `${serverUrl}/api/reviews`. |
+| `initialEnabled` | `boolean` | `false` | Start with review mode enabled. |
+| `showToggle` | `boolean` | `false` | Render the built-in floating toggle button. |
+| `reviewerName` | `string` | `undefined` | Include a reviewer name in review metadata. |
+| `keyboardShortcut` | `ReviewKeyboardShortcut \| false` | Default shortcut | Customize or disable the keyboard shortcut. |
+| `submitOptions` | `Omit<SubmitReviewOptions, "endpoint">` | `{}` | Override retry, fetch, header, or abort behavior for submissions. |
 | `children` | `ReactNode` | Required | App content |
 
 <Callout variant="warning">
@@ -42,3 +46,7 @@ function App() {
   transparent overlay when review mode is active — this does not affect
   your app's layout or event handling in normal mode.
 </Callout>
+
+Additional callbacks such as `onReviewCreated`, `onReviewError`, `onHover`,
+`onSelect`, and `onToggleRequest` are available when you need to integrate the
+overlay with your own app state.

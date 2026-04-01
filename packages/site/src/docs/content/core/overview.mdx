@@ -30,20 +30,49 @@ A review captures everything an agent needs to understand and fix an issue:
 ## Usage
 
 ```typescript
-import { createCapture, generateLocators } from "@peril-ai/core";
+import {
+  captureElementScreenshot,
+  capturePageScreenshot,
+  createReview,
+  generateLocatorBundle,
+  submitReview
+} from "@peril-ai/core";
 
-const capture = createCapture({
-  screenshots: true,
-  domSnippet: true,
+const locators = generateLocatorBundle(element);
+
+const review = createReview({
+  url: window.location.href,
+  viewport: { width: window.innerWidth, height: window.innerHeight },
+  selection: {
+    boundingBox: { x: 24, y: 48, width: 160, height: 44 },
+    locators,
+    domSnippet: element.outerHTML
+  },
+  comment: {
+    category: "polish",
+    severity: "medium",
+    text: "Button text is truncated on mobile",
+    expected: "Keep the label on one line at tablet widths."
+  },
+  artifacts: {
+    elementScreenshot: await captureElementScreenshot(element),
+    pageScreenshot: await capturePageScreenshot()
+  },
+  metadata: {
+    userAgent: navigator.userAgent,
+    scrollPosition: { x: window.scrollX, y: window.scrollY },
+    devicePixelRatio: window.devicePixelRatio
+  }
 });
 
-// When the user selects an element:
-const review = await capture.fromElement(element, {
-  comment: "Button text is truncated on mobile",
-  category: "visual",
-  severity: "medium",
+await submitReview(review, {
+  endpoint: "http://127.0.0.1:4173/api/reviews"
 });
 ```
+
+The core package is intentionally low-level: it focuses on locator generation,
+review serialization, screenshot capture, and transport primitives. The React
+adapter builds on top of these functions.
 
 <Callout variant="tip">
   The core package has zero framework dependencies. Use it with React, Vue,

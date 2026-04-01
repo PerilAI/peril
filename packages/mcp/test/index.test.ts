@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import { resolve } from "node:path";
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import packageJson from "../package.json" with { type: "json" };
 
 import { submitReview, type SubmitReviewInput } from "../../core/src/index";
 import { startServer, type Review } from "../../server/src/index";
@@ -222,8 +223,7 @@ describe("@peril-ai/mcp", () => {
 
   it("includes a version string in the manifest", () => {
     const manifest = createManifest();
-    expect(manifest.version).toBeDefined();
-    expect(typeof manifest.version).toBe("string");
+    expect(manifest.version).toBe(packageJson.version);
   });
 
   it("includes all tool definitions in the manifest", () => {
@@ -467,7 +467,8 @@ describe("@peril-ai/mcp", () => {
           tools: {}
         },
         serverInfo: {
-          name: "@peril-ai/mcp"
+          name: "@peril-ai/mcp",
+          version: packageJson.version
         }
       }
     });

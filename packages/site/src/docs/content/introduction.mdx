@@ -27,7 +27,7 @@ import { ReviewProvider, useReviewMode } from "@peril-ai/react";
 
 function App() {
   return (
-    <ReviewProvider endpoint="http://localhost:3000/api">
+    <ReviewProvider serverUrl="http://127.0.0.1:4173" showToggle>
       <YourApp />
       <ReviewToggle />
     </ReviewProvider>
@@ -35,10 +35,10 @@ function App() {
 }
 
 function ReviewToggle() {
-  const { active, toggle } = useReviewMode();
+  const { enabled, setEnabled } = useReviewMode();
   return (
-    <button onClick={toggle}>
-      {active ? "Exit Review" : "Start Review"}
+    <button onClick={() => setEnabled((current) => !current)}>
+      {enabled ? "Exit Review" : "Start Review"}
     </button>
   );
 }
@@ -46,5 +46,6 @@ function ReviewToggle() {
 
 <Callout variant="tip">
   Peril is designed for local development workflows. Point your MCP-compatible
-  agent at the local server and it will receive structured tasks automatically.
+  agent at the local MCP server and it can retrieve structured tasks from your
+  local Peril backend.
 </Callout>

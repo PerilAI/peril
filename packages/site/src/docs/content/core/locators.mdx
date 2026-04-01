@@ -11,7 +11,10 @@ Each review includes a locator bundle ordered by resilience:
 ```typescript
 interface LocatorBundle {
   testId?: string;    // data-testid="submit-btn"
-  role?: string;      // button[name="Submit"]
+  role?: {
+    type: string;
+    name: string;
+  };
   css: string;        // .form-actions > button.primary
   xpath: string;      // /html/body/div/form/button[2]
   text?: string;      // "Submit Order"
@@ -28,19 +31,21 @@ interface LocatorBundle {
 | 4 | `xpath` | Low | Fragile to DOM structure |
 | 5 | `text` | Lowest | Content may change |
 
-## Custom Locators
-
-You can extend the locator system with custom strategies:
+## Helper Functions
 
 ```typescript
-import { registerLocatorStrategy } from "@peril-ai/core";
+import {
+  generateLocatorBundle,
+  getBestLocatorSummary,
+  getRankedLocators
+} from "@peril-ai/core";
 
-registerLocatorStrategy("customAttr", (element) => {
-  return element.getAttribute("data-component") ?? null;
-});
+const bundle = generateLocatorBundle(element);
+const rankedLocators = getRankedLocators(bundle);
+const summary = getBestLocatorSummary(bundle);
 ```
 
 <Callout variant="note">
-  Agents should try locators in priority order, falling back to less resilient
-  strategies only when more resilient ones fail.
+  `generateLocatorBundle()` follows the same priority order documented in the
+  data model: `testId > role > css > xpath > text`.
 </Callout>

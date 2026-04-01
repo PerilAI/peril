@@ -1,48 +1,51 @@
 # React Components
 
-`@peril-ai/react` exports components for integrating Peril into your React app.
+`@peril-ai/react` currently ships one React component plus a state hook for
+controlling it.
 
 ## `ReviewProvider`
 
-The root context provider. See [Setup](/docs/react/setup) for full details.
-
-## `ReviewOverlay`
-
-The visual overlay shown when review mode is active. Typically rendered
-automatically by `ReviewProvider`, but can be used standalone:
+The root provider that mounts the review overlay, handles selection, captures
+artifacts, and submits reviews to the Peril server.
 
 ```tsx
-import { ReviewOverlay } from "@peril-ai/react";
+import { ReviewProvider } from "@peril-ai/react";
 
-function CustomReviewUI() {
+function App() {
   return (
-    <ReviewOverlay
-      onElementSelect={(element) => {
-        console.log("Selected:", element);
-      }}
-      highlightColor="rgba(251, 191, 36, 0.3)"
-    />
+    <ReviewProvider serverUrl="http://127.0.0.1:4173" showToggle>
+      <YourApp />
+    </ReviewProvider>
   );
 }
 ```
 
-## `CommentComposer`
+<Callout variant="tip">
+  Most apps only need `ReviewProvider` plus `useReviewMode()` for a custom
+  toggle or status display.
+</Callout>
 
-The comment input shown after an element is selected:
+## `useReviewMode()`
+
+Use the hook when you want to render your own controls instead of relying on the
+built-in toggle button:
 
 ```tsx
-import { CommentComposer } from "@peril-ai/react";
+import { useReviewMode } from "@peril-ai/react";
 
-<CommentComposer
-  onSubmit={(comment) => {
-    // Handle the comment
-  }}
-  categories={["visual", "ux", "content", "bug"]}
-  severities={["low", "medium", "high", "critical"]}
-/>
+function ReviewToggle() {
+  const { enabled, setEnabled } = useReviewMode();
+
+  return (
+    <button onClick={() => setEnabled((current) => !current)}>
+      {enabled ? "Exit Review" : "Start Review"}
+    </button>
+  );
+}
 ```
 
-<Callout variant="tip">
-  Most apps only need `ReviewProvider` — it handles the overlay and comment
-  composer automatically.
-</Callout>
+## Helper Re-exports
+
+The React package also re-exports `getBestLocatorSummary`, `getRankedLocators`,
+and `locatorPriority` from `@peril-ai/core` so React apps can use the same
+locator helpers without adding a second import path.

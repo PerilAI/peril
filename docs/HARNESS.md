@@ -2,7 +2,11 @@
 
 ## Purpose
 
-Peril is still early and mostly scaffolded, so the harness should optimize for legibility and drift control rather than heavyweight automation. This document is the repository-level contract for how agents should reason about the codebase and what must stay mechanically enforced.
+Peril now ships working `core`, `react`, `server`, `mcp`, and marketing/docs
+packages, so the harness should focus on keeping the public contract aligned
+with the code that actually ships. This document is the repository-level
+contract for how agents should reason about the codebase and what must stay
+mechanically enforced.
 
 The goal is simple: make repository knowledge the system of record, then back the highest-value rules with tests.
 
@@ -22,8 +26,9 @@ These files define the current product boundary, package split, and agent-facing
 1. Keep `packages/core/` framework-agnostic. React belongs only in `packages/react/`.
 2. Preserve the V1 MCP tool contract: `list_reviews`, `get_review`, `get_review_artifact`, `mark_review_resolved`, `update_review_status`.
 3. Preserve locator priority in this exact order: `testId`, `role`, `css`, `xpath`, `text` (`testId > role > css > xpath > text`).
-4. Treat documentation as executable design. If behavior or contracts change, update docs and tests in the same change.
-5. Prefer local, deterministic checks over human memory. If a rule matters repeatedly, promote it into code.
+4. Public docs examples must name real exported APIs, real bin entrypoints, and real package names.
+5. Treat documentation as executable design. If behavior or contracts change, update docs and tests in the same change.
+6. Prefer local, deterministic checks over human memory. If a rule matters repeatedly, promote it into code.
 
 ## Mechanical Checks
 
@@ -33,6 +38,11 @@ These files define the current product boundary, package split, and agent-facing
 - documented package structure matches the workspace packages
 - locator priority in docs matches `@peril-ai/core`
 - MCP tool names in docs match `@peril-ai/mcp`
+- public React, MCP, and REST/API docs reference the APIs and binaries that
+  actually exist today
+- repo-root MCP configuration exists for local agent workflows
+- marketing site install snippets reference the real `@peril-ai/*` package
+  namespace
 - Paperclip-managed local state stays ignored and untracked (`agents/*/memory/`, `agents/*/life/`, `.claude/skills/`, `.claude/worktrees/`) while agent instruction files stay tracked
 - merge-close guidance keeps the custom worktree policy, merge-back-to-`main` requirement, and `pnpm repo:audit` documented
 
@@ -53,6 +63,7 @@ For any substantial change:
 As the repo grows, add checks for:
 
 - Review schema validation against the documented `Review` interface
+- runtime checks that the illustrative site demo stays labeled as illustrative
 - REST route coverage for the documented server API
 - MCP integration tests against stored review fixtures
 - Architectural boundary checks between packages

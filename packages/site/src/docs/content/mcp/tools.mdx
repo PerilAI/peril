@@ -11,7 +11,7 @@ List open review tasks, optionally filtered.
   "name": "list_reviews",
   "arguments": {
     "status": "open",
-    "category": "visual",
+    "category": "polish",
     "severity": "high"
   }
 }
@@ -21,10 +21,11 @@ List open review tasks, optionally filtered.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `status` | `string` | Filter by status: `open`, `in_progress`, `resolved` |
+| `status` | `string \| string[]` | Filter by status: `open`, `in_progress`, `resolved`, `wont_fix` |
 | `category` | `string` | Filter by category |
-| `severity` | `string` | Filter by severity |
+| `severity` | `string` | Minimum severity to include |
 | `url` | `string` | Filter by page URL |
+| `limit` | `number` | Maximum number of reviews to return |
 
 ## `get_review`
 
@@ -49,7 +50,7 @@ Retrieve a screenshot or snapshot binary.
   "name": "get_review_artifact",
   "arguments": {
     "id": "rev_01HXYZ...",
-    "type": "element"
+    "type": "elementScreenshot"
   }
 }
 ```
@@ -63,7 +64,7 @@ Close a review task after fixing the issue.
   "name": "mark_review_resolved",
   "arguments": {
     "id": "rev_01HXYZ...",
-    "resolution": "Fixed button truncation by adding text-overflow"
+    "comment": "Fixed button truncation by adding text-overflow"
   }
 }
 ```

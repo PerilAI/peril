@@ -4,18 +4,21 @@ Hooks for controlling review mode and accessing Peril state.
 
 ## `useReviewMode()`
 
-Toggle and query the review mode state:
+Read and update the `ReviewProvider` state from your own UI:
 
 ```tsx
 import { useReviewMode } from "@peril-ai/react";
 
 function ReviewToggle() {
-  const { active, toggle, activate, deactivate } = useReviewMode();
+  const { enabled, setEnabled, serverUrl } = useReviewMode();
 
   return (
-    <button onClick={toggle}>
-      {active ? "Exit Review" : "Start Review"}
-    </button>
+    <div>
+      <button onClick={() => setEnabled((current) => !current)}>
+        {enabled ? "Exit Review" : "Start Review"}
+      </button>
+      <p>Posting to: {serverUrl ?? "/api/reviews"}</p>
+    </div>
   );
 }
 ```
@@ -24,29 +27,10 @@ function ReviewToggle() {
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `active` | `boolean` | Whether review mode is currently on |
-| `toggle` | `() => void` | Toggle review mode |
-| `activate` | `() => void` | Turn on review mode |
-| `deactivate` | `() => void` | Turn off review mode |
+| `enabled` | `boolean` | Whether review mode is currently on |
+| `setEnabled` | `Dispatch<SetStateAction<boolean>>` | Update review mode state from your own controls |
+| `serverUrl` | `string \| undefined` | The configured Peril server base URL |
 
-## `useReviews()`
-
-Access the list of reviews created in the current session:
-
-```tsx
-import { useReviews } from "@peril-ai/react";
-
-function ReviewList() {
-  const { reviews, loading } = useReviews();
-
-  if (loading) return <p>Loading...</p>;
-
-  return (
-    <ul>
-      {reviews.map((r) => (
-        <li key={r.id}>{r.comment}</li>
-      ))}
-    </ul>
-  );
-}
-```
+<Callout variant="note">
+  `useReviewMode()` must be used inside a `ReviewProvider`.
+</Callout>

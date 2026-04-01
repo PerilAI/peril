@@ -1,5 +1,6 @@
 import { Buffer } from "node:buffer";
 import process from "node:process";
+import packageJson from "../package.json" with { type: "json" };
 
 export interface JsonSchema {
   type?: string;
@@ -142,7 +143,7 @@ type ToolName =
   | "mark_review_resolved"
   | "update_review_status";
 
-const packageVersion = "0.0.0";
+const packageVersion = packageJson.version;
 const defaultServerUrl = "http://127.0.0.1:4173";
 const reviewStatuses = ["open", "in_progress", "resolved", "wont_fix"] as const;
 const reviewCategories = ["bug", "polish", "accessibility", "copy", "ux"] as const;
@@ -794,4 +795,3 @@ export function startStdioServer(options: PerilMcpServerOptions = {}): void {
 
   process.stdin.resume();
 }
-

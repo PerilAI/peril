@@ -21,6 +21,7 @@ interface ComposerPosition {
 export function AnnotationPlayground() {
   const [sectionRef, inView] = useInView(0.1);
   const frameRef = useRef<HTMLDivElement | null>(null);
+  const viewportRef = useRef<HTMLDivElement | null>(null);
   const issueElementsRef = useRef<Record<string, HTMLElement | null>>({});
   const glowedRef = useRef(false);
   const [activeIssueId, setActiveIssueId] = useState<string>(initialPlaygroundIssueId);
@@ -105,20 +106,21 @@ export function AnnotationPlayground() {
     const issue = getPlaygroundIssue(issueId);
     const targetElement = issueElementsRef.current[issueId];
     const frameElement = frameRef.current;
+    const viewportElement = viewportRef.current ?? frameElement;
 
-    if (!targetElement || !frameElement) {
+    if (!targetElement || !frameElement || !viewportElement) {
       setSubmittedAnnotation(createFallbackAnnotation(issueId, nextDraft));
       return;
     }
 
     const targetRect = targetElement.getBoundingClientRect();
-    const frameRect = frameElement.getBoundingClientRect();
+    const viewportRect = viewportElement.getBoundingClientRect();
     const locators = generatePlaygroundLocatorBundle(targetElement);
 
     setSubmittedAnnotation({
       boundingBox: {
-        x: round(targetRect.left - frameRect.left),
-        y: round(targetRect.top - frameRect.top),
+        x: round(targetRect.left - viewportRect.left),
+        y: round(targetRect.top - viewportRect.top),
         width: round(targetRect.width),
         height: round(targetRect.height)
       },
@@ -191,7 +193,7 @@ export function AnnotationPlayground() {
               color: "var(--sf-text-accent)",
             }}
           >
-            Interactive demo
+            Interactive walkthrough
           </p>
           <h2
             id="annotation-playground-heading"
@@ -214,8 +216,8 @@ export function AnnotationPlayground() {
             }}
           >
             Click any element below. A lightweight review composer opens inline,
-            and the payload on the right updates with the locator bundle your
-            agent would receive.
+            and the simulated review payload on the right updates to mirror the
+            locator bundle and metadata Peril stores.
           </p>
         </div>
 
@@ -256,7 +258,7 @@ export function AnnotationPlayground() {
               </span>
             </div>
 
-            <div className="grid gap-6 p-5 md:p-6">
+            <div ref={viewportRef} className="grid gap-6 p-5 md:p-6">
               <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl px-4 py-3" style={{ border: "1px solid rgba(255,255,255,0.04)", background: "var(--sf-bg-elevated)" }}>
                 <nav className="flex flex-wrap items-center gap-2 text-sm text-text-secondary" aria-label="Sample dashboard navigation">
                   {playgroundIssues
@@ -512,7 +514,7 @@ export function AnnotationPlayground() {
                 </h3>
               </div>
               <div className="rounded-full px-3 py-1 uppercase" style={{ border: "1px solid rgba(245,158,11,0.2)", background: "var(--sf-accent-muted)", fontSize: "var(--sf-text-caption)", letterSpacing: "var(--sf-tracking-overline)", color: "var(--sf-text-accent)" }}>
-                live locator output
+                simulated review payload
               </div>
             </div>
 
@@ -539,9 +541,9 @@ export function AnnotationPlayground() {
                 Why this matters
               </p>
               <p className="mt-2 text-sm leading-6" style={{ color: "var(--sf-text-secondary)" }}>
-                Peril carries the click target, structured comment, locator
-                bundle, and artifact reference together so an agent can fix the
-                issue without a second round of human explanation.
+                This walkthrough keeps the click target, structured comment,
+                locator bundle, and artifact reference together in the same
+                shape the local server and MCP tools return.
               </p>
             </div>
           </aside>

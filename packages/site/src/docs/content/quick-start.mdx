@@ -50,7 +50,7 @@ import { ReviewProvider } from "@peril-ai/react";
 
 function App() {
   return (
-    <ReviewProvider endpoint="http://localhost:3000/api">
+    <ReviewProvider serverUrl="http://127.0.0.1:4173" showToggle>
       <YourApp />
     </ReviewProvider>
   );
@@ -60,7 +60,7 @@ function App() {
 ### 3. Start the Server
 
 ```bash
-npx peril-server --port 3000
+npx peril-server
 ```
 
 ### 4. Connect Your Agent
@@ -72,7 +72,7 @@ Add Peril's MCP server to your agent's configuration:
   "mcpServers": {
     "peril": {
       "command": "npx",
-      "args": ["peril-mcp", "--port", "3001"]
+      "args": ["peril-mcp"]
     }
   }
 }
@@ -85,7 +85,7 @@ See [MCP Configuration](/docs/mcp/configuration) for agent-specific config file 
 1. Open your app in the browser
 2. Press `Ctrl+Shift+.` to activate review mode
 3. Click any element and leave a comment
-4. Your agent will receive the structured task via MCP
+4. Your agent can inspect the review via `list_reviews` and `get_review`
 
 <Callout variant="note">
   See the full [Installation](/docs/installation) guide for detailed

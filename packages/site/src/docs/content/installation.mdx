@@ -57,15 +57,19 @@ For non-React apps, skip `@peril-ai/react` and use `@peril-ai/core` directly —
 ## Configuration
 
 Peril uses sensible defaults, but you can customize behavior via the
-`ReviewProvider` props or server configuration:
+`ReviewProvider` props or MCP/server options:
 
 ```tsx
 <ReviewProvider
-  endpoint="http://localhost:3000/api"
-  captureScreenshots={true}
-  locatorStrategy="resilient"
+  serverUrl="http://127.0.0.1:4173"
+  showToggle
+  reviewerName="Design QA"
 />
 ```
+
+`serverUrl` is the Peril server base URL. The React adapter submits reviews to
+`${serverUrl}/api/reviews`. If you omit it, the browser will post to the
+current origin's `/api/reviews` path.
 
 ## Storage
 

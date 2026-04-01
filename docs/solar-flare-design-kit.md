@@ -860,7 +860,7 @@ Minimal but complete. Dark surface (`--sf-bg-space`), top border.
 - Center: Nav links (How it works, Pricing, Docs, GitHub, Changelog)
 - Right: Install command in a mini code block:
   ```
-  npm install @anthropic/peril
+  npm install @peril-ai/core @peril-ai/react @peril-ai/server @peril-ai/mcp
   ```
 
 Below the three columns, a single-line bottom bar with "Built for the agents

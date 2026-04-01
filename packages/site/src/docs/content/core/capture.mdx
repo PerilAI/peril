@@ -1,18 +1,17 @@
-# Capture API
+# Screenshot Capture
 
-The Capture API is the primary interface for creating reviews from DOM elements.
+`@peril-ai/core` exposes focused helpers for generating PNG screenshots of a
+selected element or the current page.
 
-## `createCapture(options)`
+## `captureElementScreenshot(element, options)`
 
-Creates a configured capture instance.
+Capture a single DOM element as a PNG data URL by default:
 
 ```typescript
-import { createCapture } from "@peril-ai/core";
+import { captureElementScreenshot } from "@peril-ai/core";
 
-const capture = createCapture({
-  screenshots: true,
-  domSnippet: true,
-  maxSnippetDepth: 3,
+const dataUrl = await captureElementScreenshot(buttonElement, {
+  backgroundColor: null
 });
 ```
 
@@ -20,34 +19,23 @@ const capture = createCapture({
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `screenshots` | `boolean` | `true` | Capture element and page screenshots |
-| `domSnippet` | `boolean` | `true` | Include DOM context around the element |
-| `maxSnippetDepth` | `number` | `3` | Depth of DOM tree to capture |
+| `backgroundColor` | `string \| null` | `null` | Override the screenshot background color |
+| `format` | `"dataUrl" \| "blob"` | `"dataUrl"` | Return a base64 PNG data URL or a `Blob` |
+| `html2canvasOptions` | `Partial<Html2CanvasOptions>` | `{}` | Forwarded to `html2canvas` |
 
-## `capture.fromElement(element, metadata)`
+## `capturePageScreenshot(options)`
 
-Captures a review from a DOM element.
+Capture either the full document or the current viewport:
 
 ```typescript
-const review = await capture.fromElement(buttonElement, {
-  comment: "This button needs a loading state",
-  category: "ux",
-  severity: "medium",
+import { capturePageScreenshot } from "@peril-ai/core";
+
+const pageDataUrl = await capturePageScreenshot({
+  scope: "document",
+  format: "dataUrl"
 });
 ```
 
-### Return Value
-
-Returns a `Review` object containing locators, screenshots, DOM context,
-and all metadata needed for an agent to act on the feedback.
-
-## `capture.fromSelector(selector, metadata)`
-
-Convenience method that finds an element by CSS selector before capturing.
-
-```typescript
-const review = await capture.fromSelector(
-  "[data-testid='submit-btn']",
-  { comment: "Disabled state not visible enough" }
-);
-```
+`capturePageScreenshot()` also accepts `document`, `window`, `scope`, and the
+same `backgroundColor`, `format`, and `html2canvasOptions` fields as
+`captureElementScreenshot()`.

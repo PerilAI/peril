@@ -6,20 +6,29 @@ Model Context Protocol.
 ## Starting the Server
 
 ```bash
-npx peril-mcp --port 3001
+npx peril-mcp
 ```
 
-Or programmatically:
+The shipped MCP server uses stdio transport and reads from
+`PERIL_SERVER_URL` when you need a non-default backend URL.
+
+Or use the package programmatically:
 
 ```typescript
-import { createMCPServer } from "@peril-ai/mcp";
+import { PerilMcpServer, startStdioServer } from "@peril-ai/mcp";
 
-const server = createMCPServer({
-  port: 3001,
-  perilEndpoint: "http://localhost:3000/api",
+startStdioServer({
+  serverUrl: "http://127.0.0.1:4173",
+  resolvedBy: "codex"
 });
 
-await server.start();
+const server = new PerilMcpServer({
+  serverUrl: "http://127.0.0.1:4173"
+});
+
+const reviews = await server.callTool("list_reviews", {
+  status: "open"
+});
 ```
 
 ## Agent Configuration
@@ -51,7 +60,7 @@ Add to `~/.claude/claude_desktop_config.json`:
   "mcpServers": {
     "peril": {
       "command": "npx",
-      "args": ["peril-mcp", "--port", "3001"]
+      "args": ["peril-mcp"]
     }
   }
 }
@@ -110,24 +119,23 @@ npx peril-mcp
 Set `PERIL_SERVER_URL` if the backend runs on a non-default port:
 
 ```bash
-PERIL_SERVER_URL=http://localhost:3001 npx peril-mcp
+PERIL_SERVER_URL=http://127.0.0.1:3000 npx peril-mcp
 ```
 
 <Callout variant="tip">
   We use the bin name `peril-mcp` instead of the package name `@peril-ai/mcp`
   so that npx can resolve it from parent `node_modules` in monorepos.
 </Callout>
-```
 
 ## Options
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `port` | `number` | `3001` | MCP server port |
-| `perilEndpoint` | `string` | `http://localhost:3000/api` | Peril REST API URL |
-| `transport` | `"stdio" \| "http"` | `"stdio"` | Transport protocol |
+| `serverUrl` | `string` | `http://127.0.0.1:4173` | Base Peril server URL used for REST requests |
+| `resolvedBy` | `string` | `@peril-ai/mcp` | Actor recorded when the MCP server resolves a review |
 
 <Callout variant="note">
-  Most MCP clients use stdio transport by default. Use HTTP transport
-  only when running the MCP server as a standalone service.
+  `startStdioServer()` is the supported transport entrypoint today. Use
+  `PerilMcpServer` directly when you want in-process tool calls for tests or
+  custom integrations.
 </Callout>

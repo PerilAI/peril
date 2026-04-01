@@ -5,7 +5,7 @@ The Peril server exposes a REST API for managing reviews.
 ## Base URL
 
 ```
-http://localhost:3000/api
+http://127.0.0.1:4173/api
 ```
 
 ## Endpoints
@@ -24,6 +24,7 @@ Query parameters:
 | `category` | `string` | Filter by category |
 | `severity` | `string` | Filter by severity |
 | `url` | `string` | Filter by page URL |
+| `limit` | `number` | Maximum number of reviews to return |
 
 ### Get Review
 
@@ -50,7 +51,11 @@ Content-Type: application/json
 
 {
   "status": "resolved",
-  "resolution": "Fixed the issue"
+  "resolution": {
+    "resolvedAt": "2026-03-31T20:45:00.000Z",
+    "resolvedBy": "codex",
+    "comment": "Fixed the issue"
+  }
 }
 ```
 
@@ -60,7 +65,8 @@ Content-Type: application/json
 GET /api/reviews/:id/artifacts/:type
 ```
 
-Returns the binary screenshot or snapshot. Type is `element` or `page`.
+Returns the binary screenshot or snapshot. Type is `elementScreenshot`,
+`pageScreenshot`, or `rrwebSession`.
 
 ### Delete Review
 
@@ -74,4 +80,12 @@ DELETE /api/reviews/:id
 GET /api/health
 ```
 
-Returns `{ "ok": true }` when the server is running.
+Returns a JSON payload like:
+
+```json
+{
+  "status": "ok",
+  "service": "@peril-ai/server",
+  "timestamp": "2026-03-31T20:45:00.000Z"
+}
+```
